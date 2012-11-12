@@ -721,7 +721,7 @@ class MPLPlot(object):
                 ax = fig.add_subplot(111)
                 ax = self._maybe_right_yaxis(ax)
             else:
-                fig = self.ax.get_figure()
+                fig = self.ax.get_figure(figsize=self.figsize)
                 ax = self._maybe_right_yaxis(self.ax)
 
             axes = [ax]
@@ -1352,7 +1352,7 @@ def plot_frame(frame=None, x=None, y=None, subplots=False, sharex=True,
                            rot=rot, xticks=xticks, yticks=yticks,
                            xlim=xlim, ylim=ylim, ax=ax, style=style,
                            grid=grid, logy=logy, secondary_y=secondary_y,
-                           **kwds)
+                           figsize=figsize, **kwds)
 
     plot_obj = klass(frame, kind=kind, subplots=subplots, rot=rot,
                      legend=legend, ax=ax, style=style, fontsize=fontsize,
