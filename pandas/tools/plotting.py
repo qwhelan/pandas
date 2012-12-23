@@ -1385,6 +1385,12 @@ def plot_series(series, label=None, kind='line', use_index=True, rot=None,
         kde : kernel density estimation plot
     rot : int, default None
         Rotation for ticks
+    use_index : boolean, default True
+        Plot index as axis tick labels
+    ax : matplotlib axis object
+        If not passed, uses gca()
+    style : string, default matplotlib default
+        matplotlib line style to use
     logy : boolean, default False
         For line plots, use log scaling on y axis
     xticks : sequence
