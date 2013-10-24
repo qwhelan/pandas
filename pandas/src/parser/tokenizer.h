@@ -223,7 +223,7 @@ coliter_t *coliter_new(parser_t *self, int i);
 
 #define COLITER_NEXT(iter) iter.words[*iter.line_start++ + iter.col]
 
-parser_t* parser_new();
+extern parser_t* parser_new();
 
 int parser_init(parser_t *self);
 
@@ -259,6 +259,6 @@ int P_INLINE to_double(char *item, double *p_value, char sci, char decimal, char
 int P_INLINE to_complex(char *item, double *p_real, double *p_imag, char sci, char decimal);
 int P_INLINE to_longlong(char *item, long long *p_value);
 int P_INLINE to_longlong_thousands(char *item, long long *p_value, char tsep);
-int P_INLINE to_boolean(char *item, uint8_t *val);
+extern int P_INLINE to_boolean(char *item, uint8_t *val);
 
 #endif // _PARSER_COMMON_H_

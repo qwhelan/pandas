@@ -559,7 +559,6 @@ int parser_add_skiprow(parser_t *self, int64_t row) {
 static int parser_buffer_bytes(parser_t *self, size_t nbytes) {
     int status;
     size_t bytes_read;
-    void *src = self->source;
 
     status = 0;
     self->datapos = 0;
@@ -1721,7 +1720,6 @@ int P_INLINE to_longlong_thousands(char *item, long long *p_value, char tsep)
 {
     int i, pos, status, n = strlen(item), count = 0;
     char *tmp;
-    char *p_end;
 
     for (i = 0; i < n; ++i)
     {
@@ -1896,7 +1894,7 @@ static double xstrtod(const char *str, char **endptr, char decimal,
     p++;
     num_digits++;
 
-    p += (tsep != '\0' & *p == tsep);
+    p += ((tsep != '\0') & (*p == tsep));
   }
 
   // Process decimal part

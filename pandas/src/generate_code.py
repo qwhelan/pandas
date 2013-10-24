@@ -1545,7 +1545,11 @@ def group_ohlc_%(name)s(ndarray[%(dest_type2)s, ndim=2] out,
     cdef:
         Py_ssize_t i, j, N, K, ngroups, b
         %(dest_type2)s val, count
-        %(dest_type2)s vopen, vhigh, vlow, vclose, NA
+        %(dest_type2)s vopen = np.nan
+        %(dest_type2)s vhigh = np.nan
+        %(dest_type2)s vlow = np.nan
+        %(dest_type2)s vclose = np.nan
+        %(dest_type2)s NA = np.nan
         bint got_first = 0
 
     if bins[len(bins) - 1] == len(values):
@@ -1558,7 +1562,7 @@ def group_ohlc_%(name)s(ndarray[%(dest_type2)s, ndim=2] out,
     if out.shape[1] != 4:
         raise ValueError('Output array must have 4 columns')
 
-    NA = np.nan
+#    NA = np.nan
 
     b = 0
     if K > 1:

@@ -1096,7 +1096,6 @@ void NpyArr_freeLabels(char** labels, npy_intp len)
 char** NpyArr_encodeLabels(PyArrayObject* labels, JSONObjectEncoder* enc, npy_intp num)
 {
     // NOTE this function steals a reference to labels.
-    PyArrayObject* labelsTmp = NULL;
     PyObject* item = NULL;
     npy_intp i, stride, len, need_quotes;
     char** ret;

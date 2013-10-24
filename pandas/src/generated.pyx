@@ -2598,6 +2598,7 @@ def take_2d_axis0_bool_bool(ndarray[uint8_t, ndim=2] values,
         cdef:
             uint8_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(uint8_t) and
             sizeof(uint8_t) * n >= 256):
@@ -2641,6 +2642,7 @@ def take_2d_axis0_bool_object(ndarray[uint8_t, ndim=2] values,
         cdef:
             object *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(object) and
             sizeof(object) * n >= 256):
@@ -2684,6 +2686,7 @@ def take_2d_axis0_int8_int8(ndarray[int8_t, ndim=2] values,
         cdef:
             int8_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int8_t) and
             sizeof(int8_t) * n >= 256):
@@ -2727,6 +2730,7 @@ def take_2d_axis0_int8_int32(ndarray[int8_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -2770,6 +2774,7 @@ def take_2d_axis0_int8_int64(ndarray[int8_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -2813,6 +2818,7 @@ def take_2d_axis0_int8_float64(ndarray[int8_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -2856,6 +2862,7 @@ def take_2d_axis0_int16_int16(ndarray[int16_t, ndim=2] values,
         cdef:
             int16_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int16_t) and
             sizeof(int16_t) * n >= 256):
@@ -2899,6 +2906,7 @@ def take_2d_axis0_int16_int32(ndarray[int16_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -2942,6 +2950,7 @@ def take_2d_axis0_int16_int64(ndarray[int16_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -2985,6 +2994,7 @@ def take_2d_axis0_int16_float64(ndarray[int16_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3028,6 +3038,7 @@ def take_2d_axis0_int32_int32(ndarray[int32_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -3071,6 +3082,7 @@ def take_2d_axis0_int32_int64(ndarray[int32_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -3114,6 +3126,7 @@ def take_2d_axis0_int32_float64(ndarray[int32_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3157,6 +3170,7 @@ def take_2d_axis0_int64_int64(ndarray[int64_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -3200,6 +3214,7 @@ def take_2d_axis0_int64_float64(ndarray[int64_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3243,6 +3258,7 @@ def take_2d_axis0_float32_float32(ndarray[float32_t, ndim=2] values,
         cdef:
             float32_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float32_t) and
             sizeof(float32_t) * n >= 256):
@@ -3286,6 +3302,7 @@ def take_2d_axis0_float32_float64(ndarray[float32_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3329,6 +3346,7 @@ def take_2d_axis0_float64_float64(ndarray[float64_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3372,6 +3390,7 @@ def take_2d_axis0_object_object(ndarray[object, ndim=2] values,
         cdef:
             object *v, *o
 
+        #GH3130
         if (values.strides[1] == out.strides[1] and
             values.strides[1] == sizeof(object) and
             sizeof(object) * n >= 256):
@@ -3419,6 +3438,7 @@ def take_2d_axis1_bool_bool(ndarray[uint8_t, ndim=2] values,
         cdef:
             uint8_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(uint8_t) and
             sizeof(uint8_t) * n >= 256):
@@ -3465,6 +3485,7 @@ def take_2d_axis1_bool_object(ndarray[uint8_t, ndim=2] values,
         cdef:
             object *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(object) and
             sizeof(object) * n >= 256):
@@ -3511,6 +3532,7 @@ def take_2d_axis1_int8_int8(ndarray[int8_t, ndim=2] values,
         cdef:
             int8_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int8_t) and
             sizeof(int8_t) * n >= 256):
@@ -3557,6 +3579,7 @@ def take_2d_axis1_int8_int32(ndarray[int8_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -3603,6 +3626,7 @@ def take_2d_axis1_int8_int64(ndarray[int8_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -3649,6 +3673,7 @@ def take_2d_axis1_int8_float64(ndarray[int8_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3695,6 +3720,7 @@ def take_2d_axis1_int16_int16(ndarray[int16_t, ndim=2] values,
         cdef:
             int16_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int16_t) and
             sizeof(int16_t) * n >= 256):
@@ -3741,6 +3767,7 @@ def take_2d_axis1_int16_int32(ndarray[int16_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -3787,6 +3814,7 @@ def take_2d_axis1_int16_int64(ndarray[int16_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -3833,6 +3861,7 @@ def take_2d_axis1_int16_float64(ndarray[int16_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -3879,6 +3908,7 @@ def take_2d_axis1_int32_int32(ndarray[int32_t, ndim=2] values,
         cdef:
             int32_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int32_t) and
             sizeof(int32_t) * n >= 256):
@@ -3925,6 +3955,7 @@ def take_2d_axis1_int32_int64(ndarray[int32_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -3971,6 +4002,7 @@ def take_2d_axis1_int32_float64(ndarray[int32_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -4017,6 +4049,7 @@ def take_2d_axis1_int64_int64(ndarray[int64_t, ndim=2] values,
         cdef:
             int64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(int64_t) and
             sizeof(int64_t) * n >= 256):
@@ -4063,6 +4096,7 @@ def take_2d_axis1_int64_float64(ndarray[int64_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -4109,6 +4143,7 @@ def take_2d_axis1_float32_float32(ndarray[float32_t, ndim=2] values,
         cdef:
             float32_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float32_t) and
             sizeof(float32_t) * n >= 256):
@@ -4155,6 +4190,7 @@ def take_2d_axis1_float32_float64(ndarray[float32_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -4201,6 +4237,7 @@ def take_2d_axis1_float64_float64(ndarray[float64_t, ndim=2] values,
         cdef:
             float64_t *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(float64_t) and
             sizeof(float64_t) * n >= 256):
@@ -4247,6 +4284,7 @@ def take_2d_axis1_object_object(ndarray[object, ndim=2] values,
         cdef:
             object *v, *o
 
+        #GH3130
         if (values.strides[0] == out.strides[0] and
             values.strides[0] == sizeof(object) and
             sizeof(object) * n >= 256):
@@ -6828,7 +6866,11 @@ def group_ohlc_float64(ndarray[float64_t, ndim=2] out,
     cdef:
         Py_ssize_t i, j, N, K, ngroups, b
         float64_t val, count
-        float64_t vopen, vhigh, vlow, vclose, NA
+        float64_t vopen = np.nan
+        float64_t vhigh = np.nan
+        float64_t vlow = np.nan
+        float64_t vclose = np.nan
+        float64_t NA = np.nan
         bint got_first = 0
 
     if bins[len(bins) - 1] == len(values):
@@ -6841,7 +6883,7 @@ def group_ohlc_float64(ndarray[float64_t, ndim=2] out,
     if out.shape[1] != 4:
         raise ValueError('Output array must have 4 columns')
 
-    NA = np.nan
+#    NA = np.nan
 
     b = 0
     if K > 1:
@@ -6901,7 +6943,11 @@ def group_ohlc_float32(ndarray[float32_t, ndim=2] out,
     cdef:
         Py_ssize_t i, j, N, K, ngroups, b
         float32_t val, count
-        float32_t vopen, vhigh, vlow, vclose, NA
+        float32_t vopen = np.nan
+        float32_t vhigh = np.nan
+        float32_t vlow = np.nan
+        float32_t vclose = np.nan
+        float32_t NA = np.nan
         bint got_first = 0
 
     if bins[len(bins) - 1] == len(values):
@@ -6914,7 +6960,7 @@ def group_ohlc_float32(ndarray[float32_t, ndim=2] out,
     if out.shape[1] != 4:
         raise ValueError('Output array must have 4 columns')
 
-    NA = np.nan
+#    NA = np.nan
 
     b = 0
     if K > 1:

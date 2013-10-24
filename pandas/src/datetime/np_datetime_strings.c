@@ -117,50 +117,6 @@ fail:
     return -1;
 }
 
-/*
- * Wraps `gmtime` functionality for multiple platforms. This
- * converts a time value to a time structure in UTC.
- *
- * Returns 0 on success, -1 on failure.
- */
-static int
-get_gmtime(NPY_TIME_T *ts, struct tm *tms)
-{
-    char *func_name = "<unknown>";
-#if defined(_WIN32)
- #if defined(_MSC_VER) && (_MSC_VER >= 1400)
-    if (gmtime_s(tms, ts) != 0) {
-        func_name = "gmtime_s";
-        goto fail;
-    }
- #elif defined(__GNUC__) && defined(NPY_MINGW_USE_CUSTOM_MSVCR)
-    if (_gmtime64_s(tms, ts) != 0) {
-        func_name = "_gmtime64_s";
-        goto fail;
-    }
- #else
-    struct tm *tms_tmp;
-    tms_tmp = gmtime(ts);
-    if (tms_tmp == NULL) {
-        func_name = "gmtime";
-        goto fail;
-    }
-    memcpy(tms, tms_tmp, sizeof(struct tm));
- #endif
-#else
-    if (gmtime_r(ts, tms) == NULL) {
-        func_name = "gmtime_r";
-        goto fail;
-    }
-#endif
-
-    return 0;
-
-fail:
-    PyErr_Format(PyExc_OSError, "Failed to use '%s' to convert "
-                                "to a UTC time", func_name);
-    return -1;
-}
 
 /*
  * Converts a datetimestruct in UTC to a datetimestruct in local time,
@@ -229,82 +185,6 @@ convert_datetimestruct_utc_to_local(pandas_datetimestruct *out_dts_local,
     return 0;
 }
 
-#if 0
-/*
- * Converts a datetimestruct in local time to a datetimestruct in UTC.
- *
- * Returns 0 on success, -1 on failure.
- */
-static int
-convert_datetimestruct_local_to_utc(pandas_datetimestruct *out_dts_utc,
-                const pandas_datetimestruct *dts_local)
-{
-    npy_int64 year_correction = 0;
-
-    /* Make a copy of the input 'dts' to modify */
-    *out_dts_utc = *dts_local;
-
-    /* HACK: Use a year < 2038 for later years for small time_t */
-    if (sizeof(NPY_TIME_T) == 4 && out_dts_utc->year >= 2038) {
-        if (is_leapyear(out_dts_utc->year)) {
-            /* 2036 is a leap year */
-            year_correction = out_dts_utc->year - 2036;
-            out_dts_utc->year -= year_correction;
-        }
-        else {
-            /* 2037 is not a leap year */
-            year_correction = out_dts_utc->year - 2037;
-            out_dts_utc->year -= year_correction;
-        }
-    }
-
-    /*
-     * ISO 8601 states to treat date-times without a timezone offset
-     * or 'Z' for UTC as local time. The C standard libary functions
-     * mktime and gmtime allow us to do this conversion.
-     *
-     * Only do this timezone adjustment for recent and future years.
-     * In this case, "recent" is defined to be 1970 and later, because
-     * on MS Windows, mktime raises an error when given an earlier date.
-     */
-    if (out_dts_utc->year >= 1970) {
-        NPY_TIME_T rawtime = 0;
-        struct tm tm_;
-
-        tm_.tm_sec = out_dts_utc->sec;
-        tm_.tm_min = out_dts_utc->min;
-        tm_.tm_hour = out_dts_utc->hour;
-        tm_.tm_mday = out_dts_utc->day;
-        tm_.tm_mon = out_dts_utc->month - 1;
-        tm_.tm_year = out_dts_utc->year - 1900;
-        tm_.tm_isdst = -1;
-
-        /* mktime converts a local 'struct tm' into a time_t */
-        rawtime = mktime(&tm_);
-        if (rawtime == -1) {
-            PyErr_SetString(PyExc_OSError, "Failed to use mktime to "
-                                        "convert local time to UTC");
-            return -1;
-        }
-
-        /* gmtime converts a 'time_t' into a UTC 'struct tm' */
-        if (get_gmtime(&rawtime, &tm_) < 0) {
-            return -1;
-        }
-        out_dts_utc->sec = tm_.tm_sec;
-        out_dts_utc->min = tm_.tm_min;
-        out_dts_utc->hour = tm_.tm_hour;
-        out_dts_utc->day = tm_.tm_mday;
-        out_dts_utc->month = tm_.tm_mon + 1;
-        out_dts_utc->year = tm_.tm_year + 1900;
-    }
-
-    /* Reapply the year 2038 year correction HACK */
-    out_dts_utc->year += year_correction;
-
-    return 0;
-}
-#endif
 
 /* int */
 /* parse_python_string(PyObject* obj, pandas_datetimestruct *dts) { */
@@ -438,8 +318,7 @@ parse_iso_8601_datetime(char *str, int len,
         }
 
         /* Check the casting rule */
-        if (unit != -1 && !can_cast_datetime64_units(bestunit, unit,
-                                                     casting)) {
+        if (!can_cast_datetime64_units(bestunit, unit, casting)) {
             PyErr_Format(PyExc_TypeError, "Cannot parse \"%s\" as unit "
                          "'%s' using casting rule %s",
                          str, _datetime_strings[unit],
@@ -481,7 +360,7 @@ parse_iso_8601_datetime(char *str, int len,
         }
 
         /* Check the casting rule */
-        if (unit != -1 && !can_cast_datetime64_units(bestunit, unit,
+        if (!can_cast_datetime64_units(bestunit, unit,
                                                      casting)) {
             PyErr_Format(PyExc_TypeError, "Cannot parse \"%s\" as unit "
                          "'%s' using casting rule %s",
@@ -891,7 +770,7 @@ finish:
     }
 
     /* Check the casting rule */
-    if (unit != -1 && !can_cast_datetime64_units(bestunit, unit,
+    if (!can_cast_datetime64_units(bestunit, unit,
                                                  casting)) {
         PyErr_Format(PyExc_TypeError, "Cannot parse \"%s\" as unit "
                      "'%s' using casting rule %s",
@@ -920,11 +799,6 @@ int
 get_datetime_iso_8601_strlen(int local, PANDAS_DATETIMEUNIT base)
 {
     int len = 0;
-
-    /* If no unit is provided, return the maximum length */
-    if (base == -1) {
-        return PANDAS_DATETIME_MAX_ISO8601_STRLEN;
-    }
 
     switch (base) {
         /* Generic units can only be used to represent NaT */
@@ -1063,7 +937,7 @@ make_iso_8601_datetime(pandas_datetimestruct *dts, char *outstr, int outlen,
     }
 
     /* Automatically detect a good unit */
-    if (base == -1) {
+    if (1) {
         base = lossless_unit_from_datetimestruct(dts);
         /*
          * If there's a timezone, use at least minutes precision,
@@ -1148,7 +1022,7 @@ make_iso_8601_datetime(pandas_datetimestruct *dts, char *outstr, int outlen,
 #ifdef _WIN32
     tmplen = _snprintf(substr, sublen, "%04" NPY_INT64_FMT, dts->year);
 #else
-    tmplen = snprintf(substr, sublen, "%04" NPY_INT64_FMT, (long long)dts->year);
+    tmplen = snprintf(substr, sublen, "%04" NPY_INT64_FMT, (long) ((long long)dts->year));
 #endif
     /* If it ran out of space or there isn't space for the NULL terminator */
     if (tmplen < 0 || tmplen > sublen) {
