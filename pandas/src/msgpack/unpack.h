@@ -69,11 +69,7 @@ static inline int template_callback_uint8(unpack_user* u, uint8_t d, msgpack_unp
 static inline int template_callback_uint32(unpack_user* u, uint32_t d, msgpack_unpack_object* o)
 {
     PyObject *p;
-    if (d > LONG_MAX) {
-        p = PyLong_FromUnsignedLong((unsigned long)d);
-    } else {
-        p = PyInt_FromLong((long)d);
-    }
+    p = PyInt_FromLong((long)d);
     if (!p)
         return -1;
     *o = p;
