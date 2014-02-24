@@ -2228,21 +2228,25 @@ class DataFrame(NDFrame):
                 arrays.append(np.asarray(self.index))
 
         to_remove = []
-        for col in keys:
-            if isinstance(col, Series):
-                level = col.values
-                names.append(col.name)
-            elif isinstance(col, (list, np.ndarray)):
-                level = col
-                names.append(None)
-            else:
-                level = frame[col].values
-                names.append(col)
-                if drop:
-                    to_remove.append(col)
-            arrays.append(level)
+        if len(keys) == 1 and isinstance(keys[0], Index):
+            # preserve .name/.names in df.set_index(df.index) case GH6452
+            index = keys[0]
+        else:
+            for col in keys:
+                if isinstance(col, Series):
+                    level = col.values
+                    names.append(col.name)
+                elif isinstance(col, (list, np.ndarray)):
+                    level = col
+                    names.append(None)
+                else:
+                    level = frame[col].values
+                    names.append(col)
+                    if drop:
+                        to_remove.append(col)
+                arrays.append(level)
 
-        index = MultiIndex.from_arrays(arrays, names=names)
+            index = MultiIndex.from_arrays(arrays, names=names)
 
         if verify_integrity and not index.is_unique:
             duplicates = index.get_duplicates()

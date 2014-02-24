@@ -13154,6 +13154,19 @@ class TestDataFrameQueryStrings(object):
         for parser, engine in product(PARSERS, ENGINES):
             yield self.check_query_single_element_booleans, parser, engine
 
+    def test_set_index_names(self):
+        df = pd.util.testing.makeDataFrame()
+        df.index.name = 'name'
+
+        assert df.set_index(df.index).index.names == ['name']
+
+        df = df.set_index(['A', 'B'])
+
+        assert df.set_index(df.index).index.names == ['A', 'B']
+
+        # Check that set_index isn't converting a MultiIndex into an Index
+        assert isinstance(df.set_index(df.index).index, MultiIndex)
+
 
 class TestDataFrameEvalNumExprPandas(tm.TestCase):
 
