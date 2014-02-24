@@ -13167,6 +13167,10 @@ class TestDataFrameQueryStrings(object):
         # Check that set_index isn't converting a MultiIndex into an Index
         assert isinstance(df.set_index(df.index).index, MultiIndex)
 
+        # Check that [MultiIndex, MultiIndex] yields a MultiIndex rather
+        # than a pair of tuples
+        assert isinstance(df.set_index([df.index, df.index]).index, MultiIndex)
+
 
 class TestDataFrameEvalNumExprPandas(tm.TestCase):
 

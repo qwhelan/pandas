@@ -2228,25 +2228,35 @@ class DataFrame(NDFrame):
                 arrays.append(np.asarray(self.index))
 
         to_remove = []
-        if len(keys) == 1 and isinstance(keys[0], Index):
-            # preserve .name/.names in df.set_index(df.index) case GH6452
-            index = keys[0]
-        else:
-            for col in keys:
-                if isinstance(col, Series):
-                    level = col.values
-                    names.append(col.name)
-                elif isinstance(col, (list, np.ndarray)):
-                    level = col
-                    names.append(None)
-                else:
-                    level = frame[col].values
-                    names.append(col)
-                    if drop:
-                        to_remove.append(col)
-                arrays.append(level)
+        for col in keys:
+            if isinstance(col, MultiIndex):
+                index_frame = DataFrame(col.tolist())
+                n_levels = len(index_frame.columns)
 
-            index = MultiIndex.from_arrays(arrays, names=names)
+                # append all but the last column so we don't have to modify
+                # the end of this loop
+                for column in range(n_levels - 1):
+                    arrays.append(index_frame[column])
+
+                level = index_frame[n_levels - 1]
+                names.extend(col.names)
+            elif isinstance(col, (Series, Index)):
+                level = col.values
+                names.append(col.name)
+            elif isinstance(col, Index):
+                level = col.values
+                names.extend(col.names)
+            elif isinstance(col, (list, np.ndarray)):
+                level = col
+                names.append(None)
+            else:
+                level = frame[col].values
+                names.append(col)
+                if drop:
+                    to_remove.append(col)
+            arrays.append(level)
+
+        index = MultiIndex.from_arrays(arrays, names=names)
 
         if verify_integrity and not index.is_unique:
             duplicates = index.get_duplicates()
