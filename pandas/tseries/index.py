@@ -1091,7 +1091,7 @@ class DatetimeIndex(Int64Index):
         left_start, left_end = left[0], left[-1]
         right_end = right[-1]
 
-        if not self.offset._should_cache():
+        if self.offset._should_cache():
             # concatenate dates
             if left_end < right_end:
                 loc = right.searchsorted(left_end, side='right')

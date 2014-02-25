@@ -36,6 +36,20 @@ data = dict((i,dict((j,float(j)) for j in xrange(100))) for i in xrange(2000))
 """
 frame_ctor_nested_dict_int64 = Benchmark("DataFrame(data)", setup)
 
+# from a datetimeindex
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10),index=date_range('1/1/1900',periods=1000,freq='D'))
+d = dict([ (col,df[col]) for col in df.columns ])
+"""
+frame_ctor_dtindex_daily = Benchmark("DataFrame(d)", setup)
+
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10),index=date_range('1/1/1900',periods=1000,freq='M'))
+d = dict([ (col,df[col]) for col in df.columns ])
+"""
+frame_ctor_dtindex_monthly = Benchmark("DataFrame(d)", setup)
+
+
 # from a mi-series
 setup = common_setup + """
 mi = MultiIndex.from_tuples([(x,y) for x in range(100) for y in range(100)])
