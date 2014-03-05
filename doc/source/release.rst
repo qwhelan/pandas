@@ -254,6 +254,8 @@ Bug Fixes
 - Bug in ``iloc`` indexing when positional indexer matched Int64Index of corresponding axis no reordering happened (:issue:`6612`)
 - Bug in ``fillna`` with ``limit`` and ``value`` specified
 - Bug in ``DataFrame.to_stata`` when columns have non-string names (:issue:`4558`)
+- Bug in indexing: empty list lookup caused ``IndexError`` exceptions (:issue:`6536`, :issue:`6551`)
+
 
 pandas 0.13.1
 -------------
