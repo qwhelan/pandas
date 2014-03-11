@@ -10,12 +10,17 @@ import os
 N = 10000
 K = 8
 df = DataFrame(np.random.randn(N, K) * np.random.randint(100, 10000, (N, K)))
+"""
+side_effects = """
 df.to_csv('test.csv', sep='|')
 """
 
+setup += side_effects
+
 read_csv_vb = Benchmark("read_csv('test.csv', sep='|')", setup,
                         cleanup="os.remove('test.csv')",
-                        start_date=datetime(2012, 5, 7))
+                        start_date=datetime(2012, 5, 7),
+                        side_effects=side_effects)
 
 
 setup = common_setup + """
@@ -25,13 +30,18 @@ K = 8
 format = lambda x: '{:,}'.format(x)
 df = DataFrame(np.random.randn(N, K) * np.random.randint(100, 10000, (N, K)))
 df = df.applymap(format)
+"""
+side_effects = """
 df.to_csv('test.csv', sep='|')
 """
+
+setup += side_effects
 
 read_csv_thou_vb = Benchmark("read_csv('test.csv', sep='|', thousands=',')",
                              setup,
                              cleanup="os.remove('test.csv')",
-                             start_date=datetime(2012, 5, 7))
+                             start_date=datetime(2012, 5, 7),
+                             side_effects=side_effects)
 
 setup = common_setup + """
 from cStringIO import StringIO

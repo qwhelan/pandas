@@ -390,11 +390,11 @@ def make_pair(name):
     df2.ix[-1,-1] = np.nan
     return df, df2
 
-def test_equal(name):
+def equal(name):
     df, df2 = pairs[name]
     return df.equals(df)
 
-def test_unequal(name):
+def unequal(name):
     df, df2 = pairs[name]
     return df.equals(df2)
     
@@ -406,13 +406,13 @@ nonunique_cols.columns = ['A']*len(nonunique_cols.columns)
 pairs = dict([(name,make_pair(name))
          for name in ('float_df', 'object_df', 'nonunique_cols')])
 """
-frame_float_equal = Benchmark('test_equal("float_df")', setup)
-frame_object_equal = Benchmark('test_equal("object_df")', setup)
-frame_nonunique_equal = Benchmark('test_equal("nonunique_cols")', setup)
+frame_float_equal = Benchmark('equal("float_df")', setup)
+frame_object_equal = Benchmark('equal("object_df")', setup)
+frame_nonunique_equal = Benchmark('equal("nonunique_cols")', setup)
 
-frame_float_unequal = Benchmark('test_unequal("float_df")', setup)
-frame_object_unequal = Benchmark('test_unequal("object_df")', setup)
-frame_nonunique_unequal = Benchmark('test_unequal("nonunique_cols")', setup)
+frame_float_unequal = Benchmark('unequal("float_df")', setup)
+frame_object_unequal = Benchmark('unequal("object_df")', setup)
+frame_nonunique_unequal = Benchmark('unequal("nonunique_cols")', setup)
 
 #-----------------------------------------------------------------------------
 # interpolate

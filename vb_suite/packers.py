@@ -8,7 +8,9 @@ import os
 import pandas as pd
 from pandas.core import common as com
 
-f = '__test__.msg'
+PATH = os.path.dirname(__file__)
+
+f = os.path.join(PATH, '__test__.msg')
 def remove(f):
    try:
        os.remove(f)
@@ -19,78 +21,85 @@ index = date_range('20000101',periods=50000,freq='H')
 df = DataFrame({'float1' : randn(50000),
                 'float2' : randn(50000)},
                index=index)
+"""
+
+side_effects_base = """
 remove(f)
 """
 
 #----------------------------------------------------------------------
 # msgpack
 
-setup = common_setup + """
+side_effects = side_effects_base + """
 df.to_msgpack(f)
 """
+setup = common_setup + side_effects
 
-packers_read_pack = Benchmark("pd.read_msgpack(f)", setup, start_date=start_date)
+packers_read_pack = Benchmark("pd.read_msgpack(f)", setup, start_date=start_date, side_effects=side_effects)
 
-setup = common_setup + """
-"""
+setup = common_setup + side_effects_base
 
-packers_write_pack = Benchmark("df.to_msgpack(f)", setup, cleanup="remove(f)", start_date=start_date)
+packers_write_pack = Benchmark("df.to_msgpack(f)", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
 
 #----------------------------------------------------------------------
 # pickle
 
-setup = common_setup + """
+side_effects = side_effects_base + """
 df.to_pickle(f)
 """
 
-packers_read_pickle = Benchmark("pd.read_pickle(f)", setup, start_date=start_date)
+setup = common_setup + side_effects
 
-setup = common_setup + """
-"""
+packers_read_pickle = Benchmark("pd.read_pickle(f)", setup, start_date=start_date, side_effects=side_effects)
 
-packers_write_pickle = Benchmark("df.to_pickle(f)", setup, cleanup="remove(f)", start_date=start_date)
+setup = common_setup + side_effects_base
+
+packers_write_pickle = Benchmark("df.to_pickle(f)", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
 
 #----------------------------------------------------------------------
 # csv
 
-setup = common_setup + """
+side_effects = side_effects_base + """
 df.to_csv(f)
 """
 
-packers_read_csv = Benchmark("pd.read_csv(f)", setup, start_date=start_date)
+setup = common_setup + side_effects
 
-setup = common_setup + """
-"""
+packers_read_csv = Benchmark("pd.read_csv(f)", setup, start_date=start_date, side_effects=side_effects)
 
-packers_write_csv = Benchmark("df.to_csv(f)", setup, cleanup="remove(f)", start_date=start_date)
+setup = common_setup + side_effects_base
+
+packers_write_csv = Benchmark("df.to_csv(f)", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
 
 #----------------------------------------------------------------------
 # hdf store
 
-setup = common_setup + """
+side_effects = side_effects_base + """
 df.to_hdf(f,'df')
 """
 
-packers_read_hdf_store = Benchmark("pd.read_hdf(f,'df')", setup, start_date=start_date)
+setup = common_setup + side_effects
 
-setup = common_setup + """
-"""
+packers_read_hdf_store = Benchmark("pd.read_hdf(f,'df')", setup, start_date=start_date, side_effects=side_effects)
 
-packers_write_hdf_store = Benchmark("df.to_hdf(f,'df')", setup, cleanup="remove(f)", start_date=start_date)
+setup = common_setup + side_effects_base
+
+packers_write_hdf_store = Benchmark("df.to_hdf(f,'df')", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
 
 #----------------------------------------------------------------------
 # hdf table
 
-setup = common_setup + """
+side_effects = side_effects_base + """
 df.to_hdf(f,'df',table=True)
 """
 
-packers_read_hdf_table = Benchmark("pd.read_hdf(f,'df')", setup, start_date=start_date)
+setup = common_setup + side_effects
 
-setup = common_setup + """
-"""
+packers_read_hdf_table = Benchmark("pd.read_hdf(f,'df')", setup, start_date=start_date, side_effects=side_effects)
 
-packers_write_hdf_table = Benchmark("df.to_hdf(f,'df',table=True)", setup, cleanup="remove(f)", start_date=start_date)
+setup = common_setup + side_effects_base
+
+packers_write_hdf_table = Benchmark("df.to_hdf(f,'df',table=True)", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
 
 #----------------------------------------------------------------------
 # json
@@ -100,15 +109,17 @@ import numpy as np
 df.index = np.arange(50000)
 """
 
-setup = common_setup + """
+side_effects = side_effects_base +  """
 df.to_json(f,orient='split')
 """
-packers_read_json_date_index = Benchmark("pd.read_json(f, orient='split')", setup, start_date=start_date)
-setup = setup + setup_int_index
-packers_read_json = Benchmark("pd.read_json(f, orient='split')", setup, start_date=start_date)
 
-setup = common_setup + """
-"""
-packers_write_json_date_index = Benchmark("df.to_json(f,orient='split')", setup, cleanup="remove(f)", start_date=start_date)
-setup = setup + setup_int_index
-packers_write_json = Benchmark("df.to_json(f,orient='split')", setup, cleanup="remove(f)", start_date=start_date)
+setup = common_setup + side_effects
+
+packers_read_json_date_index = Benchmark("pd.read_json(f, orient='split')", setup, start_date=start_date, side_effects=side_effects)
+setup = setup + setup_int_index + side_effects
+packers_read_json = Benchmark("pd.read_json(f, orient='split')", setup, start_date=start_date, side_effects=side_effects)
+
+setup = common_setup + side_effects_base
+packers_write_json_date_index = Benchmark("df.to_json(f,orient='split')", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
+setup = setup + setup_int_index + side_effects_base
+packers_write_json = Benchmark("df.to_json(f,orient='split')", setup, cleanup="remove(f)", start_date=start_date, side_effects=side_effects_base)
