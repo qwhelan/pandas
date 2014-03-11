@@ -129,7 +129,7 @@ stats_rolling_cov = Benchmark('rolling_cov(arr, arr, 100)', setup,
 stats_rolling_corr = Benchmark('rolling_corr(arr, arr, 100)', setup,
                                 start_date=datetime(2011, 6, 1))
 
-stats_rolling_corr_pairwise = Benchmark('df.rolling_corr_pairwise(df, 100)', setup,
+stats_rolling_corr_pairwise = Benchmark('rolling_corr_pairwise(df, 100)', setup,
                                         start_date=datetime(2011, 6, 1))
 
 stats_rolling_quantile = Benchmark('rolling_quantile(arr, 100, 0.5)', setup,
@@ -150,7 +150,7 @@ stats_expanding_cov = Benchmark('expanding_cov(arr, arr)', setup,
 stats_expanding_corr = Benchmark('expanding_corr(arr, arr)', setup,
                                  start_date=datetime(2011, 6, 1))
 
-stats_expanding_corr_pairwise = Benchmark('df.expanding_corr_pairwise(df)', setup,
+stats_expanding_corr_pairwise = Benchmark('expanding_corr_pairwise(df)', setup,
                                           start_date=datetime(2011, 6, 1))
 
 stats_ewma = Benchmark('ewma(arr, 100)', setup,

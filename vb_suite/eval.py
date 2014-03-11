@@ -129,7 +129,7 @@ series_setup = setup + """
 df = DataFrame({'dates': s.values})
 """
 
-query_datetime_series = Benchmark("df.query('dates < ts')",
+query_datetime_series = Benchmark("df.query('dates < @ts')",
                                   series_setup,
                                   start_date=datetime(2013, 9, 27))
 
@@ -137,7 +137,7 @@ index_setup = setup + """
 df = DataFrame({'a': np.random.randn(N)}, index=index)
 """
 
-query_datetime_index = Benchmark("df.query('index < ts')",
+query_datetime_index = Benchmark("df.query('index < @ts')",
                                  index_setup, start_date=datetime(2013, 9, 27))
 
 setup = setup + """
@@ -147,6 +147,6 @@ min_val = df['a'].min()
 max_val = df['a'].max()
 """
 
-query_with_boolean_selection = Benchmark("df.query('(a >= min_val) & (a <= max_val)')",
-                                         index_setup, start_date=datetime(2013, 9, 27))
+query_with_boolean_selection = Benchmark("df.query('(a >= @min_val) & (a <= @max_val)')",
+                                         setup, start_date=datetime(2013, 9, 27))
 
