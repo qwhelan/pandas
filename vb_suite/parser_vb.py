@@ -34,6 +34,7 @@ read_csv_thou_vb = Benchmark("read_csv('test.csv', sep='|', thousands=',')",
                              start_date=datetime(2012, 5, 7))
 
 setup = common_setup + """
+from cStringIO import StringIO
 data = ['A,B,C']
 data = data + ['1,2,3 # comment'] * 100000
 data = '\\n'.join(data)

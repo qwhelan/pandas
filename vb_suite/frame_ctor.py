@@ -47,14 +47,31 @@ frame_ctor_nested_dict_int64 = Benchmark("DataFrame(data)", setup)
 # dynamically generate benchmarks for every offset
 dynamic_benchmarks = {}
 n_steps = [1, 2]
+
+need_two = {'FY5253Quarter': ['qtr_with_extra_week', 'startingMonth', 'weekday'],
+            'FY5253': ['startingMonth', 'weekday'],
+            'LastWeekOfMonth': ['weekday', 'week'],
+            'WeekOfMonth': ['weekday', 'week']}
+
+extra_args = {'FY5253': 'variation="last"', 'FY5253Quarter': 'variation="last"'}
 for offset in offsets.__all__:
     for n in n_steps:
+        args = n
+        name = n
+        if str(offset) in need_two:
+            args = str(n) + ',' + ','.join(map(lambda x: '{}={}'.format(x, n), need_two[str(offset)]))
+            if str(offset) in extra_args:
+                args += ',' + extra_args[str(offset)]
+            name = str(n) + '_' + str(n)
+
         setup = common_setup + """
-df = DataFrame(np.random.randn(1000,10),index=date_range('1/1/1900',periods=1000,freq={}({})))
+n = 100
+df = DataFrame(np.random.randn(n,10),index=date_range('1/1/1900',periods=n,freq={}({})))
 d = dict([ (col,df[col]) for col in df.columns ])
-""".format(offset, n)
-        key = 'frame_ctor_dtindex_{}({})'.format(offset, n)
-        dynamic_benchmarks[key] = Benchmark("DataFrame(d)", setup, name=key)
+""".format(offset, args)
+        key = 'frame_ctor_dtindex_{}({})'.format(offset, name)
+        dynamic_benchmarks[key] = Benchmark("DataFrame(d)", setup, name=key,
+                                            logy=True)
 
 # Have to stuff them in globals() so vbench detects them
 globals().update(dynamic_benchmarks)
