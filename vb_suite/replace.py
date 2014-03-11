@@ -20,10 +20,11 @@ def replace_slow(ser, old, new):
 """
 
 replace_fillna = Benchmark('ts.fillna(0., inplace=True)', common_setup,
-                           start_date=datetime(2012, 4, 4))
+                           start_date=datetime(2012, 4, 4), logy=True)
+
 replace_replacena = Benchmark('ts.replace(np.nan, 0., inplace=True)',
                               common_setup,
-                              start_date=datetime(2012, 5, 15))
+                              start_date=datetime(2012, 5, 15), logy=True)
 
 # replace_putmask = Benchmark('replace_slow(ts, np.nan, 0.)', common_setup,
 #                             start_date=datetime(2012, 5, 15))

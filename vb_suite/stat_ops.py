@@ -95,17 +95,20 @@ s = Series(values)
 """
 
 stats_rank_average_int = Benchmark('s.rank()', setup,
-                                   start_date=datetime(2011, 12, 12))
+                                   start_date=datetime(2011, 12, 12),
+                                   logy=True)
 
 setup = common_setup + """
 df = DataFrame(np.random.randn(5000, 50))
 """
 
 stats_rank2d_axis1_average = Benchmark('df.rank(1)', setup,
-                                       start_date=datetime(2011, 12, 12))
+                                       start_date=datetime(2011, 12, 12),
+                                       logy=True)
 
 stats_rank2d_axis0_average = Benchmark('df.rank()', setup,
-                                       start_date=datetime(2011, 12, 12))
+                                       start_date=datetime(2011, 12, 12),
+                                       logy=True)
 
 # rolling functions
 
@@ -123,4 +126,5 @@ df = DataFrame(np.random.randn(1000, 30))
 """
 
 stats_corr_spearman = Benchmark("df.corr(method='spearman')", setup,
-                                start_date=datetime(2011, 12, 4))
+                                start_date=datetime(2011, 12, 4),
+                                logy=True)

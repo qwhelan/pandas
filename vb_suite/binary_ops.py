@@ -114,9 +114,12 @@ ts = s[halfway]
 """
 
 timestamp_series_compare = Benchmark("ts >= s", setup,
-                                     start_date=datetime(2013, 9, 27))
+                                     start_date=datetime(2013, 9, 27),
+                                     logy=True)
+
 series_timestamp_compare = Benchmark("s <= ts", setup,
-                                     start_date=datetime(2012, 2, 21))
+                                     start_date=datetime(2012, 2, 21),
+                                     logy=True)
 
 setup = common_setup + """
 N = 1000000
@@ -124,6 +127,7 @@ s = Series(date_range('20010101', periods=N, freq='s'))
 """
 
 timestamp_ops_diff1 = Benchmark("s.diff()", setup,
-                                start_date=datetime(2013, 1, 1))
+                                start_date=datetime(2013, 1, 1), logy=True)
+
 timestamp_ops_diff2 = Benchmark("s-s.shift()", setup,
-                                start_date=datetime(2013, 1, 1))
+                                start_date=datetime(2013, 1, 1), logy=True)

@@ -35,7 +35,7 @@ index = tm.makeStringIndex(1000000)
 s = Series(np.random.rand(1000000), index=index)
 """
 series_getitem_pos_slice = Benchmark("s[:800000]", setup,
-                                     name="series_getitem_pos_slice")
+                                     name="series_getitem_pos_slice", logy=True)
 
 
 setup = common_setup + """
@@ -94,7 +94,8 @@ col = columns[10]
 
 indexing_frame_get_value_ix = Benchmark("df.ix[idx,col]", setup,
                                         name='indexing_frame_get_value_ix',
-                                        start_date=datetime(2011, 11, 12))
+                                        start_date=datetime(2011, 11, 12),
+                                        logy=True)
 
 indexing_frame_get_value = Benchmark("df.get_value(idx,col)", setup,
                                      name='indexing_frame_get_value',
@@ -140,7 +141,7 @@ df2 = DataFrame(np.random.randn(50000, 100))
 """
 indexing_dataframe_boolean = \
     Benchmark("df > df2", setup, name='indexing_dataframe_boolean',
-              start_date=datetime(2012, 1, 1))
+              start_date=datetime(2012, 1, 1), logy=True)
 
 setup = common_setup + """
 import pandas.computation.expressions as expr
@@ -151,7 +152,7 @@ expr.set_numexpr_threads(1)
 
 indexing_dataframe_boolean_st = \
     Benchmark("df > df2", setup, name='indexing_dataframe_boolean_st',cleanup="expr.set_numexpr_threads()",
-              start_date=datetime(2013, 2, 26))
+              start_date=datetime(2013, 2, 26), logy=True)
 
 
 setup = common_setup + """
@@ -174,9 +175,10 @@ midx = MultiIndex.from_arrays([a, b])
 midx = midx.take(np.random.permutation(np.arange(100000)))
 """
 sort_level_zero = Benchmark("midx.sortlevel(0)", setup,
-                            start_date=datetime(2012, 1, 1))
+                            start_date=datetime(2012, 1, 1), logy=True)
+
 sort_level_one = Benchmark("midx.sortlevel(1)", setup,
-                           start_date=datetime(2012, 1, 1))
+                           start_date=datetime(2012, 1, 1), logy=True)
 
 #----------------------------------------------------------------------
 # Panel subset selection

@@ -44,15 +44,17 @@ df = DataFrame(randn(10000, 10000))
 idx = np.arange(4000, 7000)
 """
 
-frame_reindex_axis0 = Benchmark('df.reindex(idx)', setup)
+frame_reindex_axis0 = Benchmark('df.reindex(idx)', setup, logy=True)
 
-frame_reindex_axis1 = Benchmark('df.reindex(columns=idx)', setup)
+frame_reindex_axis1 = Benchmark('df.reindex(columns=idx)', setup, logy=True)
 
 frame_reindex_both_axes = Benchmark('df.reindex(index=idx, columns=idx)',
-                                    setup, start_date=datetime(2011, 1, 1))
+                                    setup, start_date=datetime(2011, 1, 1),
+                                    logy=True)
 
 frame_reindex_both_axes_ix = Benchmark('df.ix[idx, idx]', setup,
-                                       start_date=datetime(2011, 1, 1))
+                                       start_date=datetime(2011, 1, 1),
+                                       logy=True)
 
 #----------------------------------------------------------------------
 # reindex with upcasts
@@ -77,7 +79,8 @@ bool_arr[:1000] = True
 """
 
 frame_boolean_row_select = Benchmark('df[bool_arr]', setup,
-                                     start_date=datetime(2011, 1, 1))
+                                     start_date=datetime(2011, 1, 1),
+                                     logy=True)
 
 #----------------------------------------------------------------------
 # iteritems (monitor no-copying behaviour)
@@ -112,13 +115,16 @@ frame_iteritems = Benchmark('f()', setup,
                             start_date=datetime(2010, 6, 1))
 
 frame_iteritems_cached = Benchmark('g()', setup,
-                                   start_date=datetime(2010, 6, 1))
+                                   start_date=datetime(2010, 6, 1),
+                                   logy=True)
 
 frame_getitem_single_column = Benchmark('h()', setup,
-                                        start_date=datetime(2010, 6, 1))
+                                        start_date=datetime(2010, 6, 1),
+                                        logy=True)
 
 frame_getitem_single_column2 = Benchmark('j()', setup,
-                                         start_date=datetime(2010, 6, 1))
+                                         start_date=datetime(2010, 6, 1),
+                                         logy=True)
 
 #----------------------------------------------------------------------
 # assignment
@@ -132,7 +138,8 @@ def f(x):
 """
 
 frame_assign_timeseries_index = Benchmark('f(df)', setup,
-                                          start_date=datetime(2013, 10, 1))
+                                          start_date=datetime(2013, 10, 1),
+                                          logy=True)
 
 
 #----------------------------------------------------------------------
@@ -199,7 +206,7 @@ def f(K=500):
         df[i] = new_col
 """
 
-frame_insert_500_columns_end = Benchmark('f()', setup, start_date=datetime(2011, 1, 1))
+frame_insert_500_columns_end = Benchmark('f()', setup, start_date=datetime(2011, 1, 1), logy=True)
 
 setup = common_setup + """
 N = 1000
@@ -211,7 +218,7 @@ def f(K=100):
         df.insert(0,i,new_col)
 """
 
-frame_insert_100_columns_begin = Benchmark('f()', setup, start_date=datetime(2011, 1, 1))
+frame_insert_100_columns_begin = Benchmark('f()', setup, start_date=datetime(2011, 1, 1), logy=True)
 
 #----------------------------------------------------------------------
 # strings methods, #2602
@@ -221,7 +228,8 @@ s = Series(['abcdefg', np.nan]*500000)
 """
 
 series_string_vector_slice = Benchmark('s.str[:5]', setup,
-                                       start_date=datetime(2012, 8, 1))
+                                       start_date=datetime(2012, 8, 1),
+                                       logy=True)
 
 #----------------------------------------------------------------------
 # df.info() and get_dtype_counts() # 2807
@@ -231,7 +239,8 @@ df = pandas.DataFrame(np.random.randn(10,10000))
 """
 
 frame_get_dtype_counts = Benchmark('df.get_dtype_counts()', setup,
-                                       start_date=datetime(2012, 8, 1))
+                                       start_date=datetime(2012, 8, 1),
+                                   logy=True)
 
 ##
 setup = common_setup + """
@@ -239,7 +248,7 @@ df = pandas.DataFrame(np.random.randn(10,10000))
 """
 
 frame_repr_wide = Benchmark('repr(df)', setup,
-                            start_date=datetime(2012, 8, 1))
+                            start_date=datetime(2012, 8, 1), logy=True)
 
 ##
 setup = common_setup + """
@@ -247,7 +256,7 @@ df = pandas.DataFrame(np.random.randn(10000, 10))
 """
 
 frame_repr_tall = Benchmark('repr(df)', setup,
-                            start_date=datetime(2012, 8, 1))
+                            start_date=datetime(2012, 8, 1), logy=True)
 
 ##
 setup = common_setup + """
@@ -276,10 +285,12 @@ mask = isnull(df)
 """
 
 frame_mask_bools = Benchmark('bools.mask(mask)', setup,
-                             start_date=datetime(2013,1,1))
+                             start_date=datetime(2013,1,1),
+                             logy=True)
 
 frame_mask_floats  = Benchmark('bools.astype(float).mask(mask)', setup,
-                             start_date=datetime(2013,1,1))
+                               start_date=datetime(2013,1,1),
+                               logy=True)
 
 ## isnull
 setup = common_setup + """
@@ -287,7 +298,7 @@ data = np.random.randn(1000, 1000)
 df = DataFrame(data)
 """
 frame_isnull  = Benchmark('isnull(df)', setup,
-                           start_date=datetime(2012,1,1))
+                           start_date=datetime(2012,1,1), logy=True)
 
 ## dropna
 setup = common_setup + """

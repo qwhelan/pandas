@@ -20,7 +20,8 @@ df.to_csv('__test__.csv')
 """
 
 read_csv_standard = Benchmark("read_csv('__test__.csv')", setup1,
-                              start_date=datetime(2011, 9, 15))
+                              start_date=datetime(2011, 9, 15),
+                              logy=True)
 
 
 #----------------------------------------------------------------------
@@ -37,14 +38,14 @@ df = DataFrame({'float1' : randn(10000),
 """
 
 write_csv_standard = Benchmark("df.to_csv('__test__.csv')", setup2,
-                               start_date=datetime(2011, 9, 15))
+                               start_date=datetime(2011, 9, 15), logy=True)
 
 #----------------------------------
 setup = common_setup + """
 df = DataFrame(np.random.randn(3000, 30))
 """
 frame_to_csv = Benchmark("df.to_csv('__test__.csv')", setup,
-                         start_date=datetime(2011, 1, 1))
+                         start_date=datetime(2011, 1, 1), logy=True)
 #----------------------------------
 
 setup = common_setup + """
@@ -54,7 +55,7 @@ df['C'] = df.A + 2.0
 df['D'] = df.A + 3.0
 """
 frame_to_csv2 = Benchmark("df.to_csv('__test__.csv')", setup,
-                         start_date=datetime(2011, 1, 1))
+                         start_date=datetime(2011, 1, 1), logy=True)
 
 #----------------------------------
 setup = common_setup + """
@@ -88,7 +89,8 @@ data = '\\n'.join(rng.map(lambda x: x.strftime("%Y-%m-%d %H:%M:%S")))
 stmt = ("read_csv(StringIO(data), header=None, names=['foo'], "
         "         parse_dates=['foo'])")
 read_parse_dates_iso8601 = Benchmark(stmt, setup,
-                                     start_date=datetime(2012, 3, 1))
+                                     start_date=datetime(2012, 3, 1),
+                                     logy=True)
 
 setup = common_setup + """
 rng = date_range('1/1/2000', periods=1000)

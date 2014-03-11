@@ -131,12 +131,12 @@ mdf2.index = df2.index
 stmt = "df1.append(df2)"
 append_frame_single_homogenous = \
     Benchmark(stmt, setup, name='append_frame_single_homogenous',
-              ncalls=500, repeat=1)
+              ncalls=500, repeat=1, logy=True)
 
 stmt = "mdf1.append(mdf2)"
 append_frame_single_mixed = Benchmark(stmt, setup,
                                       name='append_frame_single_mixed',
-                                      ncalls=500, repeat=1)
+                                      ncalls=500, repeat=1, logy=True)
 
 #----------------------------------------------------------------------
 # data alignment

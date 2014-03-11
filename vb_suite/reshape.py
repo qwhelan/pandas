@@ -15,7 +15,7 @@ udf = df.unstack(1)
 """
 
 reshape_stack_simple = Benchmark('udf.stack()', setup,
-                                 start_date=datetime(2011, 10, 1))
+                                 start_date=datetime(2011, 10, 1), logy=True)
 
 setup = common_setup + """
 def unpivot(frame):
@@ -50,7 +50,8 @@ for iter in range(10):
 """
 
 unstack_sparse_keyspace = Benchmark('idf.unstack()', setup,
-                                    start_date=datetime(2011, 10, 1))
+                                    start_date=datetime(2011, 10, 1),
+                                    logy=True)
 
 # Melt
 

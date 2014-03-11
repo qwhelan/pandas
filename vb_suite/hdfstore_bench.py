@@ -146,7 +146,7 @@ store.append('df7',df)
 
 read_store_table = Benchmark(
     "store.select('df7')", setup7, cleanup="store.close()",
-    start_date=start_date)
+    start_date=start_date, logy=True)
 
 
 #----------------------------------------------------------------------
@@ -163,7 +163,7 @@ store = HDFStore(f)
 
 write_store_table = Benchmark(
     "store.append('df8',df)", setup8, cleanup="store.close()",
-    start_date=start_date)
+    start_date=start_date, logy=True)
 
 #----------------------------------------------------------------------
 # get from a table (wide)
@@ -178,7 +178,7 @@ store.append('df9',df)
 
 read_store_table_wide = Benchmark(
     "store.select('df9')", setup9, cleanup="store.close()",
-    start_date=start_date)
+    start_date=start_date, logy=True)
 
 
 #----------------------------------------------------------------------
@@ -193,7 +193,7 @@ store = HDFStore(f)
 
 write_store_table_wide = Benchmark(
     "store.append('df10',df)", setup10, cleanup="store.close()",
-    start_date=start_date)
+    start_date=start_date, logy=True)
 
 #----------------------------------------------------------------------
 # get from a table (wide)

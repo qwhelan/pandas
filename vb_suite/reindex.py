@@ -45,7 +45,7 @@ s2 = s1[::2]
 statement = "s1.reindex(s2.index)"
 reindex_multi = Benchmark(statement, setup,
                           name='reindex_multiindex',
-                          start_date=datetime(2011, 9, 1))
+                          start_date=datetime(2011, 9, 1), logy=True)
 
 #----------------------------------------------------------------------
 # Pad / backfill
@@ -72,15 +72,16 @@ def backfill():
 
 statement = "pad()"
 reindex_daterange_pad = Benchmark(statement, setup,
-                                  name="reindex_daterange_pad")
+                                  name="reindex_daterange_pad", logy=True)
 
 statement = "backfill()"
 reindex_daterange_backfill = Benchmark(statement, setup,
-                                       name="reindex_daterange_backfill")
+                                       name="reindex_daterange_backfill",
+                                       logy=True)
 
 reindex_fillna_pad = Benchmark("ts3.fillna(method='pad')", setup,
                                name="reindex_fillna_pad",
-                               start_date=datetime(2011, 3, 1))
+                               start_date=datetime(2011, 3, 1), logy=True)
 
 reindex_fillna_pad_float32 = Benchmark("ts4.fillna(method='pad')", setup,
                                        name="reindex_fillna_pad_float32",
@@ -88,7 +89,8 @@ reindex_fillna_pad_float32 = Benchmark("ts4.fillna(method='pad')", setup,
 
 reindex_fillna_backfill = Benchmark("ts3.fillna(method='backfill')", setup,
                                     name="reindex_fillna_backfill",
-                                    start_date=datetime(2011, 3, 1))
+                                    start_date=datetime(2011, 3, 1), logy=True)
+
 reindex_fillna_backfill_float32 = Benchmark("ts4.fillna(method='backfill')", setup,
                                             name="reindex_fillna_backfill_float32",
                                             start_date=datetime(2013, 1, 1))
@@ -109,7 +111,7 @@ df_level = DataFrame(np.random.randn(100, 4), index=index.levels[1])
 reindex_frame_level_align = \
     Benchmark("df.align(df_level, level=1, copy=False)", setup,
               name='reindex_frame_level_align',
-              start_date=datetime(2011, 12, 27))
+              start_date=datetime(2011, 12, 27), logy=True)
 
 reindex_frame_level_reindex = \
     Benchmark("df_level.reindex(df.index, level=1)", setup,
@@ -134,7 +136,8 @@ col_array_list = list(df.values.T)
 """
 statement = "df.sort_index(by=['key1', 'key2'])"
 frame_sort_index_by_columns = Benchmark(statement, setup,
-                                        start_date=datetime(2011, 11, 1))
+                                        start_date=datetime(2011, 11, 1),
+                                        logy=True)
 
 # drop_duplicates
 
@@ -155,7 +158,8 @@ df.ix[:10000, :] = np.nan
 """
 statement2 = "df.drop_duplicates(['key1', 'key2'])"
 frame_drop_duplicates_na = Benchmark(statement2, setup,
-                                     start_date=datetime(2012, 5, 15))
+                                     start_date=datetime(2012, 5, 15),
+                                     logy=True)
 
 lib_fast_zip_fillna = Benchmark('lib.fast_zip_fillna(col_array_list)', setup,
                                 start_date=datetime(2012, 5, 15))
@@ -188,7 +192,8 @@ df = DataFrame(values)
 
 frame_fillna_many_columns_pad = Benchmark("df.fillna(method='pad')",
                                           setup,
-                                          start_date=datetime(2011, 3, 1))
+                                          start_date=datetime(2011, 3, 1),
+                                          logy=True)
 
 #----------------------------------------------------------------------
 # blog "pandas escaped the zoo"

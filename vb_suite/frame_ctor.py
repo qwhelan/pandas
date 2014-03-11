@@ -81,7 +81,7 @@ setup = common_setup + """
 mi = MultiIndex.from_tuples([(x,y) for x in range(100) for y in range(100)])
 s = Series(randn(10000), index=mi)
 """
-frame_from_series = Benchmark("DataFrame(s)", setup)
+frame_from_series = Benchmark("DataFrame(s)", setup, logy=True)
 
 #----------------------------------------------------------------------
 # get_numeric_data
@@ -94,4 +94,5 @@ df = df.consolidate()
 """
 
 frame_get_numeric_data = Benchmark('df._get_numeric_data()', setup,
-                                   start_date=datetime(2011, 11, 1))
+                                   start_date=datetime(2011, 11, 1),
+                                   logy=True)

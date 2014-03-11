@@ -29,6 +29,7 @@ rng2 = rng[:-1]
 
 datetime_index_intersection = Benchmark("rng.intersection(rng2)", setup,
                                         start_date=datetime(2013, 9, 27))
+
 datetime_index_union = Benchmark("rng.union(rng2)", setup,
                                  start_date=datetime(2013, 9, 27))
 
@@ -42,10 +43,12 @@ right = Index(options.take(np.random.permutation(N)[:N // 2]))
 """
 
 index_int64_union = Benchmark('left.union(right)', setup,
-                              start_date=datetime(2011, 1, 1))
+                              start_date=datetime(2011, 1, 1),
+                              logy=True)
 
 index_int64_intersection = Benchmark('left.intersection(right)', setup,
-                                     start_date=datetime(2011, 1, 1))
+                                     start_date=datetime(2011, 1, 1),
+                                     logy=True)
 
 #----------------------------------------------------------------------
 # string index slicing

@@ -28,7 +28,8 @@ ts = Series(1, index=rng)
 
 stmt = "ts[ts.index[len(ts) // 2]]; ts.index._cleanup()"
 timeseries_large_lookup_value = Benchmark(stmt, setup,
-                                          start_date=datetime(2012, 1, 1))
+                                          start_date=datetime(2012, 1, 1),
+                                          logy=True)
 
 #----------------------------------------------------------------------
 # Test slice minutely series
@@ -62,7 +63,7 @@ left = Series(ts.values.take(lindex), index=ts.index.take(lindex))
 right = Series(ts.values.take(rindex), index=ts.index.take(rindex))
 """
 
-timeseries_add_irregular = Benchmark('left + right', setup)
+timeseries_add_irregular = Benchmark('left + right', setup, logy=True)
 
 #----------------------------------------------------------------------
 # Sort large irregular time series
@@ -185,7 +186,7 @@ rng = date_range('1/1/2000 9:30', periods=10000, freq='S', tz='US/Eastern')
 
 datetimeindex_normalize = \
     Benchmark('rng.normalize()', setup,
-              start_date=datetime(2012, 9, 1))
+              start_date=datetime(2012, 9, 1), logy=True)
 
 setup = common_setup + """
 from pandas.tseries.offsets import Second

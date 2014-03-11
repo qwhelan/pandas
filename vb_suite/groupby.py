@@ -33,7 +33,7 @@ key1 = df['key1']
 
 stmt1 = "df.groupby(['key1', 'key2'])['data1'].agg(lambda x: x.values.sum())"
 groupby_multi_python = Benchmark(stmt1, setup,
-                                 start_date=datetime(2011, 7, 1))
+                                 start_date=datetime(2011, 7, 1), logy=True)
 
 stmt3 = "df.groupby(['key1', 'key2']).sum()"
 groupby_multi_cython = Benchmark(stmt3, setup,
@@ -41,7 +41,7 @@ groupby_multi_cython = Benchmark(stmt3, setup,
 
 stmt = "df.groupby(['key1', 'key2'])['data1'].agg(np.std)"
 groupby_multi_series_op = Benchmark(stmt, setup,
-                                    start_date=datetime(2011, 8, 1))
+                                    start_date=datetime(2011, 8, 1), logy=True)
 
 groupby_series_simple_cython = \
     Benchmark('simple_series.groupby(key1).sum()', setup,
@@ -96,13 +96,13 @@ groupby_multi_different_functions = \
     Benchmark("""df.groupby(['key1', 'key2']).agg({'value1' : 'mean',
                                                    'value2' : 'var',
                                                    'value3' : 'sum'})""",
-              setup, start_date=datetime(2011, 9, 1))
+              setup, start_date=datetime(2011, 9, 1), logy=True)
 
 groupby_multi_different_numpy_functions = \
     Benchmark("""df.groupby(['key1', 'key2']).agg({'value1' : np.mean,
                                                    'value2' : np.var,
                                                    'value3' : np.sum})""",
-              setup, start_date=datetime(2011, 9, 1))
+              setup, start_date=datetime(2011, 9, 1), logy=True)
 
 #----------------------------------------------------------------------
 # size() speed
@@ -116,7 +116,8 @@ df = DataFrame({'key1': np.random.randint(0, 500, size=100000),
 """
 
 groupby_multi_size = Benchmark("df.groupby(['key1', 'key2']).size()",
-                               setup, start_date=datetime(2011, 10, 1))
+                               setup, start_date=datetime(2011, 10, 1),
+                               logy=True)
 
 #----------------------------------------------------------------------
 # Series.value_counts
@@ -126,7 +127,8 @@ s = Series(np.random.randint(0, 1000, size=100000))
 """
 
 series_value_counts_int64 = Benchmark('s.value_counts()', setup,
-                                      start_date=datetime(2011, 10, 21))
+                                      start_date=datetime(2011, 10, 21),
+                                      logy=True)
 
 # value_counts on lots of strings
 
@@ -189,16 +191,16 @@ labels = labels.take(np.random.permutation(len(labels)))
 """
 
 groupby_first = Benchmark('data.groupby(labels).first()', setup,
-                          start_date=datetime(2012, 5, 1))
+                          start_date=datetime(2012, 5, 1), logy=True)
 
 groupby_first_float32 = Benchmark('data2.groupby(labels).first()', setup,
-                          start_date=datetime(2013, 1, 1))
+                          start_date=datetime(2013, 1, 1), logy=True)
 
 groupby_last = Benchmark('data.groupby(labels).last()', setup,
-                         start_date=datetime(2012, 5, 1))
+                         start_date=datetime(2012, 5, 1), logy=True)
 
 groupby_last_float32 = Benchmark('data2.groupby(labels).last()', setup,
-                         start_date=datetime(2013, 1, 1))
+                         start_date=datetime(2013, 1, 1), logy=True)
 
 
 #----------------------------------------------------------------------
@@ -218,7 +220,8 @@ ts = Series(np.random.randn(len(rng)), index=rng)
 """
 
 groupby_indices = Benchmark('len(ts.groupby([year, month, day]))',
-                            setup, start_date=datetime(2012, 1, 1))
+                            setup, start_date=datetime(2012, 1, 1),
+                            logy=True)
 
 #----------------------------------------------------------------------
 # median
@@ -264,10 +267,11 @@ def f(g):
 """
 
 groupby_frame_apply_overhead = Benchmark("df.groupby('key').apply(f)", setup,
-                                         start_date=datetime(2011, 10, 1))
+                                         start_date=datetime(2011, 10, 1),
+                                         logy=True)
 
 groupby_frame_apply = Benchmark("df.groupby(['key', 'key2']).apply(f)", setup,
-                                 start_date=datetime(2011, 10, 1))
+                                 start_date=datetime(2011, 10, 1), logy=True)
 
 
 #----------------------------------------------------------------------
@@ -293,7 +297,7 @@ N = 500
 df = DataFrame({'ii':range(N),'bb':[True for x in range(N)]})
 """
 
-groupby_sum_booleans = Benchmark("df.groupby('ii').sum()", setup)
+groupby_sum_booleans = Benchmark("df.groupby('ii').sum()", setup, logy=True)
 
 #----------------------------------------------------------------------
 # Transform testing

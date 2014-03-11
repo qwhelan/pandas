@@ -22,7 +22,7 @@ arr = np.random.randn(100, 100)
 
 ctor_frame_ndarray = \
     Benchmark("DataFrame(arr)", setup=setup,
-              name='frame_constructor_ndarray')
+              name='frame_constructor_ndarray', logy=True)
 
 setup = common_setup + """
 data = np.array(['foo', 'bar', 'baz'], dtype=object)
@@ -34,6 +34,7 @@ ctor_index_array_string = Benchmark('Index(data)', setup=setup)
 setup = common_setup + """
 s = Series([Timestamp('20110101'),Timestamp('20120101'),Timestamp('20130101')]*1000)
 """
-index_from_series_ctor = Benchmark('Index(s)', setup=setup)
+index_from_series_ctor = Benchmark('Index(s)', setup=setup, logy=True)
 
-dtindex_from_series_ctor = Benchmark('DatetimeIndex(s)', setup=setup)
+dtindex_from_series_ctor = Benchmark('DatetimeIndex(s)', setup=setup,
+                                     logy=True)

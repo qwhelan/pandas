@@ -42,7 +42,7 @@ data = '\\n'.join(data)
 
 stmt = "read_csv(StringIO(data), comment='#')"
 read_csv_comment2 = Benchmark(stmt, setup,
-                              start_date=datetime(2011, 11, 1))
+                              start_date=datetime(2011, 11, 1), logy=True)
 
 setup = common_setup + """
 from cStringIO import StringIO
