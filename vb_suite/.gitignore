@@ -2,3 +2,4 @@ benchmarks.db
 build/*
 source/vbench/*
 source/*.rst
+vb_coverage/*

@@ -26,7 +26,9 @@ modules = ['attrs_caching',
            'reshape',
            'stat_ops',
            'timeseries',
-           'eval']
+           'eval',
+           'dtindex',
+           'nanops']
 
 by_module = {}
 benchmarks = []
@@ -62,7 +64,7 @@ try:
     TMP_DIR = config.get('setup', 'tmp_dir')
 except:
     REPO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
-    REPO_URL = 'git@github.com:pydata/pandas.git'
+    REPO_URL = REPO_PATH#'git@github.com:pydata/pandas.git'
     DB_PATH = os.path.join(REPO_PATH, 'vb_suite/benchmarks.db')
     TMP_DIR = os.path.join(HOME, 'tmp/vb_pandas')
 
@@ -107,21 +109,24 @@ def generate_rst_files(benchmarks):
 
         fig_full_path = os.path.join(fig_base_path, '%s.png' % bmk.name)
 
-        # make the figure
-        plt.figure(figsize=(10, 6))
-        ax = plt.gca()
-        bmk.plot(DB_PATH, ax=ax)
+        try:
+            # make the figure
+            plt.figure(figsize=(10, 6))
+            ax = plt.gca()
+            bmk.plot(DB_PATH, ax=ax)
 
-        start, end = ax.get_xlim()
+            start, end = ax.get_xlim()
 
-        plt.xlim([start - 30, end + 30])
-        plt.savefig(fig_full_path, bbox_inches='tight')
-        plt.close('all')
+            plt.xlim([start - 30, end + 30])
+            plt.savefig(fig_full_path, bbox_inches='tight')
+            plt.close('all')
 
-        fig_rel_path = 'vbench/figures/%s.png' % bmk.name
-        rst_text = bmk.to_rst(image_path=fig_rel_path)
-        with open(rst_path, 'w') as f:
-            f.write(rst_text)
+            fig_rel_path = 'vbench/figures/%s.png' % bmk.name
+            rst_text = bmk.to_rst(image_path=fig_rel_path)
+            with open(rst_path, 'w') as f:
+                f.write(rst_text)
+        except:
+            print 'failed for', bmk
 
     with open(os.path.join(RST_BASE, 'index.rst'), 'w') as f:
         print >> f, """
