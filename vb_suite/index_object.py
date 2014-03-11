@@ -33,6 +33,12 @@ datetime_index_intersection = Benchmark("rng.intersection(rng2)", setup,
 datetime_index_union = Benchmark("rng.union(rng2)", setup,
                                  start_date=datetime(2013, 9, 27))
 
+datetime_index_diff = Benchmark('rng.diff(rng2)', setup,
+                                start_date=datetime(2013, 9, 27))
+
+datetime_index_sym_diff = Benchmark('rng.sym_diff(rng2)', setup,
+                                start_date=datetime(2013, 9, 27))
+
 # integers
 setup = common_setup + """
 N = 1000000
@@ -50,15 +56,33 @@ index_int64_intersection = Benchmark('left.intersection(right)', setup,
                                      start_date=datetime(2011, 1, 1),
                                      logy=True)
 
-#----------------------------------------------------------------------
-# string index slicing
-setup = common_setup + """
-idx = tm.makeStringIndex(1000000)
+index_int64_diff = Benchmark('left.diff(right)', setup,
+                             start_date=datetime(2011, 1, 1))
 
-mask = np.arange(1000000) % 3 == 0
-series_mask = Series(mask)
+index_int64_sym_diff = Benchmark('left.sym_diff(right)', setup,
+                             start_date=datetime(2011, 1, 1))
+
+
+# mixed dtypes
+setup = common_setup + """
+N = 10000
+options = np.arange(N)
+
+left = Index(options.take(np.random.permutation(N)[:N // 2]))
+right = Index(options.take(np.random.permutation(N)[:N // 2]), dtype='object')
 """
-index_str_slice_indexer_basic = Benchmark('idx[:-1]', setup)
-index_str_slice_indexer_even = Benchmark('idx[::2]', setup)
-index_str_boolean_indexer = Benchmark('idx[mask]', setup)
-index_str_boolean_series_indexer = Benchmark('idx[series_mask]', setup)
+
+index_mixed_dtype_union = Benchmark('left.union(right)', setup,
+                              start_date=datetime(2011, 1, 1))
+
+index_mixed_dtype_intersection = Benchmark('left.intersection(right)', setup,
+                                     start_date=datetime(2011, 1, 1))
+
+index_mixed_dtype_diff = Benchmark('left.diff(right)', setup,
+                                     start_date=datetime(2011, 1, 1))
+
+index_mixed_dtype_sym_diff = Benchmark('left.sym_diff(right)', setup,
+                                     start_date=datetime(2011, 1, 1))
+
+index_mixed_dtype_join = Benchmark('left.join(right)', setup,
+                                     start_date=datetime(2011, 1, 1))

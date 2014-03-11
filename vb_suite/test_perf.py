@@ -252,7 +252,6 @@ def profile_comparative(benchmarks):
         report_comparative(head_res,baseline_res)
 
     finally:
-        #        print("Disposing of TMP_DIR: %s" % TMP_DIR)
         shutil.rmtree(TMP_DIR)
 
 def prep_pickle_for_total(df, agg_name='median'):
