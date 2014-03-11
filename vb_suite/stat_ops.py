@@ -114,10 +114,59 @@ stats_rank2d_axis0_average = Benchmark('df.rank()', setup,
 
 setup = common_setup + """
 arr = np.random.randn(100000)
+df = DataFrame(np.random.randn(100000, 4))
 """
 
 stats_rolling_mean = Benchmark('rolling_mean(arr, 100)', setup,
                                start_date=datetime(2011, 6, 1))
+
+stats_rolling_count = Benchmark('rolling_count(arr, 100)', setup,
+                                start_date=datetime(2011, 6, 1))
+
+stats_rolling_cov = Benchmark('rolling_cov(arr, arr, 100)', setup,
+                                start_date=datetime(2011, 6, 1))
+
+stats_rolling_corr = Benchmark('rolling_corr(arr, arr, 100)', setup,
+                                start_date=datetime(2011, 6, 1))
+
+stats_rolling_corr_pairwise = Benchmark('df.rolling_corr_pairwise(df, 100)', setup,
+                                        start_date=datetime(2011, 6, 1))
+
+stats_rolling_quantile = Benchmark('rolling_quantile(arr, 100, 0.5)', setup,
+                                   start_date=datetime(2011, 6, 1))
+
+stats_expanding_mean = Benchmark('expanding_mean(arr)', setup,
+                                 start_date=datetime(2011, 6, 1))
+
+stats_expanding_count = Benchmark('expanding_count(arr)', setup,
+                                  start_date=datetime(2011, 6, 1))
+
+stats_expanding_quantile = Benchmark('expanding_quantile(arr, 0.5)', setup,
+                                     start_date=datetime(2011, 6, 1))
+
+stats_expanding_cov = Benchmark('expanding_cov(arr, arr)', setup,
+                                start_date=datetime(2011, 6, 1))
+
+stats_expanding_corr = Benchmark('expanding_corr(arr, arr)', setup,
+                                 start_date=datetime(2011, 6, 1))
+
+stats_expanding_corr_pairwise = Benchmark('df.expanding_corr_pairwise(df)', setup,
+                                          start_date=datetime(2011, 6, 1))
+
+stats_ewma = Benchmark('ewma(arr, 100)', setup,
+                       start_date=datetime(2011, 6, 1))
+
+stats_ewmvar = Benchmark('ewmvar(arr, 100)', setup,
+                         start_date=datetime(2011, 6, 1))
+
+stats_ewmstd = Benchmark('ewmstd(arr, 100)', setup,
+                         start_date=datetime(2011, 6, 1))
+
+stats_ewmcov = Benchmark('ewmcov(arr, arr, 100)', setup,
+                         start_date=datetime(2011, 6, 1))
+
+stats_ewmcorr = Benchmark('ewmcorr(arr, arr, 100)', setup,
+                          start_date=datetime(2011, 6, 1))
 
 # spearman correlation
 
