@@ -85,11 +85,13 @@ setup = common_setup + """
 fac1 = np.array(['A', 'B', 'C'], dtype='O')
 fac2 = np.array(['one', 'two'], dtype='O')
 
-df = DataFrame({'key1': fac1.take(np.random.randint(0, 3, size=100000)),
-                'key2': fac2.take(np.random.randint(0, 2, size=100000)),
-                'value1' : np.random.randn(100000),
-                'value2' : np.random.randn(100000),
-                'value3' : np.random.randn(100000)})
+n = 10000
+
+df = DataFrame({'key1': fac1.take(np.random.randint(0, 3, size=n)),
+                'key2': fac2.take(np.random.randint(0, 2, size=n)),
+                'value1' : np.random.randn(n),
+                'value2' : np.random.randn(n),
+                'value3' : np.random.randn(n)})
 """
 
 groupby_multi_different_functions = \

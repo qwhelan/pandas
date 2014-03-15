@@ -96,3 +96,15 @@ df = df.consolidate()
 frame_get_numeric_data = Benchmark('df._get_numeric_data()', setup,
                                    start_date=datetime(2011, 11, 1),
                                    logy=True)
+
+setup = common_setup + """
+from numpy.ma import mrecords
+
+a = np.random.randn(10000,25)
+ma = a.view(mrecords.MaskedArray)
+mr = a.view(mrecords.mrecarray)
+"""
+
+frame_masked_array = Benchmark("DataFrame(ma)", setup)
+
+frame_masked_records = Benchmark("DataFrame(mr)", setup)

@@ -150,3 +150,9 @@ max_val = df['a'].max()
 query_with_boolean_selection = Benchmark("df.query('(a >= @min_val) & (a <= @max_val)')",
                                          setup, start_date=datetime(2013, 9, 27))
 
+query_membership = Benchmark("df.query('(@min_val not in a) | (@max_val in a)')",
+                                         setup, start_date=datetime(2013, 9, 27))
+
+
+eval_assignment = Benchmark("df.query('b = a/2')",
+                                         setup, start_date=datetime(2013, 9, 27))

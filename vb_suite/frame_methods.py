@@ -40,7 +40,7 @@ frame_fillna_inplace = Benchmark('df.fillna(0, inplace=True)', setup,
 # reindex both axes
 
 setup = common_setup + """
-df = DataFrame(randn(10000, 10000))
+df = DataFrame(randn(1000, 1000))
 idx = np.arange(4000, 7000)
 """
 
@@ -354,6 +354,13 @@ frame_apply_np_mean = Benchmark('df.apply(np.mean)', setup,
 setup = common_setup + """
 df = DataFrame(np.random.randn(1000,100))
 """
+frame_apply_np_ufunc = Benchmark('df.apply(np.add)', setup,
+                               name = 'frame_apply_np_ufunc',
+                               start_date=datetime(2012,1,1))
+
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,100))
+"""
 frame_apply_pass_thru = Benchmark('df.apply(lambda x: x)', setup,
                                   name = 'frame_apply_pass_thru',
                                   start_date=datetime(2012,1,1))
@@ -371,6 +378,23 @@ df = DataFrame(np.random.randn(1000,3),columns=list('ABC'))
 frame_apply_ref_by_name = Benchmark('df.apply(lambda x: x["A"] + x["B"],axis=1)', setup,
                                      name = 'frame_apply_ref_by_name',
                                      start_date=datetime(2012,1,1))
+
+setup = common_setup + """
+df = DataFrame()
+"""
+frame_apply_empty = Benchmark('df.apply(np.mean)', setup,
+                               name = 'frame_apply_empty',
+                               start_date=datetime(2012,1,1))
+
+#setup = common_setup + """
+#df = DataFrame()
+#
+#def create_empty_series_with_index(x):
+#    return Series(index=range(10))
+#"""
+#frame_apply_empty_with_index = Benchmark('df.apply(create_empty_series_with_index)', setup,
+#                               name = 'frame_apply_empty_with_index',
+#                               start_date=datetime(2012,1,1))
 
 #----------------------------------------------------------------------
 # dtypes
@@ -440,3 +464,47 @@ frame_interpolate_some_good_infer = Benchmark('df.interpolate(downcast="infer")'
                                               setup,
                                               start_date=datetime(2014, 2, 7))
 
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10))
+"""
+frame_diff = Benchmark('df.diff()', setup,
+                       name = 'frame_diff')
+
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10))
+"""
+frame_first_valid_index = Benchmark('df.first_valid_index()', setup)
+frame_last_valid_index = Benchmark('df.last_valid_index()', setup)
+
+
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10))
+df2 = df.copy()
+
+df.ix[::2] = float('nan')
+df2.ix[1::2] = float('nan')
+"""
+frame_update = Benchmark('df.update(df2)', setup)
+frame_combine_first = Benchmark('df.combine_first(df2)', setup)
+frame_sort = Benchmark('df.sort()', setup)
+
+
+setup = common_setup + """
+df = DataFrame(np.random.randn(1000,10))
+
+s = df.ix[0]
+d = df.ix[:1].to_dict('list')
+l = list(s.values)
+
+print d
+"""
+frame_isin_series = Benchmark('df.isin(s)', setup)
+frame_isin_dict = Benchmark('df.isin(d)', setup)
+frame_isin_list = Benchmark('df.isin(l)', setup)
+frame_idxmax = Benchmark('df.idxmax()', setup)
+frame_idxmin = Benchmark('df.idxmin()', setup)
+frame_all = Benchmark('df.all()', setup)
+frame_any = Benchmark('df.any()', setup)
+frame_corrwith = Benchmark('df.corrwith(df)', setup)
+frame_cov = Benchmark('df.cov()', setup)
+frame_corr = Benchmark('df.corr(method="kendall")', setup)
