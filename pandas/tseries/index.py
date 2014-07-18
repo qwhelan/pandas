@@ -794,6 +794,73 @@ class DatetimeIndex(DatetimeIndexOpsMixin, Int64Index):
         # we know it conforms; skip check
         return DatetimeIndex(snapped, freq=freq, verify_integrity=False)
 
+    def shift(self, n, freq=None):
+        """
+        Specialized shift which produces a DatetimeIndex
+
+        Parameters
+        ----------
+        n : int
+            Periods to shift by
+        freq : DateOffset or timedelta-like, optional
+
+        Returns
+        -------
+        shifted : DatetimeIndex
+        """
+        if freq is not None and freq != self.offset:
+            if isinstance(freq, compat.string_types):
+                freq = to_offset(freq)
+            result = Index.shift(self, n, freq)
+            result.tz = self.tz
+
+            return result
+
+        if n == 0:
+            # immutable so OK
+            return self
+
+        if self.offset is None:
+            raise ValueError("Cannot shift with no offset")
+
+        start = self[0] + n * self.offset
+        end = self[-1] + n * self.offset
+        return DatetimeIndex(start=start, end=end, freq=self.offset,
+                             name=self.name, tz=self.tz)
+
+    def repeat(self, repeats, axis=None):
+        """
+        Analogous to ndarray.repeat
+        """
+        return DatetimeIndex(self.values.repeat(repeats),
+                             name=self.name)
+
+    def take(self, indices, axis=0):
+        """
+        Analogous to ndarray.take
+        """
+        maybe_slice = lib.maybe_indices_to_slice(com._ensure_int64(indices))
+        if isinstance(maybe_slice, slice):
+            return self[maybe_slice]
+        return super(DatetimeIndex, self).take(indices, axis)
+
+    def unique(self, dropna=False):
+        """
+        Index.unique with handling for DatetimeIndex metadata
+
+        Parameters
+        ----------
+        dropna : boolean, default False
+            Don't include NaN in the result.
+
+        Returns
+        -------
+        result : DatetimeIndex
+        """
+        result = Int64Index.unique(self, dropna=dropna)
+        return DatetimeIndex._simple_new(result, tz=self.tz,
+                                         name=self.name)
+
     def union(self, other):
         """
         Specialized union for DatetimeIndex objects. If combine
