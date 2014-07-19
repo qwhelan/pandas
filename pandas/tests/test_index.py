@@ -1257,6 +1257,14 @@ class TestIndex(Base, tm.TestCase):
         self.assertEqual(reindexed.levels[0].dtype.type, np.int64)
         self.assertEqual(reindexed.levels[1].dtype.type, np.float64)
 
+    def test_dropna(self):
+        idx = Index([np.nan, 'a', np.nan, np.nan, 'b', 'c', np.nan],
+                    name='idx')
+        expected = Index(['a', 'b', 'c'], name='idx')
+        result = idx.dropna()
+        tm.assert_index_equal(result, expected)
+
+
     def test_groupby(self):
         idx = Index(range(5))
         groups = idx.groupby(np.array([1,1,2,2,2]))
@@ -1511,6 +1519,12 @@ class TestFloat64Index(Numeric, tm.TestCase):
         result = index.astype(float)
         expected = Float64Index([1.0, np.nan, 0.2])
         tm.assert_equal(result.dtype, expected.dtype)
+        tm.assert_index_equal(result, expected)
+
+    def test_dropna(self):
+        idx = Float64Index([np.nan, 1.0, np.nan, np.nan, 2.0, 3.0, np.nan])
+        expected = Float64Index([1.0, 2.0, 3.0])
+        result = idx.dropna()
         tm.assert_index_equal(result, expected)
 
 
@@ -2085,6 +2099,14 @@ class TestDatetimeIndex(DatetimeLike, tm.TestCase):
 
             tm.assert_array_equal(ts.index.get_loc(key), i)
             tm.assert_series_equal(ts[key], ts.iloc[i])
+=======
+    def test_dropna_does_nothing(self):
+        idx = Int64Index([1, 2, 3], name='idx')
+        expected = Int64Index([1, 2, 3], name='idx')
+        result = idx.dropna()
+        tm.assert_index_equal(result, expected)
+
+>>>>>>> dropna method added to Index.
 
             left, right = ts.copy(), ts.copy()
             left[key] *= -10
@@ -3890,6 +3912,7 @@ class TestMultiIndex(Base, tm.TestCase):
         # if this fails, probably didn't reset the cache correctly.
         assert not ind.is_monotonic
 
+<<<<<<< HEAD
     def test_isin(self):
         values = [('foo', 2), ('bar', 3), ('quux', 4)]
 
@@ -3988,6 +4011,13 @@ class TestMultiIndex(Base, tm.TestCase):
         groups = self.index.groupby(self.index)
         exp = dict((key, [key]) for key in self.index)
         tm.assert_dict_equal(groups, exp)
+=======
+    def test_dropna_does_nothing(self):
+        idx = MultiIndex.from_tuples([('bar', 'two')])
+        expected = idx
+        result = idx.dropna()
+        tm.assert_index_equal(result, expected)
+>>>>>>> dropna method added to Index.
 
 
 def test_get_combined_index():
