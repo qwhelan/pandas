@@ -2771,7 +2771,9 @@ class DataFrame(NDFrame):
                         raise TypeError('must specify how or thresh')                    
                 
             mask = agg_obj._count_geq_thresh(axis=agg_axis, thresh=thresh)
-
+            print mask
+            print mask.nonzero()[0]
+            print mask.nonzero()
             result = self.take(mask.nonzero()[0], axis=axis, convert=False)
 
         if inplace:
@@ -4234,16 +4236,19 @@ class DataFrame(NDFrame):
         else:
             frame = self
 
+        print 'in _count'
+        print frame
+
         # GH #423
         if len(frame._get_axis(axis)) == 0:
             result = Series(0 >= thresh, index=frame._get_agg_axis(axis))
         else:
+            print axis
             if axis == 1:
-                counts = notnull(frame.values).sum(1)
-                result = Series(counts, index=frame._get_agg_axis(axis)) >= thresh
+                result = Series(lib.count_geq_thresh_1(frame.values, thresh), index=frame._get_agg_axis(axis))
             else:
-                result = notnull(frame).sum(axis=axis) >= thresh
-
+                result = Series(lib.count_geq_thresh_2(frame.values, thresh), index=frame._get_agg_axis(axis))
+        print result
         return result.astype(np.bool_)
 
     def _count_level(self, level, axis=0, numeric_only=False):

@@ -339,6 +339,46 @@ def isnullobj2d_old(ndarray[object, ndim=2] arr):
                 result[i, j] = 1
     return result.view(np.bool_)
 
+@cython.wraparound(False)
+@cython.boundscheck(False)
+def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
+    cdef Py_ssize_t i, j, n, m
+    cdef object val
+    cdef ndarray[uint8_t, ndim=1] result
+
+    n, m = (<object> arr).shape
+    result = np.zeros(n, dtype=np.uint8)
+    for i from 0 <= i < n:
+        for j from 0 <= j < m:
+            val = arr[i, j]
+            if not checknull(val):
+                result[i] += 1
+                if result[i] >= thresh:
+                    break
+        else:
+            result[i] = 0
+    return result.view(bool)
+
+@cython.wraparound(False)
+@cython.boundscheck(False)
+def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
+    cdef Py_ssize_t i, j, n, m
+    cdef object val
+    cdef ndarray[uint8_t, ndim=1] result
+
+    n, m = (<object> arr).shape
+    result = np.zeros(m, dtype=np.uint8)
+    for i from 0 <= i < m:
+        for j from 0 <= j < n:
+            val = arr[j, i]
+            if not checknull(val):
+                result[i] += 1
+                if result[i] >= thresh:
+                    break
+        else:
+            result[i] = 0
+    return result.view(np.bool_)
+
 def list_to_object_array(list obj):
     '''
     Convert list to object ndarray. Seriously can't believe I had to write this
