@@ -363,56 +363,56 @@ def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
                 break
     return result.view(np.bool_)
 
-# @cython.wraparound(False)
-# @cython.boundscheck(False)
-# def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
-#     cdef Py_ssize_t i, j, n, m, nans
-#     cdef object val
-#     cdef ndarray[uint8_t, ndim=1] result, nans
-
-#     n, m = (<object> arr).shape
-#     result = np.ones(m, dtype=np.uint8)
-#     for i from 0 <= i < m:
-#         buf = arr[:, i]
-#         nans = 0
-#         for j from 0 <= j < n:
-#             val = buf[j]
-#             if checknull(val):
-#                 nans += 1
-#                 if nans > (n - thresh):
-#                     result[i] = 0
-#                     break
-#             elif (j + 1 - nans) >= thresh:
-#                 break
-#     return result.view(np.bool_)
-
 @cython.wraparound(False)
 @cython.boundscheck(False)
 def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
-    cdef Py_ssize_t i, j, n, m, counter
+    cdef Py_ssize_t i, j, n, m, nans
     cdef object val
     cdef ndarray[uint8_t, ndim=1] result, nans
 
     n, m = (<object> arr).shape
     result = np.ones(m, dtype=np.uint8)
-    nans = np.zeros(m, dtype=np.uint8)
-    counter = 0
-    for i from 0 <= i < n:
-        if counter == m:
-            break
-        buf = arr[i]
-        for j from 0 <= j < m:
-            if result[j] == 0:
-                continue
+    for i from 0 <= i < m:
+        buf = arr[:, i]
+        nans = 0
+        for j from 0 <= j < n:
             val = buf[j]
             if checknull(val):
-                nans[j] += 1
-                if nans[j] > (n - thresh):
-                    result[j] = 0
-                    counter += 1
-#            elif (i + 1 - nans[j]) >= thresh:
-#                counter 
+                nans += 1
+                if nans > (n - thresh):
+                    result[i] = 0
+                    break
+            elif (j + 1 - nans) >= thresh:
+                break
     return result.view(np.bool_)
+
+# @cython.wraparound(False)
+# @cython.boundscheck(False)
+# def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
+#     cdef Py_ssize_t i, j, n, m, counter
+#     cdef object val
+#     cdef ndarray[uint8_t, ndim=1] result, nans
+
+#     n, m = (<object> arr).shape
+#     result = np.ones(m, dtype=np.uint8)
+#     nans = np.zeros(m, dtype=np.uint8)
+#     counter = 0
+#     for i from 0 <= i < n:
+#         if counter == m:
+#             break
+#         buf = arr[i]
+#         for j from 0 <= j < m:
+#             if result[j] == 0:
+#                 continue
+#             val = buf[j]
+#             if checknull(val):
+#                 nans[j] += 1
+#                 if nans[j] > (n - thresh):
+#                     result[j] = 0
+#                     counter += 1
+# #            elif (i + 1 - nans[j]) >= thresh:
+# #                counter 
+#     return result.view(np.bool_)
 
 def list_to_object_array(list obj):
     '''
