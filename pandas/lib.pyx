@@ -354,15 +354,12 @@ def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
         nans = 0
         for j from 0 <= j < m:
             val = buf[j]
-#            print j, nans, val
             if checknull(val):
                 nans += 1
                 if nans > nan_thresh:
                     result[i] = 0
-#                    print 'nan break'
                     break
             elif (j + 1 - nans) >= thresh:
-#                print 'thresh break'
                 break
     return result.view(np.bool_)
 
