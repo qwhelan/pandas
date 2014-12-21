@@ -366,12 +366,13 @@ def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
 @cython.wraparound(False)
 @cython.boundscheck(False)
 def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
-    cdef Py_ssize_t i, j, n, m, nans
+    cdef Py_ssize_t i, j, n, m, nans, nan_thresh
     cdef object val
-    cdef ndarray[uint8_t, ndim=1] result, nans
+    cdef ndarray[uint8_t, ndim=1] result
 
     n, m = (<object> arr).shape
     result = np.ones(m, dtype=np.uint8)
+    nan_thresh = n - thresh
     for i from 0 <= i < m:
         buf = arr[:, i]
         nans = 0
@@ -379,7 +380,7 @@ def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
             val = buf[j]
             if checknull(val):
                 nans += 1
-                if nans > (n - thresh):
+                if nans > nan_thresh:
                     result[i] = 0
                     break
             elif (j + 1 - nans) >= thresh:
