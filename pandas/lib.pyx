@@ -341,7 +341,7 @@ def isnullobj2d_old(ndarray[object, ndim=2] arr):
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
-def count_geq_thresh_1(ndarray[object, ndim=2] arr, Py_ssize_t thresh):
+def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
     cdef Py_ssize_t i, j, n, m
     cdef object val
     cdef ndarray[uint8_t, ndim=1] result
@@ -349,11 +349,13 @@ def count_geq_thresh_1(ndarray[object, ndim=2] arr, Py_ssize_t thresh):
     n, m = (<object> arr).shape
     result = np.zeros(n, dtype=np.uint8)
     for i from 0 <= i < n:
+        buf = arr[i]
         for j from 0 <= j < m:
-            val = arr[i, j]
+            val = buf[j]
             if not checknull(val):
                 result[i] += 1
                 if result[i] >= thresh:
+#                    result[i] = 0
                     break
         else:
             result[i] = 0
@@ -361,7 +363,7 @@ def count_geq_thresh_1(ndarray[object, ndim=2] arr, Py_ssize_t thresh):
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
-def count_geq_thresh_2(ndarray[object, ndim=2] arr, Py_ssize_t thresh):
+def count_geq_thresh_2(ndarray arr, Py_ssize_t thresh):
     cdef Py_ssize_t i, j, n, m
     cdef object val
     cdef ndarray[uint8_t, ndim=1] result
@@ -369,8 +371,9 @@ def count_geq_thresh_2(ndarray[object, ndim=2] arr, Py_ssize_t thresh):
     n, m = (<object> arr).shape
     result = np.zeros(m, dtype=np.uint8)
     for i from 0 <= i < m:
+        buf = arr[:, i]
         for j from 0 <= j < n:
-            val = arr[j, i]
+            val = buf[j]
             if not checknull(val):
                 result[i] += 1
                 if result[i] >= thresh:
