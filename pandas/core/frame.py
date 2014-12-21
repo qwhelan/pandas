@@ -2759,19 +2759,18 @@ class DataFrame(NDFrame):
                     raise KeyError(list(np.compress(check,subset)))
                 agg_obj = self.take(indices,axis=agg_axis)
 
-            count = agg_obj.count(axis=agg_axis)
-
-            if thresh is not None:
-                mask = count >= thresh
-            elif how == 'any':
-                mask = count == len(agg_obj._get_axis(agg_axis))
-            elif how == 'all':
-                mask = count > 0
-            else:
-                if how is not None:
-                    raise ValueError('invalid how option: %s' % how)
+            if thresh is None:
+                if how == 'any':
+                    thresh = len(agg_obj._get_axis(agg_axis))
+                elif how == 'all':
+                    thresh = 1
                 else:
-                    raise TypeError('must specify how or thresh')
+                    if how is not None:
+                        raise ValueError('invalid how option: %s' % how)
+                    else:
+                        raise TypeError('must specify how or thresh')                    
+                
+            mask = agg_obj._count_geq_thresh(axis=agg_axis, thresh=thresh)
 
             result = self.take(mask.nonzero()[0], axis=axis, convert=False)
 
@@ -4224,6 +4223,28 @@ class DataFrame(NDFrame):
                 result = Series(counts, index=frame._get_agg_axis(axis))
 
         return result.astype('int64')
+
+    def _count_geq_thresh(self, axis=0, level=None, numeric_only=False, thresh=0):
+        axis = self._get_axis_number(axis)
+        if level is not None:
+            return self._count_level(level, axis=axis,
+                                     numeric_only=numeric_only)
+        if numeric_only:
+            frame = self._get_numeric_data()
+        else:
+            frame = self
+
+        # GH #423
+        if len(frame._get_axis(axis)) == 0:
+            result = Series(0 >= thresh, index=frame._get_agg_axis(axis))
+        else:
+            if axis == 1:
+                counts = notnull(frame.values).sum(1)
+                result = Series(counts, index=frame._get_agg_axis(axis)) >= thresh
+            else:
+                result = notnull(frame).sum(axis=axis) >= thresh
+
+        return result.astype(np.bool_)
 
     def _count_level(self, level, axis=0, numeric_only=False):
         if numeric_only:
