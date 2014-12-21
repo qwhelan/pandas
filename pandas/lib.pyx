@@ -343,7 +343,7 @@ def isnullobj2d_old(ndarray[object, ndim=2] arr):
 @cython.boundscheck(False)
 def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
     cdef Py_ssize_t i, j, n, m, nans, nan_thresh
-    cdef object val
+#    cdef object val
     cdef ndarray[uint8_t, ndim=1] result
 
     n, m = (<object> arr).shape
@@ -353,8 +353,8 @@ def count_geq_thresh_1(ndarray arr, Py_ssize_t thresh):
         buf = arr[i]
         nans = 0
         for j from 0 <= j < m:
-            val = buf[j]
-            if checknull(val):
+#            val = buf[j]
+            if checknull(buf[j]):
                 nans += 1
                 if nans > nan_thresh:
                     result[i] = 0
