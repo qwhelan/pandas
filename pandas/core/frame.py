@@ -2768,9 +2768,10 @@ class DataFrame(NDFrame):
                     if how is not None:
                         raise ValueError('invalid how option: %s' % how)
                     else:
-                        raise TypeError('must specify how or thresh')                    
-                
-            mask = agg_obj._count_geq_thresh(axis=agg_axis, thresh=thresh)
+                        raise TypeError('must specify how or thresh')
+
+            mask = agg_obj.count(axis=agg_axis)
+#            mask = agg_obj._count_geq_thresh(axis=agg_axis, thresh=thresh)
             result = self.take(mask.nonzero()[0], axis=axis, convert=False)
 
         if inplace:
