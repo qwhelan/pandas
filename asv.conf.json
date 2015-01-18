@@ -6,6 +6,8 @@
     // The name of the project being benchmarked
     "project": "pandas",
 
+    "setup_path": "..",
+
     // The project's homepage
     "project_url": "http://pandas.pydata.org",
 
