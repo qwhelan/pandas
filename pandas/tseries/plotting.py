@@ -49,8 +49,8 @@ def tsplot(series, plotf, **kwargs):
         raise ValueError('Cannot use dynamic axis without frequency info')
     else:
         # Convert DatetimeIndex to PeriodIndex
-        if isinstance(series.index, DatetimeIndex):
-            series = series.to_period(freq=freq)
+#        if isinstance(series.index, DatetimeIndex):
+#            series = series.to_period(freq=freq)
         freq, ax_freq, series = _maybe_resample(series, ax, freq, plotf,
                                                 kwargs)
 

@@ -1593,7 +1593,8 @@ class LinePlot(MPLPlot):
         self._initialize_prior(len(self.data))
 
         if self._is_ts_plot():
-            data = self._maybe_convert_index(self.data)
+            data = self.data
+            #data = self._maybe_convert_index(self.data)
             x = data.index      # dummy, not used
             plotf = self._get_ts_plot_function()
             it = self._iter_data(data=data, keep_index=True)
