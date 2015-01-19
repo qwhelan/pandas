@@ -750,6 +750,25 @@ def autocorrelation_plot(series, ax=None, **kwds):
     ax.grid()
     return ax
 
+def _mplplot_plotf(errorbar=False):
+    import matplotlib.pyplot as plt
+    def plotf(ax, x, y, style=None, **kwds):
+        mask = com.isnull(y)
+        if mask.any():
+            y = np.ma.array(y)
+            y = np.ma.masked_where(mask, y)
+
+        if errorbar:
+            return plt.Axes.errorbar(ax, x, y, **kwds)
+        else:
+            # prevent style kwarg from going to errorbar, where it is unsupported
+            if style is not None:
+                args = (ax, x, y, style)
+            else:
+                args = (ax, x, y)
+            return plt.Axes.plot(*args, **kwds)
+
+    return plotf
 
 class MPLPlot(object):
     """
@@ -1187,22 +1206,8 @@ class MPLPlot(object):
         the presence of errorbar keywords.
         '''
         errorbar = any(e is not None for e in self.errors.values())
-        def plotf(ax, x, y, style=None, **kwds):
-            mask = com.isnull(y)
-            if mask.any():
-                y = np.ma.array(y)
-                y = np.ma.masked_where(mask, y)
 
-            if errorbar:
-                return self.plt.Axes.errorbar(ax, x, y, **kwds)
-            else:
-                # prevent style kwarg from going to errorbar, where it is unsupported
-                if style is not None:
-                    args = (ax, x, y, style)
-                else:
-                    args = (ax, x, y)
-                return self.plt.Axes.plot(*args, **kwds)
-        return plotf
+        return _mplplot_plotf(errorbar)
 
     def _get_index_name(self):
         if isinstance(self.data.index, MultiIndex):
