@@ -58,9 +58,9 @@ def tsplot(series, plotf, **kwargs):
     _decorate_axes(ax, freq, kwargs)
 
     # how to make sure ax.clear() flows through?
-    if not hasattr(ax, '_plot_data'):
-        ax._plot_data = []
-    ax._plot_data.append((series, plotf, kwargs))
+#    if not hasattr(ax, '_plot_data'):
+#        ax._plot_data = []
+#    ax._plot_data.append((series.copy(), plotf, kwargs))
     lines = plotf(ax, series.index._mpl_repr(), series.values, **kwargs)
 
     # set date formatter, locators and rescale limits
@@ -88,7 +88,7 @@ def _maybe_resample(series, ax, freq, plotf, kwargs):
             series = series.resample(ax_freq, how=how).dropna()
             freq = ax_freq
         elif frequencies.is_subperiod(freq, ax_freq) or _is_sub(freq, ax_freq):
-            _upsample_others(ax, freq, plotf, kwargs)
+            _upsample_others(((series, plotf, kwargs),), ax, freq, plotf, kwargs)
             ax_freq = freq
         else:  # pragma: no cover
             raise ValueError('Incompatible frequency conversion')
@@ -115,9 +115,9 @@ def _is_sup(f1, f2):
             (f2.startswith('W') and frequencies.is_superperiod(f1, 'D')))
 
 
-def _upsample_others(ax, freq, plotf, kwargs):
+def _upsample_others(series, ax, freq, plotf, kwargs):
     legend = ax.get_legend()
-    lines, labels = _replot_ax(ax, freq, kwargs)
+    lines, labels = _replot_ax(series, ax, freq, kwargs)
 
     other_ax = None
     if hasattr(ax, 'left_ax'):
@@ -126,7 +126,7 @@ def _upsample_others(ax, freq, plotf, kwargs):
         other_ax = ax.right_ax
 
     if other_ax is not None:
-        rlines, rlabels = _replot_ax(other_ax, freq, kwargs)
+        rlines, rlabels = _replot_ax(series, other_ax, freq, kwargs)
         lines.extend(rlines)
         labels.extend(rlabels)
 
@@ -138,9 +138,10 @@ def _upsample_others(ax, freq, plotf, kwargs):
         ax.legend(lines, labels, loc='best', title=title)
 
 
-def _replot_ax(ax, freq, kwargs):
-    data = getattr(ax, '_plot_data', None)
-    ax._plot_data = []
+def _replot_ax(series, ax, freq, kwargs):
+#    data = getattr(ax, '_plot_data', None)
+#    ax._plot_data = []
+    data = series
     ax.clear()
     _decorate_axes(ax, freq, kwargs)
 
@@ -151,7 +152,7 @@ def _replot_ax(ax, freq, kwargs):
             series = series.copy()
             idx = series.index.asfreq(freq, how='S')
             series.index = idx
-            ax._plot_data.append(series)
+            #ax._plot_data.append(series.copy())
             lines.append(plotf(ax, series.index._mpl_repr(), series.values, **kwds)[0])
             labels.append(com.pprint_thing(series.name))
 
