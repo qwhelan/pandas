@@ -1594,7 +1594,6 @@ class LinePlot(MPLPlot):
         return not self.x_compat and self.use_index and self._use_dynamic_x()
 
     def _make_plot(self):
-        self._initialize_prior(len(self.data))
 
         if self._is_ts_plot():
             data = self._maybe_convert_index(self.data)
@@ -1626,12 +1625,13 @@ class LinePlot(MPLPlot):
             left, right = _get_xlim(lines)
             ax.set_xlim(left, right)
 
-    def _get_stacked_values(self, y, label):
-        if self.stacked:
+    @classmethod
+    def _get_stacked_values(cls, ax, y, label, stacked):
+        if stacked:
             if (y >= 0).all():
-                return self._pos_prior + y
+                return ax._pos_prior + y
             elif (y <= 0).all():
-                return self._neg_prior + y
+                return ax._neg_prior + y
             else:
                 raise ValueError('When stacked is True, each column must be either all positive or negative.'
                                  '{0} contains both positive and negative values'.format(label))
@@ -1640,13 +1640,15 @@ class LinePlot(MPLPlot):
 
     def _get_plot_function(self):
         f = MPLPlot._get_plot_function(self)
+        stacked = self.stacked
+        subplots = self.subplots
         def plotf(ax, x, y, style=None, column_num=None, **kwds):
             # column_num is used to get the target column from protf in line and area plots
-            if column_num == 0:
-                self._initialize_prior(len(self.data))
-            y_values = self._get_stacked_values(y, kwds['label'])
+            if not hasattr(ax, '_pos_prior') or column_num == 0:
+                LinePlot._initialize_prior(ax, len(y))
+            y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
             lines = f(ax, x, y_values, style=style, **kwds)
-            self._update_prior(y)
+            LinePlot._update_prior(ax, y, stacked, subplots)
             return lines
         return plotf
 
@@ -1660,19 +1662,21 @@ class LinePlot(MPLPlot):
             return lines
         return _plot
 
-    def _initialize_prior(self, n):
-        self._pos_prior = np.zeros(n)
-        self._neg_prior = np.zeros(n)
+    @classmethod
+    def _initialize_prior(cls, ax, n):
+        ax._pos_prior = np.zeros(n)
+        ax._neg_prior = np.zeros(n)
 
-    def _update_prior(self, y):
-        if self.stacked and not self.subplots:
+    @classmethod
+    def _update_prior(cls, ax, y, stacked, subplots):
+        if stacked and not subplots:
             # tsplot resample may changedata length
-            if len(self._pos_prior) != len(y):
-                self._initialize_prior(len(y))
+            if len(ax._pos_prior) != len(y):
+                cls._initialize_prior(ax, len(y))
             if (y >= 0).all():
-                self._pos_prior += y
+                ax._pos_prior += y
             elif (y <= 0).all():
-                self._neg_prior += y
+                ax._neg_prior += y
 
     def _maybe_convert_index(self, data):
         # tsplot converts automatically, but don't want to convert index
@@ -1735,31 +1739,34 @@ class AreaPlot(LinePlot):
             self.kwds.setdefault('alpha', 0.5)
 
     def _get_plot_function(self):
+        import matplotlib.pyplot as plt
         if self.logy or self.loglog:
             raise ValueError("Log-y scales are not supported in area plot")
         else:
             f = MPLPlot._get_plot_function(self)
+            stacked = self.stacked
+            subplots = self.subplots
             def plotf(ax, x, y, style=None, column_num=None, **kwds):
-                if column_num == 0:
-                    self._initialize_prior(len(self.data))
-                y_values = self._get_stacked_values(y, kwds['label'])
+                if not hasattr(ax, '_pos_prior') or column_num == 0:
+                    LinePlot._initialize_prior(ax, len(y))
+                y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
                 lines = f(ax, x, y_values, style=style, **kwds)
 
                 # get data from the line to get coordinates for fill_between
                 xdata, y_values = lines[0].get_data(orig=False)
 
                 if (y >= 0).all():
-                    start = self._pos_prior
+                    start = ax._pos_prior
                 elif (y <= 0).all():
-                    start = self._neg_prior
+                    start = ax._neg_prior
                 else:
                     start = np.zeros(len(y))
 
                 if not 'color' in kwds:
                     kwds['color'] = lines[0].get_color()
 
-                self.plt.Axes.fill_between(ax, xdata, start, y_values, **kwds)
-                self._update_prior(y)
+                plt.Axes.fill_between(ax, xdata, start, y_values, **kwds)
+                LinePlot._update_prior(ax, y, stacked, subplots)
                 return lines
 
         return plotf
@@ -1950,15 +1957,20 @@ class HistPlot(LinePlot):
             self.bottom = np.array(self.bottom)
 
     def _get_plot_function(self):
+        import matplotlib.pyplot as plt
+        bins = self.bins
+        bottom = self.bottom
+        stacked = self.stacked
+        subplots = self.subplots
         def plotf(ax, y, style=None, column_num=None, **kwds):
-            if column_num == 0:
-                self._initialize_prior(len(self.bins) - 1)
+            if not hasattr(ax, '_pos_prior') or column_num == 0:
+                LinePlot._initialize_prior(ax, len(self.bins) - 1)
             y = y[~com.isnull(y)]
-            bottom = self._pos_prior + self.bottom
+            new_bottom = ax._pos_prior + bottom
             # ignore style
-            n, bins, patches = self.plt.Axes.hist(ax, y, bins=self.bins,
-                                                  bottom=bottom, **kwds)
-            self._update_prior(n)
+            n, new_bins, patches = plt.Axes.hist(ax, y, bins=bins,
+                                                  bottom=new_bottom, **kwds)
+            LinePlot._update_prior(ax, n, stacked, subplots)
             return patches
         return plotf
 
