@@ -770,6 +770,64 @@ def _mplplot_plotf(errorbar=False):
 
     return plotf
 
+
+def _lineplot_plotf(f, stacked, subplots):
+    def plotf(ax, x, y, style=None, column_num=None, **kwds):
+        # column_num is used to get the target column from protf in line and area plots
+        if not hasattr(ax, '_pos_prior') or column_num == 0:
+            LinePlot._initialize_prior(ax, len(y))
+        y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
+        lines = f(ax, x, y_values, style=style, **kwds)
+        LinePlot._update_prior(ax, y, stacked, subplots)
+        return lines
+
+    return plotf
+
+
+def _areaplot_plotf(f, stacked, subplots):
+    import matplotlib.pyplot as plt
+    def plotf(ax, x, y, style=None, column_num=None, **kwds):
+        if not hasattr(ax, '_pos_prior') or column_num == 0:
+            LinePlot._initialize_prior(ax, len(y))
+        y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
+        lines = f(ax, x, y_values, style=style, **kwds)
+
+        # get data from the line to get coordinates for fill_between
+        xdata, y_values = lines[0].get_data(orig=False)
+
+        if (y >= 0).all():
+            start = ax._pos_prior
+        elif (y <= 0).all():
+            start = ax._neg_prior
+        else:
+            start = np.zeros(len(y))
+
+        if not 'color' in kwds:
+            kwds['color'] = lines[0].get_color()
+
+        plt.Axes.fill_between(ax, xdata, start, y_values, **kwds)
+        LinePlot._update_prior(ax, y, stacked, subplots)
+        return lines
+
+    return plotf
+
+
+def _histplot_plotf(bins, bottom, stacked, subplots):
+    import matplotlib.pyplot as plt
+    def plotf(ax, y, style=None, column_num=None, **kwds):
+        if not hasattr(ax, '_pos_prior') or column_num == 0:
+            LinePlot._initialize_prior(ax, len(bins) - 1)
+        y = y[~com.isnull(y)]
+        new_bottom = ax._pos_prior + bottom
+        # ignore style
+        n, new_bins, patches = plt.Axes.hist(ax, y, bins=bins,
+                                             bottom=new_bottom, **kwds)
+        LinePlot._update_prior(ax, n, stacked, subplots)
+        return patches
+
+    return plotf
+
+
 class MPLPlot(object):
     """
     Base class for assembling a pandas plot using matplotlib
@@ -1640,17 +1698,8 @@ class LinePlot(MPLPlot):
 
     def _get_plot_function(self):
         f = MPLPlot._get_plot_function(self)
-        stacked = self.stacked
-        subplots = self.subplots
-        def plotf(ax, x, y, style=None, column_num=None, **kwds):
-            # column_num is used to get the target column from protf in line and area plots
-            if not hasattr(ax, '_pos_prior') or column_num == 0:
-                LinePlot._initialize_prior(ax, len(y))
-            y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
-            lines = f(ax, x, y_values, style=style, **kwds)
-            LinePlot._update_prior(ax, y, stacked, subplots)
-            return lines
-        return plotf
+
+        return _lineplot_plotf(f, self.stacked, self.subplots)
 
     def _get_ts_plot_function(self):
         from pandas.tseries.plotting import tsplot
@@ -1739,35 +1788,12 @@ class AreaPlot(LinePlot):
             self.kwds.setdefault('alpha', 0.5)
 
     def _get_plot_function(self):
-        import matplotlib.pyplot as plt
         if self.logy or self.loglog:
             raise ValueError("Log-y scales are not supported in area plot")
         else:
             f = MPLPlot._get_plot_function(self)
-            stacked = self.stacked
-            subplots = self.subplots
-            def plotf(ax, x, y, style=None, column_num=None, **kwds):
-                if not hasattr(ax, '_pos_prior') or column_num == 0:
-                    LinePlot._initialize_prior(ax, len(y))
-                y_values = LinePlot._get_stacked_values(ax, y, kwds['label'], stacked)
-                lines = f(ax, x, y_values, style=style, **kwds)
 
-                # get data from the line to get coordinates for fill_between
-                xdata, y_values = lines[0].get_data(orig=False)
-
-                if (y >= 0).all():
-                    start = ax._pos_prior
-                elif (y <= 0).all():
-                    start = ax._neg_prior
-                else:
-                    start = np.zeros(len(y))
-
-                if not 'color' in kwds:
-                    kwds['color'] = lines[0].get_color()
-
-                plt.Axes.fill_between(ax, xdata, start, y_values, **kwds)
-                LinePlot._update_prior(ax, y, stacked, subplots)
-                return lines
+            return _areaplot_plotf(f, self.stacked, self.subplots)
 
         return plotf
 
@@ -1957,22 +1983,7 @@ class HistPlot(LinePlot):
             self.bottom = np.array(self.bottom)
 
     def _get_plot_function(self):
-        import matplotlib.pyplot as plt
-        bins = self.bins
-        bottom = self.bottom
-        stacked = self.stacked
-        subplots = self.subplots
-        def plotf(ax, y, style=None, column_num=None, **kwds):
-            if not hasattr(ax, '_pos_prior') or column_num == 0:
-                LinePlot._initialize_prior(ax, len(self.bins) - 1)
-            y = y[~com.isnull(y)]
-            new_bottom = ax._pos_prior + bottom
-            # ignore style
-            n, new_bins, patches = plt.Axes.hist(ax, y, bins=bins,
-                                                  bottom=new_bottom, **kwds)
-            LinePlot._update_prior(ax, n, stacked, subplots)
-            return patches
-        return plotf
+        return _histplot_plotf(self.bins, self.bottom, self.stacked, self.subplots)
 
     def _make_plot(self):
         plotf = self._get_plot_function()
