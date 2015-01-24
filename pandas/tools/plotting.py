@@ -828,6 +828,58 @@ def _histplot_plotf(bins, bottom, stacked, subplots):
     return plotf
 
 
+def _boxplot_plotf(return_type):
+    def plotf(ax, y, column_num=None, **kwds):
+        if y.ndim == 2:
+            y = [remove_na(v) for v in y]
+            # Boxplot fails with empty arrays, so need to add a NaN
+            #   if any cols are empty
+            # GH 8181
+            y = [v if v.size > 0 else np.array([np.nan]) for v in y]
+        else:
+            y = remove_na(y)
+        bp = ax.boxplot(y, **kwds)
+
+        if return_type == 'dict':
+            return bp, bp
+        elif return_type == 'both':
+            return BoxPlot.BP(ax=ax, lines=bp), bp
+        else:
+            return ax, bp
+
+    return plotf
+
+
+def _kdeplot_plotf(f, bw_method, ind):
+    from scipy.stats import gaussian_kde
+    from scipy import __version__ as spv
+
+    def plotf(ax, y, style=None, column_num=None, **kwds):
+        y = remove_na(y)
+        if LooseVersion(spv) >= '0.11.0':
+            gkde = gaussian_kde(y, bw_method=bw_method)
+        else:
+            gkde = gaussian_kde(y)
+            if bw_method is not None:
+                msg = ('bw_method was added in Scipy 0.11.0.' +
+                       ' Scipy version in use is %s.' % spv)
+                warnings.warn(msg)
+
+        if ind is None:
+            sample_range = max(y) - min(y)
+            ind_local = np.linspace(min(y) - 0.5 * sample_range,
+                                    max(y) + 0.5 * sample_range, 1000)
+        else:
+            ind_local = ind
+
+        y = gkde.evaluate(ind_local)
+        lines = f(ax, ind_local, y, style=style, **kwds)
+        return lines
+
+    return plotf
+
+
+
 class MPLPlot(object):
     """
     Base class for assembling a pandas plot using matplotlib
@@ -1258,14 +1310,15 @@ class MPLPlot(object):
                 index.inferred_type in ('datetime', 'date', 'datetime64',
                                         'time'))
 
+    def _plot_errors(self):
+        return any(e is not None for e in self.errors.values())
+
     def _get_plot_function(self):
         '''
         Returns the matplotlib plotting function (plot or errorbar) based on
         the presence of errorbar keywords.
         '''
-        errorbar = any(e is not None for e in self.errors.values())
-
-        return _mplplot_plotf(errorbar)
+        return _mplplot_plotf(self._plot_errors())
 
     def _get_index_name(self):
         if isinstance(self.data.index, MultiIndex):
@@ -2030,35 +2083,9 @@ class KdePlot(HistPlot):
     def _args_adjust(self):
         pass
 
-    def _get_ind(self, y):
-        if self.ind is None:
-            sample_range = max(y) - min(y)
-            ind = np.linspace(min(y) - 0.5 * sample_range,
-                              max(y) + 0.5 * sample_range, 1000)
-        else:
-            ind = self.ind
-        return ind
-
     def _get_plot_function(self):
-        from scipy.stats import gaussian_kde
-        from scipy import __version__ as spv
         f = MPLPlot._get_plot_function(self)
-        def plotf(ax, y, style=None, column_num=None, **kwds):
-            y = remove_na(y)
-            if LooseVersion(spv) >= '0.11.0':
-                gkde = gaussian_kde(y, bw_method=self.bw_method)
-            else:
-                gkde = gaussian_kde(y)
-                if self.bw_method is not None:
-                    msg = ('bw_method was added in Scipy 0.11.0.' +
-                           ' Scipy version in use is %s.' % spv)
-                    warnings.warn(msg)
-
-            ind = self._get_ind(y)
-            y = gkde.evaluate(ind)
-            lines = f(ax, ind, y, style=style, **kwds)
-            return lines
-        return plotf
+        return _kdeplot_plotf(f, self.bw_method, self.ind)
 
     def _post_plot_logic(self):
         for ax in self.axes:
@@ -2153,24 +2180,7 @@ class BoxPlot(LinePlot):
                 self.sharey = False
 
     def _get_plot_function(self):
-        def plotf(ax, y, column_num=None, **kwds):
-            if y.ndim == 2:
-                y = [remove_na(v) for v in y]
-                # Boxplot fails with empty arrays, so need to add a NaN
-                #   if any cols are empty
-                # GH 8181
-                y = [v if v.size > 0 else np.array([np.nan]) for v in y]
-            else:
-                y = remove_na(y)
-            bp = ax.boxplot(y, **kwds)
-
-            if self.return_type == 'dict':
-                return bp, bp
-            elif self.return_type == 'both':
-                return self.BP(ax=ax, lines=bp), bp
-            else:
-                return ax, bp
-        return plotf
+        return _boxplot_plotf(self.return_type)
 
     def _validate_color_args(self):
         if 'color' in self.kwds:
