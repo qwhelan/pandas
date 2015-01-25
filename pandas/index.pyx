@@ -243,7 +243,7 @@ cdef class IndexEngine:
         self.monotonic_check = 1
 
     cdef _get_index_values(self):
-        return self.vgetter()
+        return self.vgetter
 
     cdef inline _do_unique_check(self):
         self._ensure_mapping_populated()
@@ -350,7 +350,7 @@ cdef class IndexEngine:
 cdef class Int64Engine(IndexEngine):
 
     cdef _get_index_values(self):
-        return algos.ensure_int64(self.vgetter())
+        return algos.ensure_int64(self.vgetter)
 
     cdef _make_hash_table(self, n):
         return _hash.Int64HashTable(n)
@@ -414,7 +414,7 @@ cdef class Float64Engine(IndexEngine):
         return _hash.Float64HashTable(n)
 
     cdef _get_index_values(self):
-        return algos.ensure_float64(self.vgetter())
+        return algos.ensure_float64(self.vgetter)
 
     cdef _maybe_get_bool_indexer(self, object val):
         cdef:
@@ -529,7 +529,7 @@ cdef class DatetimeEngine(Int64Engine):
         return _to_i8(val) in self.mapping
 
     cdef _get_index_values(self):
-        return self.vgetter().view('i8')
+        return self.vgetter.view('i8')
 
     def _call_monotonic(self, values):
         return algos.is_monotonic_int64(values, timelike=True)
