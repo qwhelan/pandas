@@ -1022,16 +1022,19 @@ class NDFrame(PandasObject):
     @classmethod
     def _create_indexer(cls, name, indexer):
         """ create an indexer like _name in the class """
-
+        import weakref
         if getattr(cls, name, None) is None:
             iname = '_%s' % name
             setattr(cls, iname, None)
 
             def _indexer(self):
-                i = getattr(self, iname)
-                if i is None:
+                i = None
+                iref = getattr(self, iname)
+                if iref is not None:
+                    i = iref()
+                if iref is None or i is None:
                     i = indexer(self, name)
-                    setattr(self, iname, i)
+                    setattr(self, iname, weakref.ref(i))
                 return i
 
             setattr(cls, name, property(_indexer))
