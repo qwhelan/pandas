@@ -1031,7 +1031,7 @@ class NDFrame(PandasObject):
                 i = getattr(self, iname)
                 if i is None:
                     i = indexer(self, name)
-                    setattr(self, iname, i)
+#                    setattr(self, iname, i)
                 return i
 
             setattr(cls, name, property(_indexer))
