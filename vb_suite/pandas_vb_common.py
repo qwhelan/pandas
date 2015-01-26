@@ -7,6 +7,7 @@ import pandas.util.testing as tm
 import random
 import numpy as np
 
+np.random.seed(1234)
 try:
     import pandas._tseries as lib
 except:
