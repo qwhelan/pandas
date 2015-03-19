@@ -3139,12 +3139,18 @@ class TestDataFramePlots(TestPlotBase):
         plt.close('all')
         # force a garbage collection
         gc.collect()
+        failed = False
         for key in results:
             # check that every plot was collected
-            with tm.assertRaises(ReferenceError):
-                # need to actually access something to get an error
-                results[key].lines
+            try:
+                with tm.assertRaises(ReferenceError):
+                    # need to actually access something to get an error
+                    results[key].lines
+            except:
+                print 'failed', key
+                failed = True
 
+        assert not failed
 @tm.mplskip
 class TestDataFrameGroupByPlots(TestPlotBase):
 
