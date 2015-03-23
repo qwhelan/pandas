@@ -8,7 +8,7 @@ N = 100000
 try:
     rng = date_range('1/1/2000', periods=N, freq='min')
 except NameError:
-    rng = DatetimeIndex('1/1/2000', periods=N, offset=datetools.Minute())
+    rng = DatetimeIndex(start='1/1/2000', periods=N, offset=datetools.Minute())
     def date_range(start=None, end=None, periods=None, freq=None):
         return DatetimeIndex(start, end, periods=periods, offset=freq)
 
