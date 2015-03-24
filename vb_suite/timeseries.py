@@ -6,11 +6,11 @@ from datetime import timedelta
 N = 100000
 
 try:
-    rng = date_range('1/1/2000', periods=N, freq='min')
+    rng = date_range(start='1/1/2000', periods=N, freq='min')
 except NameError:
-    rng = DatetimeIndex(start='1/1/2000', periods=N, offset=datetools.Minute())
+    rng = DatetimeIndex(start='1/1/2000', periods=N, freq='T')
     def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
+        return DatetimeIndex(start=start, end=end, periods=periods, offset=freq)
 
 if hasattr(Series, 'convert'):
     Series.resample = Series.convert
@@ -22,7 +22,7 @@ ts = Series(np.random.randn(N), index=rng)
 # Lookup value in large time series, hash map population
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=1500000, freq='s')
+rng = date_range(start='1/1/2000', periods=1500000, freq='s')
 ts = Series(1, index=rng)
 """
 
@@ -69,7 +69,7 @@ timeseries_add_irregular = Benchmark('left + right', setup)
 
 setup = common_setup + """
 N = 100000
-rng = date_range('1/1/2000', periods=N, freq='s')
+rng = date_range(start='1/1/2000', periods=N, freq='s')
 rng = rng.take(np.random.permutation(N))
 ts = Series(np.random.randn(N), index=rng)
 """
@@ -81,7 +81,7 @@ timeseries_sort_index = Benchmark('ts.sort_index()', setup,
 # Shifting, add offset
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=10000, freq='T')
+rng = date_range(start='1/1/2000', periods=10000, freq='T')
 """
 
 datetimeindex_add_offset = Benchmark('rng + timedelta(minutes=2)', setup,
@@ -89,9 +89,9 @@ datetimeindex_add_offset = Benchmark('rng + timedelta(minutes=2)', setup,
 
 setup = common_setup + """
 N = 10000
-rng = date_range('1/1/1990', periods=N, freq='53s')
+rng = date_range(start='1/1/1990', periods=N, freq='53s')
 ts = Series(np.random.randn(N), index=rng)
-dates = date_range('1/1/1990', periods=N * 10, freq='5s')
+dates = date_range(start='1/1/1990', periods=N * 10, freq='5s')
 """
 timeseries_asof_single = Benchmark('ts.asof(dates[0])', setup,
                                    start_date=datetime(2012, 4, 27))
@@ -108,7 +108,7 @@ timeseries_asof_nan = Benchmark('ts.asof(dates)', setup,
 # Time zone stuff
 
 setup = common_setup + """
-rng = date_range('1/1/2000', '3/1/2000', tz='US/Eastern')
+rng = date_range(start='1/1/2000', end='3/1/2000', tz='US/Eastern')
 """
 
 timeseries_timestamp_tzinfo_cons = \
@@ -118,7 +118,7 @@ timeseries_timestamp_tzinfo_cons = \
 # Resampling period
 
 setup = common_setup + """
-rng = period_range('1/1/2000', '1/1/2001', freq='T')
+rng = period_range(start='1/1/2000', end='1/1/2001', freq='T')
 ts = Series(np.random.randn(len(rng)), index=rng)
 """
 
@@ -127,7 +127,7 @@ timeseries_period_downsample_mean = \
               start_date=datetime(2012, 4, 25))
 
 setup = common_setup + """
-rng = date_range('1/1/2000', '1/1/2001', freq='T')
+rng = date_range(start='1/1/2000', end='1/1/2001', freq='T')
 ts = Series(np.random.randn(len(rng)), index=rng)
 """
 
@@ -139,7 +139,7 @@ timeseries_timestamp_downsample_mean = \
 # to_datetime
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=20000, freq='h')
+rng = date_range(start='1/1/2000', periods=20000, freq='h')
 strings = [x.strftime('%Y-%m-%d %H:%M:%S') for x in rng]
 """
 
@@ -148,7 +148,7 @@ timeseries_to_datetime_iso8601 = \
               start_date=datetime(2012, 7, 11))
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=10000, freq='D')
+rng = date_range(start='1/1/2000', periods=10000, freq='D')
 strings = Series(rng.year*10000+rng.month*100+rng.day,dtype=np.int64).apply(str)
 """
 
@@ -169,7 +169,7 @@ timeseries_with_format_replace = Benchmark("to_datetime(s.str.replace(':\S+$',''
 
 setup = common_setup + """
 from pandas.tseries.frequencies import infer_freq
-rng = date_range('1/1/1700', freq='D', periods=100000)
+rng = date_range(start='1/1/1700', freq='D', periods=100000)
 a = rng[:50000].append(rng[50002:])
 """
 
@@ -179,7 +179,7 @@ timeseries_infer_freq = \
 # setitem PeriodIndex
 
 setup = common_setup + """
-rng = period_range('1/1/1990', freq='S', periods=20000)
+rng = period_range(start='1/1/1990', freq='S', periods=20000)
 df = DataFrame(index=range(len(rng)))
 """
 
@@ -188,7 +188,7 @@ period_setitem = \
               start_date=datetime(2012, 8, 1))
 
 setup = common_setup + """
-rng = date_range('1/1/2000 9:30', periods=10000, freq='S', tz='US/Eastern')
+rng = date_range(start='1/1/2000 9:30', periods=10000, freq='S', tz='US/Eastern')
 """
 
 datetimeindex_normalize = \
@@ -197,7 +197,7 @@ datetimeindex_normalize = \
 
 setup = common_setup + """
 from pandas.tseries.offsets import Second
-s1 = date_range('1/1/2000', periods=100, freq='S')
+s1 = date_range(start='1/1/2000', periods=100, freq='S')
 curr = s1[-1]
 slst = []
 for i in range(100):
@@ -210,7 +210,7 @@ for i in range(100):
 
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=1000, freq='H')
+rng = date_range(start='1/1/2000', periods=1000, freq='H')
 df = DataFrame(np.random.randn(len(rng), 2), rng)
 """
 
@@ -218,7 +218,7 @@ dti_reset_index = \
     Benchmark('df.reset_index()', setup, start_date=datetime(2012, 9, 1))
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=1000, freq='H',
+rng = date_range(start='1/1/2000', periods=1000, freq='H',
                  tz='US/Eastern')
 df = DataFrame(np.random.randn(len(rng), 2), index=rng)
 """
@@ -227,7 +227,7 @@ dti_reset_index_tz = \
     Benchmark('df.reset_index()', setup, start_date=datetime(2012, 9, 1))
 
 setup = common_setup + """
-rng = date_range('1/1/2000', periods=1000, freq='T')
+rng = date_range(start='1/1/2000', periods=1000, freq='T')
 index = rng.repeat(10)
 """
 
@@ -237,13 +237,13 @@ datetimeindex_unique = Benchmark('index.unique()', setup,
 # tz_localize with infer argument.  This is an attempt to emulate the results
 # of read_csv with duplicated data.  Not passing infer_dst will fail
 setup = common_setup + """
-dst_rng = date_range('10/29/2000 1:00:00',
-                     '10/29/2000 1:59:59', freq='S')
-index = date_range('10/29/2000', '10/29/2000 00:59:59', freq='S')
+dst_rng = date_range(start='10/29/2000 1:00:00',
+                     end='10/29/2000 1:59:59', freq='S')
+index = date_range(start='10/29/2000', end='10/29/2000 00:59:59', freq='S')
 index = index.append(dst_rng)
 index = index.append(dst_rng)
-index = index.append(date_range('10/29/2000 2:00:00',
-                                '10/29/2000 3:00:00', freq='S'))
+index = index.append(date_range(start='10/29/2000 2:00:00',
+                                end='10/29/2000 3:00:00', freq='S'))
 """
 
 datetimeindex_infer_dst = \
@@ -255,7 +255,7 @@ Benchmark('index.tz_localize("US/Eastern", infer_dst=True)',
 # Resampling: fast-path various functions
 
 setup = common_setup + """
-rng = date_range('20130101',periods=100000,freq='50L')
+rng = date_range(start='20130101',periods=100000,freq='50L')
 df = DataFrame(np.random.randn(100000,2),index=rng)
 """
 
@@ -362,7 +362,7 @@ timeseries_custom_bmonthbegin_decr_n = \
 
 setup = common_setup + """
 N = 10000
-rng = date_range('1/1/1', periods=N, freq='B')
+rng = date_range(start='1/1/1', periods=N, freq='B')
 """
 
 timeseries_is_month_start = Benchmark('rng.is_month_start', setup,
