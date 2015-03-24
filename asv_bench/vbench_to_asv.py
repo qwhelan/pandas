@@ -35,6 +35,13 @@ class AssignToSelf(ast.NodeTransformer):
         self.generic_visit(node)
         return node
 
+    def visit_TryExcept(self, node):
+        if any([isinstance(x, (ast.Import, ast.ImportFrom)) for x in node.body]):
+            self.imports.append(node)
+        else:
+            self.generic_visit(node)
+            return node
+
     def visit_Assign(self, node):
         for target in node.targets:
             if isinstance(target, ast.Name) and not isinstance(target.ctx, ast.Param):
@@ -55,11 +62,16 @@ class AssignToSelf(ast.NodeTransformer):
 
     def visit_Import(self, node):
         self.imports.append(node)
-        self.generic_visit(node)
 
     def visit_ImportFrom(self, node):
         self.imports.append(node)
+
+    def visit_FunctionDef(self, node):
+        """Delete functions that are empty due to imports being moved"""
         self.generic_visit(node)
+
+        if node.body:
+            return node
 
 
 def translate_module(target_module):
@@ -84,16 +96,6 @@ def translate_module(target_module):
     for bench in benchmarks:
         rewritten_output += vbench_to_asv_source(bench)
 
-#    imports = []
-#    output_without_imports = []
-#    for line in rewritten_output.splitlines():
-#        if 'import ' in line:
-#            imports.append(line.strip())
-#        else:
-#            output_without_imports.append(line)
-
-#    rewritten_output = '\n'.join(sorted(list(set(imports))) + output_without_imports)
-
     with open('rewrite.py', 'w') as f:
         f.write(rewritten_output)
 
@@ -102,21 +104,11 @@ def translate_module(target_module):
     transformer = AssignToSelf()
     transformed_module = transformer.visit(ast_module)
 
-    transformed_module.body = transformer.imports + transformed_module.body
+    unique_imports = {astor.to_source(node): node for node in transformer.imports}
+
+    transformed_module.body = unique_imports.values() + transformed_module.body
 
     transformed_source = astor.to_source(transformed_module)
-
-    imports = []
-    deduped_source = []
-    for line in transformed_source.splitlines():
-        if 'import ' in line:
-            imports.append(line)
-        else:
-            deduped_source.append(line)
-
-    imports = sorted(list(set(imports)))
-
-    transformed_source = '\n'.join(imports + deduped_source)
 
     with open('benchmarks/{}.py'.format(target_module), 'w') as f:
         f.write(transformed_source)

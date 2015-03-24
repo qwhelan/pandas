@@ -35,6 +35,8 @@
         "numpy": ["1.7", "1.9"],
         "Cython": [],
         "matplotlib": [],
+        "sqlalchemy": [],
+        "scipy": [],
     },
 
     // The directory (relative to the current directory) that benchmarks are
