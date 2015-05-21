@@ -30,6 +30,8 @@ class AssignToSelf(ast.NodeTransformer):
     transforms = {}
     imports = []
 
+    in_setup = False
+
     def visit_ClassDef(self, node):
         self.transforms = {}
         self.generic_visit(node)
@@ -68,7 +70,19 @@ class AssignToSelf(ast.NodeTransformer):
 
     def visit_FunctionDef(self, node):
         """Delete functions that are empty due to imports being moved"""
+        if self.in_setup:
+            node.col_offset -= 4
+            ast.increment_lineno(node, -1)
+#            print node.name
+#            assert False
+
+        if node.name == 'setup':
+            self.in_setup = True
+
         self.generic_visit(node)
+
+        if node.name == 'setup':
+            self.in_setup = False
 
         if node.body:
             return node
