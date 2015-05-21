@@ -637,7 +637,7 @@ class frame_ctor_dtindex_FY5253Quarterx1(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(FY5253Quarter(1))
+        self.idx = get_index_for_offset(FY5253Quarter(qtr_with_extra_week=1, startingMonth=1, weekday=1, variation='nearest'))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -659,7 +659,7 @@ class frame_ctor_dtindex_FY5253Quarterx2(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(FY5253Quarter(2))
+        self.idx = get_index_for_offset(FY5253Quarter(qtr_with_extra_week=2, startingMonth=2, weekday=2, variation='last'))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -681,7 +681,7 @@ class frame_ctor_dtindex_FY5253x1(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(FY5253(1))
+        self.idx = get_index_for_offset(FY5253(startingMonth=1, weekday=1, variation='nearest'))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -703,7 +703,7 @@ class frame_ctor_dtindex_FY5253x2(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(FY5253(2))
+        self.idx = get_index_for_offset(FY5253(startingMonth=2, weekday=2, variation='last'))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -769,7 +769,7 @@ class frame_ctor_dtindex_LastWeekOfMonthx1(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(LastWeekOfMonth(1))
+        self.idx = get_index_for_offset(LastWeekOfMonth(weekday=1, week=1))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -791,7 +791,7 @@ class frame_ctor_dtindex_LastWeekOfMonthx2(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(LastWeekOfMonth(2))
+        self.idx = get_index_for_offset(LastWeekOfMonth(weekday=2, week=2))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -1209,7 +1209,7 @@ class frame_ctor_dtindex_WeekOfMonthx1(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(WeekOfMonth(1))
+        self.idx = get_index_for_offset(WeekOfMonth(weekday=1, week=1))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 
@@ -1231,7 +1231,7 @@ class frame_ctor_dtindex_WeekOfMonthx2(object):
         def get_index_for_offset(off):
             self.start_date = Timestamp('1/1/1900')
             return date_range(self.start_date, periods=min(1000, get_period_count(self.start_date, off)), freq=off)
-        self.idx = get_index_for_offset(WeekOfMonth(2))
+        self.idx = get_index_for_offset(WeekOfMonth(weekday=2, week=2))
         self.df = DataFrame(np.random.randn(len(self.idx), 10), index=self.idx)
         self.d = dict([(col, self.df[col]) for col in self.df.columns])
 

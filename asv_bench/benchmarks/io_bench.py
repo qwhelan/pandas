@@ -9,6 +9,7 @@ import pandas.computation.expressions as expr
 from pandas import concat, Timestamp
 from itertools import product
 from string import ascii_letters, digits
+from StringIO import StringIO
 
 
 class frame_to_csv(object):
