@@ -11,7 +11,7 @@ def vbench_to_asv_source(bench, kinds=None):
     if kinds is None:
         kinds = ['time']
 
-    output = 'class {}:\n'.format(bench.name)
+    output = 'class {}(object):\n'.format(bench.name)
     if bench.setup:
         indented_setup = [tab * 2 + '{}\n'.format(x) for x in bench.setup.splitlines()]
         output += tab + 'def setup(self):\n' + ''.join(indented_setup) + '\n'
@@ -73,8 +73,6 @@ class AssignToSelf(ast.NodeTransformer):
         if self.in_setup:
             node.col_offset -= 4
             ast.increment_lineno(node, -1)
-#            print node.name
-#            assert False
 
         if node.name == 'setup':
             self.in_setup = True
@@ -95,7 +93,6 @@ def translate_module(target_module):
 
     print target_module
     module = eval(target_module, g_vars)
-
 
     benchmarks = []
     for obj_str in dir(module):
