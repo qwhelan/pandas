@@ -1,16 +1,21 @@
 from vbench.api import Benchmark
 from datetime import datetime
+from pandas import *
 
-common_setup = """from pandas_vb_common import *
-from datetime import timedelta
 N = 100000
-
 try:
     rng = date_range(start='1/1/2000', periods=N, freq='min')
 except NameError:
     rng = DatetimeIndex(start='1/1/2000', periods=N, freq='T')
     def date_range(start=None, end=None, periods=None, freq=None):
         return DatetimeIndex(start=start, end=end, periods=periods, offset=freq)
+
+
+common_setup = """from pandas_vb_common import *
+from datetime import timedelta
+N = 100000
+
+rng = date_range(start='1/1/2000', periods=N, freq='T')
 
 if hasattr(Series, 'convert'):
     Series.resample = Series.convert
@@ -22,7 +27,7 @@ ts = Series(np.random.randn(N), index=rng)
 # Lookup value in large time series, hash map population
 
 setup = common_setup + """
-rng = date_range(start='1/1/2000', periods=1500000, freq='s')
+rng = date_range(start='1/1/2000', periods=1500000, freq='S')
 ts = Series(1, index=rng)
 """
 
@@ -149,7 +154,7 @@ timeseries_resample_datetime64 = Benchmark("ts.resample('1S', how='last')", setu
 # to_datetime
 
 setup = common_setup + """
-rng = date_range(start='1/1/2000', periods=20000, freq='h')
+rng = date_range(start='1/1/2000', periods=20000, freq='H')
 strings = [x.strftime('%Y-%m-%d %H:%M:%S') for x in rng]
 """
 
@@ -384,6 +389,13 @@ timeseries_is_month_start = Benchmark('rng.is_month_start', setup,
 
 #----------------------------------------------------------------------
 # iterate over DatetimeIndex/PeriodIndex
+def iter_n(iterable, n=None):
+  i = 0
+  for _ in iterable:
+    i += 1
+    if n is not None and i > n:
+      break
+
 setup = common_setup + """
 N = 1000000
 M = 10000

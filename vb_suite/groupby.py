@@ -212,7 +212,7 @@ df = DataFrame({'key1': fac1.take(ind1),
 'value3' : np.random.randn(100000)})
 """
 
-stmt = "df.pivot_table(rows='key1', cols=['key2', 'key3'])"
+stmt = "df.pivot_table(index='key1', columns=['key2', 'key3'])"
 groupby_pivot_table = Benchmark(stmt, setup, start_date=datetime(2011, 12, 15))
 
 
