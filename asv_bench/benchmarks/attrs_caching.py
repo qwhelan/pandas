@@ -2,6 +2,7 @@ from pandas_vb_common import *
 
 
 class getattr_dataframe_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10, 6))
@@ -12,6 +13,7 @@ class getattr_dataframe_index(object):
 
 
 class setattr_dataframe_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10, 6))

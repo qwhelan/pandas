@@ -1,13 +1,8 @@
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-import pandas as pd
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 
 
 class frame_apply_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 100))
@@ -17,6 +12,7 @@ class frame_apply_axis_1(object):
 
 
 class frame_apply_lambda_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 100))
@@ -26,6 +22,7 @@ class frame_apply_lambda_mean(object):
 
 
 class frame_apply_np_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 100))
@@ -35,6 +32,7 @@ class frame_apply_np_mean(object):
 
 
 class frame_apply_pass_thru(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 100))
@@ -44,6 +42,7 @@ class frame_apply_pass_thru(object):
 
 
 class frame_apply_ref_by_name(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 3), columns=list('ABC'))
@@ -53,6 +52,7 @@ class frame_apply_ref_by_name(object):
 
 
 class frame_apply_user_func(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.arange(1028.0))
@@ -63,6 +63,7 @@ class frame_apply_user_func(object):
 
 
 class frame_assign_timeseries_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = date_range('1/1/2000', periods=100000, freq='D')
@@ -77,6 +78,7 @@ class frame_assign_timeseries_index(object):
 
 
 class frame_boolean_row_select(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 100))
@@ -88,6 +90,7 @@ class frame_boolean_row_select(object):
 
 
 class frame_count_level_axis0_mixed_dtypes_multi(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -104,6 +107,7 @@ class frame_count_level_axis0_mixed_dtypes_multi(object):
 
 
 class frame_count_level_axis0_multi(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -119,6 +123,7 @@ class frame_count_level_axis0_multi(object):
 
 
 class frame_count_level_axis1_mixed_dtypes_multi(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -135,6 +140,7 @@ class frame_count_level_axis1_mixed_dtypes_multi(object):
 
 
 class frame_count_level_axis1_multi(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -150,6 +156,7 @@ class frame_count_level_axis1_multi(object):
 
 
 class frame_dropna_axis0_all(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -163,6 +170,7 @@ class frame_dropna_axis0_all(object):
 
 
 class frame_dropna_axis0_all_mixed_dtypes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -177,6 +185,7 @@ class frame_dropna_axis0_all_mixed_dtypes(object):
 
 
 class frame_dropna_axis0_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -190,6 +199,7 @@ class frame_dropna_axis0_any(object):
 
 
 class frame_dropna_axis0_any_mixed_dtypes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -204,6 +214,7 @@ class frame_dropna_axis0_any_mixed_dtypes(object):
 
 
 class frame_dropna_axis1_all(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -217,6 +228,7 @@ class frame_dropna_axis1_all(object):
 
 
 class frame_dropna_axis1_all_mixed_dtypes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -231,6 +243,7 @@ class frame_dropna_axis1_all_mixed_dtypes(object):
 
 
 class frame_dropna_axis1_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -244,6 +257,7 @@ class frame_dropna_axis1_any(object):
 
 
 class frame_dropna_axis1_any_mixed_dtypes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(10000, 1000)
@@ -258,6 +272,7 @@ class frame_dropna_axis1_any_mixed_dtypes(object):
 
 
 class frame_dtypes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 1000))
@@ -267,6 +282,7 @@ class frame_dtypes(object):
 
 
 class frame_duplicated(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = (1 << 20)
@@ -279,6 +295,7 @@ class frame_duplicated(object):
 
 
 class frame_fancy_lookup(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10000, 8), columns=list('abcdefgh'))
@@ -293,6 +310,7 @@ class frame_fancy_lookup(object):
 
 
 class frame_fancy_lookup_all(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10000, 8), columns=list('abcdefgh'))
@@ -307,6 +325,7 @@ class frame_fancy_lookup_all(object):
 
 
 class frame_fillna_inplace(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 100))
@@ -317,6 +336,7 @@ class frame_fillna_inplace(object):
 
 
 class frame_float_equal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -344,6 +364,7 @@ class frame_float_equal(object):
 
 
 class frame_float_unequal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -371,6 +392,7 @@ class frame_float_unequal(object):
 
 
 class frame_from_records_generator(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -382,6 +404,7 @@ class frame_from_records_generator(object):
 
 
 class frame_from_records_generator_nrows(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -393,6 +416,7 @@ class frame_from_records_generator_nrows(object):
 
 
 class frame_get_dtype_counts(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = pandas.DataFrame(np.random.randn(10, 10000))
@@ -402,6 +426,7 @@ class frame_get_dtype_counts(object):
 
 
 class frame_getitem_single_column(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 1000))
@@ -431,6 +456,7 @@ class frame_getitem_single_column(object):
 
 
 class frame_getitem_single_column2(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 1000))
@@ -460,6 +486,7 @@ class frame_getitem_single_column2(object):
 
 
 class frame_html_repr_trunc_mi(object):
+    goal_time = 0.2
 
     def setup(self):
         self.nrows = 10000
@@ -472,6 +499,7 @@ class frame_html_repr_trunc_mi(object):
 
 
 class frame_html_repr_trunc_si(object):
+    goal_time = 0.2
 
     def setup(self):
         self.nrows = 10000
@@ -484,6 +512,7 @@ class frame_html_repr_trunc_si(object):
 
 
 class frame_insert_100_columns_begin(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000
@@ -499,6 +528,7 @@ class frame_insert_100_columns_begin(object):
 
 
 class frame_insert_500_columns_end(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000
@@ -514,6 +544,7 @@ class frame_insert_500_columns_end(object):
 
 
 class frame_interpolate(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 100))
@@ -524,6 +555,7 @@ class frame_interpolate(object):
 
 
 class frame_interpolate_some_good(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'A': np.arange(0, 10000), 'B': np.random.randint(0, 100, 10000), 'C': randn(10000), 'D': randn(10000), })
@@ -535,6 +567,7 @@ class frame_interpolate_some_good(object):
 
 
 class frame_interpolate_some_good_infer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'A': np.arange(0, 10000), 'B': np.random.randint(0, 100, 10000), 'C': randn(10000), 'D': randn(10000), })
@@ -546,6 +579,7 @@ class frame_interpolate_some_good_infer(object):
 
 
 class frame_isnull(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(1000, 1000)
@@ -556,6 +590,7 @@ class frame_isnull(object):
 
 
 class frame_iteritems(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 1000))
@@ -585,6 +620,7 @@ class frame_iteritems(object):
 
 
 class frame_iteritems_cached(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 1000))
@@ -614,6 +650,7 @@ class frame_iteritems_cached(object):
 
 
 class frame_mask_bools(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(1000, 500)
@@ -627,6 +664,7 @@ class frame_mask_bools(object):
 
 
 class frame_mask_floats(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(1000, 500)
@@ -640,6 +678,7 @@ class frame_mask_floats(object):
 
 
 class frame_nonunique_equal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -667,6 +706,7 @@ class frame_nonunique_equal(object):
 
 
 class frame_nonunique_unequal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -694,6 +734,7 @@ class frame_nonunique_unequal(object):
 
 
 class frame_object_equal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -721,6 +762,7 @@ class frame_object_equal(object):
 
 
 class frame_object_unequal(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -748,6 +790,7 @@ class frame_object_unequal(object):
 
 
 class frame_reindex_axis0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 10000))
@@ -758,6 +801,7 @@ class frame_reindex_axis0(object):
 
 
 class frame_reindex_axis1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 10000))
@@ -768,6 +812,7 @@ class frame_reindex_axis1(object):
 
 
 class frame_reindex_both_axes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 10000))
@@ -778,6 +823,7 @@ class frame_reindex_both_axes(object):
 
 
 class frame_reindex_both_axes_ix(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(10000, 10000))
@@ -788,6 +834,7 @@ class frame_reindex_both_axes_ix(object):
 
 
 class frame_reindex_upcast(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(dict([(c, {0: randint(0, 2, 1000).astype(np.bool_), 1: randint(0, 1000, 1000).astype(np.int16), 2: randint(0, 1000, 1000).astype(np.int32), 3: randint(0, 1000, 1000).astype(np.int64), }[randint(0, 4)]) for c in range(1000)]))
@@ -797,6 +844,7 @@ class frame_reindex_upcast(object):
 
 
 class frame_repr_tall(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = pandas.DataFrame(np.random.randn(10000, 10))
@@ -806,6 +854,7 @@ class frame_repr_tall(object):
 
 
 class frame_repr_wide(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = pandas.DataFrame(np.random.randn(10, 10000))
@@ -815,6 +864,7 @@ class frame_repr_wide(object):
 
 
 class frame_shift_axis0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.rand(10000, 500))
@@ -824,6 +874,7 @@ class frame_shift_axis0(object):
 
 
 class frame_shift_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.rand(10000, 500))
@@ -833,6 +884,7 @@ class frame_shift_axis_1(object):
 
 
 class frame_to_html_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
         self.nrows = 500
@@ -845,6 +897,7 @@ class frame_to_html_mixed(object):
 
 
 class frame_to_string_floats(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(100, 10))
@@ -854,6 +907,7 @@ class frame_to_string_floats(object):
 
 
 class frame_xs_col(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(1, 100000))
@@ -863,6 +917,7 @@ class frame_xs_col(object):
 
 
 class frame_xs_row(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(randn(100000, 1))
@@ -872,6 +927,7 @@ class frame_xs_row(object):
 
 
 class series_string_vector_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series((['abcdefg', np.nan] * 500000))

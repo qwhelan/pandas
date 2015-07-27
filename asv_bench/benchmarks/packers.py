@@ -1,26 +1,18 @@
 from numpy.random import randint
 import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
 from collections import OrderedDict
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
+from pandas.compat import BytesIO
 import sqlite3
+from pandas_vb_common import *
+import os
 from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
-from random import randrange
 import numpy as np
+from random import randrange
 from pandas.core import common as com
 
 
 class packers_read_csv(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -46,7 +38,39 @@ class packers_read_csv(object):
         pd.read_csv(self.f)
 
 
+class packers_read_excel(object):
+    goal_time = 0.2
+
+    def setup(self):
+        self.f = '__test__.msg'
+
+        def remove(f):
+            try:
+                os.remove(self.f)
+            except:
+                pass
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df2 = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.df2['object'] = [('%08x' % randrange((16 ** 8))) for _ in range(self.N)]
+        remove(self.f)
+        self.bio = BytesIO()
+        self.writer = pd.io.excel.ExcelWriter(self.bio, engine='xlsxwriter')
+        self.df[:2000].to_excel(self.writer)
+        self.writer.save()
+
+    def time_packers_read_excel(self):
+        self.bio.seek(0)
+        pd.read_excel(self.bio)
+
+
 class packers_read_hdf_store(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -73,6 +97,7 @@ class packers_read_hdf_store(object):
 
 
 class packers_read_hdf_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -92,13 +117,14 @@ class packers_read_hdf_table(object):
         self.df2 = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
         self.df2['object'] = [('%08x' % randrange((16 ** 8))) for _ in range(self.N)]
         remove(self.f)
-        self.df2.to_hdf(self.f, 'df', table=True)
+        self.df2.to_hdf(self.f, 'df', format='table')
 
     def time_packers_read_hdf_table(self):
         pd.read_hdf(self.f, 'df')
 
 
 class packers_read_json(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -126,6 +152,7 @@ class packers_read_json(object):
 
 
 class packers_read_json_date_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -152,6 +179,7 @@ class packers_read_json_date_index(object):
 
 
 class packers_read_pack(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -178,6 +206,7 @@ class packers_read_pack(object):
 
 
 class packers_read_pickle(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -204,6 +233,7 @@ class packers_read_pickle(object):
 
 
 class packers_read_sql(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -231,6 +261,7 @@ class packers_read_sql(object):
 
 
 class packers_read_stata(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -257,6 +288,7 @@ class packers_read_stata(object):
 
 
 class packers_read_stata_with_validation(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -287,6 +319,7 @@ class packers_read_stata_with_validation(object):
 
 
 class packers_write_csv(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -314,7 +347,98 @@ class packers_write_csv(object):
         remove(self.f)
 
 
+class packers_write_excel_openpyxl(object):
+    goal_time = 0.2
+
+    def setup(self):
+        self.f = '__test__.msg'
+
+        def remove(f):
+            try:
+                os.remove(self.f)
+            except:
+                pass
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df2 = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.df2['object'] = [('%08x' % randrange((16 ** 8))) for _ in range(self.N)]
+        remove(self.f)
+        self.bio = BytesIO()
+
+    def time_packers_write_excel_openpyxl(self):
+        self.bio.seek(0)
+        self.writer = pd.io.excel.ExcelWriter(self.bio, engine='openpyxl')
+        self.df[:2000].to_excel(self.writer)
+        self.writer.save()
+
+
+class packers_write_excel_xlsxwriter(object):
+    goal_time = 0.2
+
+    def setup(self):
+        self.f = '__test__.msg'
+
+        def remove(f):
+            try:
+                os.remove(self.f)
+            except:
+                pass
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df2 = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.df2['object'] = [('%08x' % randrange((16 ** 8))) for _ in range(self.N)]
+        remove(self.f)
+        self.bio = BytesIO()
+
+    def time_packers_write_excel_xlsxwriter(self):
+        self.bio.seek(0)
+        self.writer = pd.io.excel.ExcelWriter(self.bio, engine='xlsxwriter')
+        self.df[:2000].to_excel(self.writer)
+        self.writer.save()
+
+
+class packers_write_excel_xlwt(object):
+    goal_time = 0.2
+
+    def setup(self):
+        self.f = '__test__.msg'
+
+        def remove(f):
+            try:
+                os.remove(self.f)
+            except:
+                pass
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.N = 100000
+        self.C = 5
+        self.index = date_range('20000101', periods=self.N, freq='H')
+        self.df2 = DataFrame(dict([('float{0}'.format(i), randn(self.N)) for i in range(self.C)]), index=self.index)
+        self.df2['object'] = [('%08x' % randrange((16 ** 8))) for _ in range(self.N)]
+        remove(self.f)
+        self.bio = BytesIO()
+
+    def time_packers_write_excel_xlwt(self):
+        self.bio.seek(0)
+        self.writer = pd.io.excel.ExcelWriter(self.bio, engine='xlwt')
+        self.df[:2000].to_excel(self.writer)
+        self.writer.save()
+
+
 class packers_write_hdf_store(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -343,6 +467,7 @@ class packers_write_hdf_store(object):
 
 
 class packers_write_hdf_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -371,6 +496,7 @@ class packers_write_hdf_table(object):
 
 
 class packers_write_json(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -400,6 +526,7 @@ class packers_write_json(object):
 
 
 class packers_write_json_T(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -429,6 +556,7 @@ class packers_write_json_T(object):
 
 
 class packers_write_json_date_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -457,6 +585,7 @@ class packers_write_json_date_index(object):
 
 
 class packers_write_json_mixed_delta_int_tstamp(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -487,6 +616,7 @@ class packers_write_json_mixed_delta_int_tstamp(object):
 
 
 class packers_write_json_mixed_float_int(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -517,6 +647,7 @@ class packers_write_json_mixed_float_int(object):
 
 
 class packers_write_json_mixed_float_int_T(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -547,6 +678,7 @@ class packers_write_json_mixed_float_int_T(object):
 
 
 class packers_write_json_mixed_float_int_str(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -577,6 +709,7 @@ class packers_write_json_mixed_float_int_str(object):
 
 
 class packers_write_pack(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -605,6 +738,7 @@ class packers_write_pack(object):
 
 
 class packers_write_pickle(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -633,6 +767,7 @@ class packers_write_pickle(object):
 
 
 class packers_write_sql(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -659,6 +794,7 @@ class packers_write_sql(object):
 
 
 class packers_write_stata(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'
@@ -688,6 +824,7 @@ class packers_write_stata(object):
 
 
 class packers_write_stata_with_validation(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.msg'

@@ -1,26 +1,8 @@
-from numpy.random import randint
-import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
-from collections import OrderedDict
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
-import sqlite3
-from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
-from random import randrange
-import numpy as np
-from pandas.core import common as com
 
 
 class panel_from_dict_all_different_indexes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data_frames = {}
@@ -37,6 +19,7 @@ class panel_from_dict_all_different_indexes(object):
 
 
 class panel_from_dict_equiv_indexes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data_frames = {}
@@ -50,6 +33,7 @@ class panel_from_dict_equiv_indexes(object):
 
 
 class panel_from_dict_same_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.dr = np.asarray(DatetimeIndex(start=datetime(1990, 1, 1), end=datetime(2012, 1, 1), freq=datetools.Day(1)))
@@ -63,6 +47,7 @@ class panel_from_dict_same_index(object):
 
 
 class panel_from_dict_two_different_indexes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data_frames = {}

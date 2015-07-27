@@ -1,16 +1,8 @@
-import pandas as pd
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from itertools import product
-from string import ascii_letters, digits
 
 
 class datetime_index_intersection(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=10000, freq='T')
@@ -21,6 +13,7 @@ class datetime_index_intersection(object):
 
 
 class datetime_index_repr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.dr = pd.date_range('20000101', freq='D', periods=100000)
@@ -30,6 +23,7 @@ class datetime_index_repr(object):
 
 
 class datetime_index_union(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=10000, freq='T')
@@ -40,6 +34,7 @@ class datetime_index_union(object):
 
 
 class index_datetime_intersection(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = DatetimeIndex(start='1/1/2000', periods=10000, freq=datetools.Minute())
@@ -54,6 +49,7 @@ class index_datetime_intersection(object):
 
 
 class index_datetime_union(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = DatetimeIndex(start='1/1/2000', periods=10000, freq=datetools.Minute())
@@ -68,6 +64,7 @@ class index_datetime_union(object):
 
 
 class index_float64_boolean_indexer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -79,6 +76,7 @@ class index_float64_boolean_indexer(object):
 
 
 class index_float64_boolean_series_indexer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -90,6 +88,7 @@ class index_float64_boolean_series_indexer(object):
 
 
 class index_float64_construct(object):
+    goal_time = 0.2
 
     def setup(self):
         self.baseidx = np.arange(1000000.0)
@@ -99,6 +98,7 @@ class index_float64_construct(object):
 
 
 class index_float64_div(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -110,6 +110,7 @@ class index_float64_div(object):
 
 
 class index_float64_get(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -121,6 +122,7 @@ class index_float64_get(object):
 
 
 class index_float64_mul(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -132,6 +134,7 @@ class index_float64_mul(object):
 
 
 class index_float64_slice_indexer_basic(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -143,6 +146,7 @@ class index_float64_slice_indexer_basic(object):
 
 
 class index_float64_slice_indexer_even(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeFloatIndex(1000000)
@@ -154,6 +158,7 @@ class index_float64_slice_indexer_even(object):
 
 
 class index_int64_intersection(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000
@@ -166,6 +171,7 @@ class index_int64_intersection(object):
 
 
 class index_int64_union(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000
@@ -178,6 +184,7 @@ class index_int64_union(object):
 
 
 class index_str_boolean_indexer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeStringIndex(1000000)
@@ -189,6 +196,7 @@ class index_str_boolean_indexer(object):
 
 
 class index_str_boolean_series_indexer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeStringIndex(1000000)
@@ -200,6 +208,7 @@ class index_str_boolean_series_indexer(object):
 
 
 class index_str_slice_indexer_basic(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeStringIndex(1000000)
@@ -211,6 +220,7 @@ class index_str_slice_indexer_basic(object):
 
 
 class index_str_slice_indexer_even(object):
+    goal_time = 0.2
 
     def setup(self):
         self.idx = tm.makeStringIndex(1000000)
@@ -222,6 +232,7 @@ class index_str_slice_indexer_even(object):
 
 
 class multiindex_duplicated(object):
+    goal_time = 0.2
 
     def setup(self):
         (n, k) = (200, 5000)
@@ -234,6 +245,7 @@ class multiindex_duplicated(object):
 
 
 class multiindex_from_product(object):
+    goal_time = 0.2
 
     def setup(self):
         self.iterables = [tm.makeStringIndex(10000), xrange(20)]
@@ -243,6 +255,7 @@ class multiindex_from_product(object):
 
 
 class multiindex_sortlevel_int64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = ((((3 * 5) * 7) * 11) * (1 << 10))
@@ -256,6 +269,7 @@ class multiindex_sortlevel_int64(object):
 
 
 class multiindex_with_datetime_level_full(object):
+    goal_time = 0.2
 
     def setup(self):
         self.level1 = range(1000)
@@ -267,6 +281,7 @@ class multiindex_with_datetime_level_full(object):
 
 
 class multiindex_with_datetime_level_sliced(object):
+    goal_time = 0.2
 
     def setup(self):
         self.level1 = range(1000)

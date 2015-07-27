@@ -3,6 +3,7 @@ import pandas.computation.expressions as expr
 
 
 class frame_add(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -13,6 +14,7 @@ class frame_add(object):
 
 
 class frame_add_no_ne(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -27,6 +29,7 @@ class frame_add_no_ne(object):
 
 
 class frame_add_st(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -41,6 +44,7 @@ class frame_add_st(object):
 
 
 class frame_float_div(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 1000))
@@ -51,6 +55,7 @@ class frame_float_div(object):
 
 
 class frame_float_div_by_zero(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 1000))
@@ -60,6 +65,7 @@ class frame_float_div_by_zero(object):
 
 
 class frame_float_floor_by_zero(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 1000))
@@ -69,6 +75,7 @@ class frame_float_floor_by_zero(object):
 
 
 class frame_float_mod(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 1000))
@@ -79,6 +86,7 @@ class frame_float_mod(object):
 
 
 class frame_int_div_by_zero(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.random_integers(np.iinfo(np.int16).min, np.iinfo(np.int16).max, size=(1000, 1000)))
@@ -88,6 +96,7 @@ class frame_int_div_by_zero(object):
 
 
 class frame_int_mod(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.random_integers(np.iinfo(np.int16).min, np.iinfo(np.int16).max, size=(1000, 1000)))
@@ -98,6 +107,7 @@ class frame_int_mod(object):
 
 
 class frame_mult(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -108,6 +118,7 @@ class frame_mult(object):
 
 
 class frame_mult_no_ne(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -122,6 +133,7 @@ class frame_mult_no_ne(object):
 
 
 class frame_mult_st(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -136,6 +148,7 @@ class frame_mult_st(object):
 
 
 class frame_multi_and(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -146,6 +159,7 @@ class frame_multi_and(object):
 
 
 class frame_multi_and_no_ne(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -160,6 +174,7 @@ class frame_multi_and_no_ne(object):
 
 
 class frame_multi_and_st(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(20000, 100))
@@ -174,6 +189,7 @@ class frame_multi_and_st(object):
 
 
 class series_timestamp_compare(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000
@@ -186,6 +202,7 @@ class series_timestamp_compare(object):
 
 
 class timestamp_ops_diff1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000
@@ -196,6 +213,7 @@ class timestamp_ops_diff1(object):
 
 
 class timestamp_ops_diff2(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000
@@ -206,6 +224,7 @@ class timestamp_ops_diff2(object):
 
 
 class timestamp_series_compare(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000000

@@ -1,15 +1,10 @@
-import pandas as pd
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
 from itertools import product
 from string import ascii_letters, digits
 
 
 class groupby_agg_builtins1(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(27182)
@@ -21,6 +16,7 @@ class groupby_agg_builtins1(object):
 
 
 class groupby_agg_builtins2(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(27182)
@@ -32,6 +28,7 @@ class groupby_agg_builtins2(object):
 
 
 class groupby_apply_dict_return(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(1000).repeat(10)
@@ -43,6 +40,7 @@ class groupby_apply_dict_return(object):
 
 
 class groupby_dt_size(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 100000
@@ -55,6 +53,7 @@ class groupby_dt_size(object):
 
 
 class groupby_dt_timegrouper_size(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 100000
@@ -67,6 +66,7 @@ class groupby_dt_timegrouper_size(object):
 
 
 class groupby_first_datetimes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': date_range('1/1/2011', periods=100000, freq='s'), 'b': range(100000), })
@@ -76,6 +76,7 @@ class groupby_first_datetimes(object):
 
 
 class groupby_first_float32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -92,6 +93,7 @@ class groupby_first_float32(object):
 
 
 class groupby_first_float64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -108,6 +110,7 @@ class groupby_first_float64(object):
 
 
 class groupby_first_object(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': (['foo'] * 100000), 'b': range(100000), })
@@ -117,6 +120,7 @@ class groupby_first_object(object):
 
 
 class groupby_frame_apply(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -132,6 +136,7 @@ class groupby_frame_apply(object):
 
 
 class groupby_frame_apply_overhead(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -147,6 +152,7 @@ class groupby_frame_apply_overhead(object):
 
 
 class groupby_frame_cython_many_columns(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.random.randint(0, 100, size=1000)
@@ -157,6 +163,7 @@ class groupby_frame_cython_many_columns(object):
 
 
 class groupby_frame_median(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(100000, 2)
@@ -168,6 +175,7 @@ class groupby_frame_median(object):
 
 
 class groupby_frame_nth_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randint(1, 100, (10000, 2)))
@@ -177,6 +185,7 @@ class groupby_frame_nth_any(object):
 
 
 class groupby_frame_nth_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randint(1, 100, (10000, 2)))
@@ -186,6 +195,7 @@ class groupby_frame_nth_none(object):
 
 
 class groupby_frame_singlekey_integer(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(100000, 1)
@@ -197,6 +207,7 @@ class groupby_frame_singlekey_integer(object):
 
 
 class groupby_indices(object):
+    goal_time = 0.2
 
     def setup(self):
         try:
@@ -214,6 +225,7 @@ class groupby_indices(object):
 
 
 class groupby_int64_overflow(object):
+    goal_time = 0.2
 
     def setup(self):
         self.arr = np.random.randint(((-1) << 12), (1 << 12), ((1 << 17), 5))
@@ -229,6 +241,7 @@ class groupby_int64_overflow(object):
 
 
 class groupby_int_count(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 10000
@@ -239,6 +252,7 @@ class groupby_int_count(object):
 
 
 class groupby_last_datetimes(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': date_range('1/1/2011', periods=100000, freq='s'), 'b': range(100000), })
@@ -248,6 +262,7 @@ class groupby_last_datetimes(object):
 
 
 class groupby_last_float32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -264,6 +279,7 @@ class groupby_last_float32(object):
 
 
 class groupby_last_float64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -280,6 +296,7 @@ class groupby_last_float64(object):
 
 
 class groupby_last_object(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': (['foo'] * 100000), 'b': range(100000), })
@@ -289,6 +306,7 @@ class groupby_last_object(object):
 
 
 class groupby_multi_count(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 10000
@@ -307,6 +325,7 @@ class groupby_multi_count(object):
 
 
 class groupby_multi_cython(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
@@ -331,6 +350,7 @@ class groupby_multi_cython(object):
 
 
 class groupby_multi_different_functions(object):
+    goal_time = 0.2
 
     def setup(self):
         self.fac1 = np.array(['A', 'B', 'C'], dtype='O')
@@ -342,6 +362,7 @@ class groupby_multi_different_functions(object):
 
 
 class groupby_multi_different_numpy_functions(object):
+    goal_time = 0.2
 
     def setup(self):
         self.fac1 = np.array(['A', 'B', 'C'], dtype='O')
@@ -353,6 +374,7 @@ class groupby_multi_different_numpy_functions(object):
 
 
 class groupby_multi_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = (((5 * 7) * 11) * (1 << 9))
@@ -368,6 +390,7 @@ class groupby_multi_index(object):
 
 
 class groupby_multi_python(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
@@ -392,6 +415,7 @@ class groupby_multi_python(object):
 
 
 class groupby_multi_series_op(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
@@ -416,6 +440,7 @@ class groupby_multi_series_op(object):
 
 
 class groupby_multi_size(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 100000
@@ -428,6 +453,7 @@ class groupby_multi_size(object):
 
 
 class groupby_ngroups_10000_all(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -441,6 +467,7 @@ class groupby_ngroups_10000_all(object):
 
 
 class groupby_ngroups_10000_any(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -454,6 +481,7 @@ class groupby_ngroups_10000_any(object):
 
 
 class groupby_ngroups_10000_count(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -467,6 +495,7 @@ class groupby_ngroups_10000_count(object):
 
 
 class groupby_ngroups_10000_cumcount(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -480,6 +509,7 @@ class groupby_ngroups_10000_cumcount(object):
 
 
 class groupby_ngroups_10000_cummax(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -493,6 +523,7 @@ class groupby_ngroups_10000_cummax(object):
 
 
 class groupby_ngroups_10000_cummin(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -506,6 +537,7 @@ class groupby_ngroups_10000_cummin(object):
 
 
 class groupby_ngroups_10000_cumprod(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -519,6 +551,7 @@ class groupby_ngroups_10000_cumprod(object):
 
 
 class groupby_ngroups_10000_cumsum(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -532,6 +565,7 @@ class groupby_ngroups_10000_cumsum(object):
 
 
 class groupby_ngroups_10000_describe(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -545,6 +579,7 @@ class groupby_ngroups_10000_describe(object):
 
 
 class groupby_ngroups_10000_diff(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -558,6 +593,7 @@ class groupby_ngroups_10000_diff(object):
 
 
 class groupby_ngroups_10000_first(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -571,6 +607,7 @@ class groupby_ngroups_10000_first(object):
 
 
 class groupby_ngroups_10000_head(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -584,6 +621,7 @@ class groupby_ngroups_10000_head(object):
 
 
 class groupby_ngroups_10000_last(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -597,6 +635,7 @@ class groupby_ngroups_10000_last(object):
 
 
 class groupby_ngroups_10000_mad(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -610,6 +649,7 @@ class groupby_ngroups_10000_mad(object):
 
 
 class groupby_ngroups_10000_max(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -623,6 +663,7 @@ class groupby_ngroups_10000_max(object):
 
 
 class groupby_ngroups_10000_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -636,6 +677,7 @@ class groupby_ngroups_10000_mean(object):
 
 
 class groupby_ngroups_10000_median(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -649,6 +691,7 @@ class groupby_ngroups_10000_median(object):
 
 
 class groupby_ngroups_10000_min(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -662,6 +705,7 @@ class groupby_ngroups_10000_min(object):
 
 
 class groupby_ngroups_10000_nunique(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -675,6 +719,7 @@ class groupby_ngroups_10000_nunique(object):
 
 
 class groupby_ngroups_10000_pct_change(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -688,6 +733,7 @@ class groupby_ngroups_10000_pct_change(object):
 
 
 class groupby_ngroups_10000_prod(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -701,6 +747,7 @@ class groupby_ngroups_10000_prod(object):
 
 
 class groupby_ngroups_10000_rank(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -714,6 +761,7 @@ class groupby_ngroups_10000_rank(object):
 
 
 class groupby_ngroups_10000_sem(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -727,6 +775,7 @@ class groupby_ngroups_10000_sem(object):
 
 
 class groupby_ngroups_10000_size(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -740,6 +789,7 @@ class groupby_ngroups_10000_size(object):
 
 
 class groupby_ngroups_10000_skew(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -753,6 +803,7 @@ class groupby_ngroups_10000_skew(object):
 
 
 class groupby_ngroups_10000_std(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -766,6 +817,7 @@ class groupby_ngroups_10000_std(object):
 
 
 class groupby_ngroups_10000_sum(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -779,6 +831,7 @@ class groupby_ngroups_10000_sum(object):
 
 
 class groupby_ngroups_10000_tail(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -792,6 +845,7 @@ class groupby_ngroups_10000_tail(object):
 
 
 class groupby_ngroups_10000_unique(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -805,6 +859,7 @@ class groupby_ngroups_10000_unique(object):
 
 
 class groupby_ngroups_10000_value_counts(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -818,6 +873,7 @@ class groupby_ngroups_10000_value_counts(object):
 
 
 class groupby_ngroups_10000_var(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -831,6 +887,7 @@ class groupby_ngroups_10000_var(object):
 
 
 class groupby_ngroups_100_all(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -844,6 +901,7 @@ class groupby_ngroups_100_all(object):
 
 
 class groupby_ngroups_100_any(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -857,6 +915,7 @@ class groupby_ngroups_100_any(object):
 
 
 class groupby_ngroups_100_count(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -870,6 +929,7 @@ class groupby_ngroups_100_count(object):
 
 
 class groupby_ngroups_100_cumcount(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -883,6 +943,7 @@ class groupby_ngroups_100_cumcount(object):
 
 
 class groupby_ngroups_100_cummax(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -896,6 +957,7 @@ class groupby_ngroups_100_cummax(object):
 
 
 class groupby_ngroups_100_cummin(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -909,6 +971,7 @@ class groupby_ngroups_100_cummin(object):
 
 
 class groupby_ngroups_100_cumprod(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -922,6 +985,7 @@ class groupby_ngroups_100_cumprod(object):
 
 
 class groupby_ngroups_100_cumsum(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -935,6 +999,7 @@ class groupby_ngroups_100_cumsum(object):
 
 
 class groupby_ngroups_100_describe(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -948,6 +1013,7 @@ class groupby_ngroups_100_describe(object):
 
 
 class groupby_ngroups_100_diff(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -961,6 +1027,7 @@ class groupby_ngroups_100_diff(object):
 
 
 class groupby_ngroups_100_first(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -974,6 +1041,7 @@ class groupby_ngroups_100_first(object):
 
 
 class groupby_ngroups_100_head(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -987,6 +1055,7 @@ class groupby_ngroups_100_head(object):
 
 
 class groupby_ngroups_100_last(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1000,6 +1069,7 @@ class groupby_ngroups_100_last(object):
 
 
 class groupby_ngroups_100_mad(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1013,6 +1083,7 @@ class groupby_ngroups_100_mad(object):
 
 
 class groupby_ngroups_100_max(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1026,6 +1097,7 @@ class groupby_ngroups_100_max(object):
 
 
 class groupby_ngroups_100_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1039,6 +1111,7 @@ class groupby_ngroups_100_mean(object):
 
 
 class groupby_ngroups_100_median(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1052,6 +1125,7 @@ class groupby_ngroups_100_median(object):
 
 
 class groupby_ngroups_100_min(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1065,6 +1139,7 @@ class groupby_ngroups_100_min(object):
 
 
 class groupby_ngroups_100_nunique(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1078,6 +1153,7 @@ class groupby_ngroups_100_nunique(object):
 
 
 class groupby_ngroups_100_pct_change(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1091,6 +1167,7 @@ class groupby_ngroups_100_pct_change(object):
 
 
 class groupby_ngroups_100_prod(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1104,6 +1181,7 @@ class groupby_ngroups_100_prod(object):
 
 
 class groupby_ngroups_100_rank(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1117,6 +1195,7 @@ class groupby_ngroups_100_rank(object):
 
 
 class groupby_ngroups_100_sem(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1130,6 +1209,7 @@ class groupby_ngroups_100_sem(object):
 
 
 class groupby_ngroups_100_size(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1143,6 +1223,7 @@ class groupby_ngroups_100_size(object):
 
 
 class groupby_ngroups_100_skew(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1156,6 +1237,7 @@ class groupby_ngroups_100_skew(object):
 
 
 class groupby_ngroups_100_std(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1169,6 +1251,7 @@ class groupby_ngroups_100_std(object):
 
 
 class groupby_ngroups_100_sum(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1182,6 +1265,7 @@ class groupby_ngroups_100_sum(object):
 
 
 class groupby_ngroups_100_tail(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1195,6 +1279,7 @@ class groupby_ngroups_100_tail(object):
 
 
 class groupby_ngroups_100_unique(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1208,6 +1293,7 @@ class groupby_ngroups_100_unique(object):
 
 
 class groupby_ngroups_100_value_counts(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1221,6 +1307,7 @@ class groupby_ngroups_100_value_counts(object):
 
 
 class groupby_ngroups_100_var(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(1234)
@@ -1234,6 +1321,7 @@ class groupby_ngroups_100_var(object):
 
 
 class groupby_nth_datetimes_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': date_range('1/1/2011', periods=100000, freq='s'), 'b': range(100000), })
@@ -1243,6 +1331,7 @@ class groupby_nth_datetimes_any(object):
 
 
 class groupby_nth_datetimes_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': date_range('1/1/2011', periods=100000, freq='s'), 'b': range(100000), })
@@ -1252,6 +1341,7 @@ class groupby_nth_datetimes_none(object):
 
 
 class groupby_nth_float32_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -1268,6 +1358,7 @@ class groupby_nth_float32_any(object):
 
 
 class groupby_nth_float32_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -1284,6 +1375,7 @@ class groupby_nth_float32_none(object):
 
 
 class groupby_nth_float64_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -1300,6 +1392,7 @@ class groupby_nth_float64_any(object):
 
 
 class groupby_nth_float64_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.labels = np.arange(10000).repeat(10)
@@ -1316,6 +1409,7 @@ class groupby_nth_float64_none(object):
 
 
 class groupby_nth_object_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': (['foo'] * 100000), 'b': range(100000), })
@@ -1325,6 +1419,7 @@ class groupby_nth_object_any(object):
 
 
 class groupby_nth_object_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'a': (['foo'] * 100000), 'b': range(100000), })
@@ -1334,6 +1429,7 @@ class groupby_nth_object_none(object):
 
 
 class groupby_pivot_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.fac1 = np.array(['A', 'B', 'C'], dtype='O')
@@ -1343,10 +1439,11 @@ class groupby_pivot_table(object):
         self.df = DataFrame({'key1': self.fac1.take(self.ind1), 'key2': self.fac2.take(self.ind2), 'key3': self.fac2.take(self.ind2), 'value1': np.random.randn(100000), 'value2': np.random.randn(100000), 'value3': np.random.randn(100000), })
 
     def time_groupby_pivot_table(self):
-        self.df.pivot_table(rows='key1', cols=['key2', 'key3'])
+        self.df.pivot_table(index='key1', columns=['key2', 'key3'])
 
 
 class groupby_series_nth_any(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randint(1, 100, (10000, 2)))
@@ -1356,6 +1453,7 @@ class groupby_series_nth_any(object):
 
 
 class groupby_series_nth_none(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randint(1, 100, (10000, 2)))
@@ -1365,6 +1463,7 @@ class groupby_series_nth_none(object):
 
 
 class groupby_series_simple_cython(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
@@ -1389,6 +1488,7 @@ class groupby_series_simple_cython(object):
 
 
 class groupby_simple_compress_timing(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = np.random.randn(1000000, 2)
@@ -1400,6 +1500,7 @@ class groupby_simple_compress_timing(object):
 
 
 class groupby_sum_booleans(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500
@@ -1410,6 +1511,7 @@ class groupby_sum_booleans(object):
 
 
 class groupby_sum_multiindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 50
@@ -1420,6 +1522,7 @@ class groupby_sum_multiindex(object):
 
 
 class groupby_transform(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n_dates = 400
@@ -1449,6 +1552,7 @@ class groupby_transform(object):
 
 
 class groupby_transform_multi_key1(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(2718281)
@@ -1460,6 +1564,7 @@ class groupby_transform_multi_key1(object):
 
 
 class groupby_transform_multi_key2(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(2718281)
@@ -1472,6 +1577,7 @@ class groupby_transform_multi_key2(object):
 
 
 class groupby_transform_multi_key3(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(2718281)
@@ -1483,6 +1589,7 @@ class groupby_transform_multi_key3(object):
 
 
 class groupby_transform_multi_key4(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(2718281)
@@ -1495,6 +1602,7 @@ class groupby_transform_multi_key4(object):
 
 
 class groupby_transform_series(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(0)
@@ -1512,6 +1620,7 @@ class groupby_transform_series(object):
 
 
 class groupby_transform_series2(object):
+    goal_time = 0.2
 
     def setup(self):
         np.random.seed(0)
@@ -1522,6 +1631,7 @@ class groupby_transform_series2(object):
 
 
 class groupby_transform_ufunc(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n_dates = 400
@@ -1551,6 +1661,7 @@ class groupby_transform_ufunc(object):
 
 
 class series_value_counts_int64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.randint(0, 1000, size=100000))
@@ -1560,6 +1671,7 @@ class series_value_counts_int64(object):
 
 
 class series_value_counts_strings(object):
+    goal_time = 0.2
 
     def setup(self):
         self.K = 1000

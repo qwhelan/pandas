@@ -1,42 +1,8 @@
-import pandas as pd
-from collections import OrderedDict
-from pandas import read_csv, read_table
-from random import shuffle
-from pandas.util.decorators import cache_readonly
-from random import randrange
-from pandas.core.reshape import melt
-import scipy.sparse
-from numpy.random import randint
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from itertools import product
-try:
-    from pandas import date_range
-except ImportError:
-
-    def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
-from pandas.core import common as com
-from datetime import timedelta
-import sqlite3
 from pandas_vb_common import *
-import os
-from pandas.compat import range
-from cStringIO import StringIO
-from pandas import concat, Timestamp
-from string import ascii_letters, digits
-import pandas.sparse.series
-import sqlalchemy
-import pandas.computation.expressions as expr
-from pandas.core.sparse import SparseDataFrame
-from sqlalchemy import create_engine
-import numpy as np
-from pandas.core.sparse import SparseSeries, SparseDataFrame
 
 
 class stat_ops_frame_mean_float_axis_0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -47,6 +13,7 @@ class stat_ops_frame_mean_float_axis_0(object):
 
 
 class stat_ops_frame_mean_float_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -57,6 +24,7 @@ class stat_ops_frame_mean_float_axis_1(object):
 
 
 class stat_ops_frame_mean_int_axis_0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -67,6 +35,7 @@ class stat_ops_frame_mean_int_axis_0(object):
 
 
 class stat_ops_frame_mean_int_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -77,6 +46,7 @@ class stat_ops_frame_mean_int_axis_1(object):
 
 
 class stat_ops_frame_sum_float_axis_0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -87,6 +57,7 @@ class stat_ops_frame_sum_float_axis_0(object):
 
 
 class stat_ops_frame_sum_float_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -97,6 +68,7 @@ class stat_ops_frame_sum_float_axis_1(object):
 
 
 class stat_ops_frame_sum_int_axis_0(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -107,6 +79,7 @@ class stat_ops_frame_sum_int_axis_0(object):
 
 
 class stat_ops_frame_sum_int_axis_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(100000, 4))
@@ -117,6 +90,7 @@ class stat_ops_frame_sum_int_axis_1(object):
 
 
 class stat_ops_level_frame_sum(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -129,6 +103,7 @@ class stat_ops_level_frame_sum(object):
 
 
 class stat_ops_level_frame_sum_multiple(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -141,6 +116,7 @@ class stat_ops_level_frame_sum_multiple(object):
 
 
 class stat_ops_level_series_sum(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -153,6 +129,7 @@ class stat_ops_level_series_sum(object):
 
 
 class stat_ops_level_series_sum_multiple(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -165,6 +142,7 @@ class stat_ops_level_series_sum_multiple(object):
 
 
 class stat_ops_series_std(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.randn(100000), index=np.arange(100000))
@@ -175,6 +153,7 @@ class stat_ops_series_std(object):
 
 
 class stats_corr_spearman(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(1000, 30))
@@ -184,6 +163,7 @@ class stats_corr_spearman(object):
 
 
 class stats_rank2d_axis0_average(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(5000, 50))
@@ -193,6 +173,7 @@ class stats_rank2d_axis0_average(object):
 
 
 class stats_rank2d_axis1_average(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(5000, 50))
@@ -202,6 +183,7 @@ class stats_rank2d_axis1_average(object):
 
 
 class stats_rank_average(object):
+    goal_time = 0.2
 
     def setup(self):
         self.values = np.concatenate([np.arange(100000), np.random.randn(100000), np.arange(100000)])
@@ -212,6 +194,7 @@ class stats_rank_average(object):
 
 
 class stats_rank_average_int(object):
+    goal_time = 0.2
 
     def setup(self):
         self.values = np.random.randint(0, 100000, size=200000)
@@ -222,6 +205,7 @@ class stats_rank_average_int(object):
 
 
 class stats_rank_pct_average(object):
+    goal_time = 0.2
 
     def setup(self):
         self.values = np.concatenate([np.arange(100000), np.random.randn(100000), np.arange(100000)])
@@ -232,6 +216,7 @@ class stats_rank_pct_average(object):
 
 
 class stats_rank_pct_average_old(object):
+    goal_time = 0.2
 
     def setup(self):
         self.values = np.concatenate([np.arange(100000), np.random.randn(100000), np.arange(100000)])
@@ -242,6 +227,7 @@ class stats_rank_pct_average_old(object):
 
 
 class stats_rolling_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.arr = np.random.randn(100000)

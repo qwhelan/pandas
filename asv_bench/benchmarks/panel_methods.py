@@ -1,26 +1,8 @@
-from numpy.random import randint
-import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
-from collections import OrderedDict
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
-import sqlite3
-from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
-from random import randrange
-import numpy as np
-from pandas.core import common as com
 
 
 class panel_pct_change_items(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = date_range(start='2000', freq='D', periods=1000)
@@ -31,6 +13,7 @@ class panel_pct_change_items(object):
 
 
 class panel_pct_change_major(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = date_range(start='2000', freq='D', periods=1000)
@@ -41,6 +24,7 @@ class panel_pct_change_major(object):
 
 
 class panel_pct_change_minor(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = date_range(start='2000', freq='D', periods=1000)
@@ -51,6 +35,7 @@ class panel_pct_change_minor(object):
 
 
 class panel_shift(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = date_range(start='2000', freq='D', periods=1000)
@@ -61,6 +46,7 @@ class panel_shift(object):
 
 
 class panel_shift_minor(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = date_range(start='2000', freq='D', periods=1000)

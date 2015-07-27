@@ -1,38 +1,9 @@
-import pandas as pd
-from collections import OrderedDict
-from pandas import read_csv, read_table
-from random import shuffle
-from pandas.util.decorators import cache_readonly
-from random import randrange
-from pandas.core.reshape import melt
-from numpy.random import randint
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from itertools import product
-try:
-    from pandas import date_range
-except ImportError:
-
-    def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
-from pandas.core import common as com
-from datetime import timedelta
-import sqlite3
 from pandas_vb_common import *
-import os
-from pandas.compat import range
-from cStringIO import StringIO
-from pandas import concat, Timestamp
-from string import ascii_letters, digits
-import sqlalchemy
-import pandas.computation.expressions as expr
-from sqlalchemy import create_engine
-import numpy as np
+from pandas.core.reshape import melt
 
 
 class melt_dataframe(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex.from_arrays([np.arange(100).repeat(100), np.roll(np.tile(np.arange(100), 100), 25)])
@@ -46,6 +17,7 @@ class melt_dataframe(object):
 
 
 class reshape_pivot_time_series(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex.from_arrays([np.arange(100).repeat(100), np.roll(np.tile(np.arange(100), 100), 25)])
@@ -65,6 +37,7 @@ class reshape_pivot_time_series(object):
 
 
 class reshape_stack_simple(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex.from_arrays([np.arange(100).repeat(100), np.roll(np.tile(np.arange(100), 100), 25)])
@@ -76,6 +49,7 @@ class reshape_stack_simple(object):
 
 
 class reshape_unstack_simple(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex.from_arrays([np.arange(100).repeat(100), np.roll(np.tile(np.arange(100), 100), 25)])
@@ -86,6 +60,7 @@ class reshape_unstack_simple(object):
 
 
 class unstack_sparse_keyspace(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex.from_arrays([np.arange(100).repeat(100), np.roll(np.tile(np.arange(100), 100), 25)])

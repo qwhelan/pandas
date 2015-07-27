@@ -1,45 +1,11 @@
-import pandas as pd
-from collections import OrderedDict
-from pandas import read_csv, read_table
-from random import shuffle
-from pandas.util.decorators import cache_readonly
-from random import randrange
-from pandas.core.reshape import melt
-import scipy.sparse
-from numpy.random import randint
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from itertools import product
-try:
-    from pandas import date_range
-except ImportError:
-
-    def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
-from pandas.core import common as com
-from datetime import timedelta
-import string
-import sqlite3
 from pandas_vb_common import *
-import os
-from pandas.compat import range
-from cStringIO import StringIO
-from pandas import concat, Timestamp
-from string import ascii_letters, digits
-import pandas.sparse.series
-import sqlalchemy
-import pandas.computation.expressions as expr
-from pandas.core.sparse import SparseDataFrame
-import pandas.util.testing as testing
+import string
 import itertools as IT
-from sqlalchemy import create_engine
-import numpy as np
-from pandas.core.sparse import SparseSeries, SparseDataFrame
+import pandas.util.testing as testing
 
 
 class strings_cat(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -53,6 +19,7 @@ class strings_cat(object):
 
 
 class strings_center(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -66,6 +33,7 @@ class strings_center(object):
 
 
 class strings_contains_few(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -79,6 +47,7 @@ class strings_contains_few(object):
 
 
 class strings_contains_few_noregex(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -92,6 +61,7 @@ class strings_contains_few_noregex(object):
 
 
 class strings_contains_many(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -105,6 +75,7 @@ class strings_contains_many(object):
 
 
 class strings_contains_many_noregex(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -118,6 +89,7 @@ class strings_contains_many_noregex(object):
 
 
 class strings_count(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -131,6 +103,7 @@ class strings_count(object):
 
 
 class strings_encode_decode(object):
+    goal_time = 0.2
 
     def setup(self):
         self.ser = Series(testing.makeUnicodeIndex())
@@ -140,6 +113,7 @@ class strings_encode_decode(object):
 
 
 class strings_endswith(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -153,6 +127,7 @@ class strings_endswith(object):
 
 
 class strings_extract(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -166,6 +141,7 @@ class strings_extract(object):
 
 
 class strings_findall(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -179,6 +155,7 @@ class strings_findall(object):
 
 
 class strings_get(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -192,6 +169,7 @@ class strings_get(object):
 
 
 class strings_get_dummies(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -206,6 +184,7 @@ class strings_get_dummies(object):
 
 
 class strings_join_split(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -218,7 +197,22 @@ class strings_join_split(object):
         self.many.str.join('--').str.split('--')
 
 
+class strings_join_split_expand(object):
+    goal_time = 0.2
+
+    def setup(self):
+
+        def make_series(letters, strlen, size):
+            return Series(np.fromiter(IT.cycle(letters), count=(size * strlen), dtype='|S1').view('|S{}'.format(strlen)))
+        self.many = make_series(('matchthis' + string.uppercase), strlen=19, size=10000)
+        self.few = make_series(('matchthis' + (string.uppercase * 42)), strlen=19, size=10000)
+
+    def time_strings_join_split_expand(self):
+        self.many.str.join('--').str.split('--', expand=True)
+
+
 class strings_len(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -232,6 +226,7 @@ class strings_len(object):
 
 
 class strings_lower(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -245,6 +240,7 @@ class strings_lower(object):
 
 
 class strings_lstrip(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -258,6 +254,7 @@ class strings_lstrip(object):
 
 
 class strings_match(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -271,6 +268,7 @@ class strings_match(object):
 
 
 class strings_pad(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -284,6 +282,7 @@ class strings_pad(object):
 
 
 class strings_repeat(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -297,6 +296,7 @@ class strings_repeat(object):
 
 
 class strings_replace(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -310,6 +310,7 @@ class strings_replace(object):
 
 
 class strings_rstrip(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -323,6 +324,7 @@ class strings_rstrip(object):
 
 
 class strings_slice(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -336,6 +338,7 @@ class strings_slice(object):
 
 
 class strings_startswith(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -349,6 +352,7 @@ class strings_startswith(object):
 
 
 class strings_strip(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -362,6 +366,7 @@ class strings_strip(object):
 
 
 class strings_title(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -375,6 +380,7 @@ class strings_title(object):
 
 
 class strings_upper(object):
+    goal_time = 0.2
 
     def setup(self):
 

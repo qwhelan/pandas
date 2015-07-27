@@ -1,18 +1,10 @@
-import pandas as pd
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
 from pandas import concat, Timestamp
-from itertools import product
-from string import ascii_letters, digits
 from StringIO import StringIO
 
 
 class frame_to_csv(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(3000, 30))
@@ -22,6 +14,7 @@ class frame_to_csv(object):
 
 
 class frame_to_csv2(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'A': range(50000), })
@@ -34,6 +27,7 @@ class frame_to_csv2(object):
 
 
 class frame_to_csv_date_formatting(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=1000)
@@ -44,6 +38,7 @@ class frame_to_csv_date_formatting(object):
 
 
 class frame_to_csv_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
 
@@ -62,6 +57,7 @@ class frame_to_csv_mixed(object):
 
 
 class read_csv_infer_datetime_format_custom(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=1000)
@@ -72,6 +68,7 @@ class read_csv_infer_datetime_format_custom(object):
 
 
 class read_csv_infer_datetime_format_iso8601(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=1000)
@@ -82,6 +79,7 @@ class read_csv_infer_datetime_format_iso8601(object):
 
 
 class read_csv_infer_datetime_format_ymd(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=1000)
@@ -92,6 +90,7 @@ class read_csv_infer_datetime_format_ymd(object):
 
 
 class read_csv_skiprows(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(20000)
@@ -103,6 +102,7 @@ class read_csv_skiprows(object):
 
 
 class read_csv_standard(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(10000)
@@ -114,6 +114,7 @@ class read_csv_standard(object):
 
 
 class read_parse_dates_iso8601(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=1000)
@@ -124,6 +125,7 @@ class read_parse_dates_iso8601(object):
 
 
 class write_csv_standard(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(10000)

@@ -1,16 +1,9 @@
-import pandas as pd
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from itertools import product
-from string import ascii_letters, digits
+import pandas as pd
 
 
 class dtype_infer_datetime64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -27,6 +20,7 @@ class dtype_infer_datetime64(object):
 
 
 class dtype_infer_float32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -43,6 +37,7 @@ class dtype_infer_float32(object):
 
 
 class dtype_infer_float64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -59,6 +54,7 @@ class dtype_infer_float64(object):
 
 
 class dtype_infer_int32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -75,6 +71,7 @@ class dtype_infer_int32(object):
 
 
 class dtype_infer_int64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -91,6 +88,7 @@ class dtype_infer_int64(object):
 
 
 class dtype_infer_timedelta64_1(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -107,6 +105,7 @@ class dtype_infer_timedelta64_1(object):
 
 
 class dtype_infer_timedelta64_2(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000
@@ -123,6 +122,7 @@ class dtype_infer_timedelta64_2(object):
 
 
 class dtype_infer_uint32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 500000

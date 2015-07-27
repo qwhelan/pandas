@@ -1,68 +1,19 @@
+from pandas.tseries.converter import DatetimeConverter
 import pandas as pd
-from collections import OrderedDict
-from pandas import to_timedelta
-from pandas import read_csv, read_table
-from random import shuffle
-from pandas.util.decorators import cache_readonly
-from pandas.tseries.frequencies import infer_freq
-import pandas.tseries.holiday
-from random import randrange
-from pandas.core.reshape import melt
-import scipy.sparse
-from numpy.random import randint
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from itertools import product
-try:
-    from pandas import date_range
-except ImportError:
-    def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
-
-    raise
-
-from pandas.core import common as com
 from datetime import timedelta
-import string
-import sqlite3
 import datetime as dt
 from pandas_vb_common import *
-import os
-from pandas.compat import range
-from cStringIO import StringIO
-from pandas import concat, Timestamp
-from string import ascii_letters, digits
-import pandas.sparse.series
-from pandas.tseries.converter import DatetimeConverter
-import sqlalchemy
-import pandas.computation.expressions as expr
-from pandas.core.sparse import SparseDataFrame
-import pandas.util.testing as testing
-import itertools as IT
-from sqlalchemy import create_engine
+from pandas.tseries.frequencies import infer_freq
+import pandas.tseries.holiday
 import numpy as np
-from pandas.core.sparse import SparseSeries, SparseDataFrame
-
-
-def iter_n(iterable, n=None):
-    i = 0
-    for _ in iterable:
-        i += 1
-        if ((n is not None) and (i > n)):
-            break
 
 
 class dataframe_resample_max_numpy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -74,14 +25,11 @@ class dataframe_resample_max_numpy(object):
 
 
 class dataframe_resample_max_string(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -93,14 +41,11 @@ class dataframe_resample_max_string(object):
 
 
 class dataframe_resample_mean_numpy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -112,14 +57,11 @@ class dataframe_resample_mean_numpy(object):
 
 
 class dataframe_resample_mean_string(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -131,14 +73,11 @@ class dataframe_resample_mean_string(object):
 
 
 class dataframe_resample_min_numpy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -150,14 +89,11 @@ class dataframe_resample_min_numpy(object):
 
 
 class dataframe_resample_min_string(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -169,14 +105,11 @@ class dataframe_resample_min_string(object):
 
 
 class datetimeindex_add_offset(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -187,14 +120,11 @@ class datetimeindex_add_offset(object):
 
 
 class datetimeindex_converter(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -204,14 +134,11 @@ class datetimeindex_converter(object):
 
 
 class datetimeindex_infer_dst(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -226,14 +153,11 @@ class datetimeindex_infer_dst(object):
 
 
 class datetimeindex_normalize(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -244,14 +168,11 @@ class datetimeindex_normalize(object):
 
 
 class datetimeindex_unique(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -263,14 +184,11 @@ class datetimeindex_unique(object):
 
 
 class dti_reset_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -282,14 +200,11 @@ class dti_reset_index(object):
 
 
 class dti_reset_index_tz(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -301,14 +216,11 @@ class dti_reset_index_tz(object):
 
 
 class period_setitem(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -320,14 +232,11 @@ class period_setitem(object):
 
 
 class timeseries_1min_5min_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -337,14 +246,11 @@ class timeseries_1min_5min_mean(object):
 
 
 class timeseries_1min_5min_ohlc(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -354,14 +260,11 @@ class timeseries_1min_5min_ohlc(object):
 
 
 class timeseries_add_irregular(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -375,14 +278,11 @@ class timeseries_add_irregular(object):
 
 
 class timeseries_asof(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -396,14 +296,11 @@ class timeseries_asof(object):
 
 
 class timeseries_asof_nan(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -418,14 +315,11 @@ class timeseries_asof_nan(object):
 
 
 class timeseries_asof_single(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -439,14 +333,11 @@ class timeseries_asof_single(object):
 
 
 class timeseries_custom_bday_apply(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -465,14 +356,11 @@ class timeseries_custom_bday_apply(object):
 
 
 class timeseries_custom_bday_apply_dt64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -491,14 +379,11 @@ class timeseries_custom_bday_apply_dt64(object):
 
 
 class timeseries_custom_bday_cal_decr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -517,14 +402,11 @@ class timeseries_custom_bday_cal_decr(object):
 
 
 class timeseries_custom_bday_cal_incr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -543,14 +425,11 @@ class timeseries_custom_bday_cal_incr(object):
 
 
 class timeseries_custom_bday_cal_incr_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -569,14 +448,11 @@ class timeseries_custom_bday_cal_incr_n(object):
 
 
 class timeseries_custom_bday_cal_incr_neg_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -595,14 +471,11 @@ class timeseries_custom_bday_cal_incr_neg_n(object):
 
 
 class timeseries_custom_bday_decr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -621,14 +494,11 @@ class timeseries_custom_bday_decr(object):
 
 
 class timeseries_custom_bday_incr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -647,14 +517,11 @@ class timeseries_custom_bday_incr(object):
 
 
 class timeseries_custom_bmonthbegin_decr_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -673,14 +540,11 @@ class timeseries_custom_bmonthbegin_decr_n(object):
 
 
 class timeseries_custom_bmonthbegin_incr_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -699,14 +563,11 @@ class timeseries_custom_bmonthbegin_incr_n(object):
 
 
 class timeseries_custom_bmonthend_decr_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -725,14 +586,11 @@ class timeseries_custom_bmonthend_decr_n(object):
 
 
 class timeseries_custom_bmonthend_incr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -751,14 +609,11 @@ class timeseries_custom_bmonthend_incr(object):
 
 
 class timeseries_custom_bmonthend_incr_n(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -777,14 +632,11 @@ class timeseries_custom_bmonthend_incr_n(object):
 
 
 class timeseries_day_apply(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -803,14 +655,11 @@ class timeseries_day_apply(object):
 
 
 class timeseries_day_incr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -829,14 +678,11 @@ class timeseries_day_incr(object):
 
 
 class timeseries_infer_freq(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -848,14 +694,11 @@ class timeseries_infer_freq(object):
 
 
 class timeseries_is_month_start(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -867,14 +710,11 @@ class timeseries_is_month_start(object):
 
 
 class timeseries_iter_datetimeindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -882,20 +722,24 @@ class timeseries_iter_datetimeindex(object):
         self.M = 10000
         self.idx1 = date_range(start='20140101', freq='T', periods=self.N)
         self.idx2 = period_range(start='20140101', freq='T', periods=self.N)
+
+        def iter_n(iterable, n=None):
+            self.i = 0
+            for _ in iterable:
+                self.i += 1
+                if ((n is not None) and (self.i > n)):
+                    break
 
     def time_timeseries_iter_datetimeindex(self):
         iter_n(self.idx1)
 
 
 class timeseries_iter_datetimeindex_preexit(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -904,20 +748,23 @@ class timeseries_iter_datetimeindex_preexit(object):
         self.idx1 = date_range(start='20140101', freq='T', periods=self.N)
         self.idx2 = period_range(start='20140101', freq='T', periods=self.N)
 
+        def iter_n(iterable, n=None):
+            self.i = 0
+            for _ in iterable:
+                self.i += 1
+                if ((n is not None) and (self.i > n)):
+                    break
 
     def time_timeseries_iter_datetimeindex_preexit(self):
         iter_n(self.idx1, self.M)
 
 
 class timeseries_iter_periodindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -925,20 +772,24 @@ class timeseries_iter_periodindex(object):
         self.M = 10000
         self.idx1 = date_range(start='20140101', freq='T', periods=self.N)
         self.idx2 = period_range(start='20140101', freq='T', periods=self.N)
+
+        def iter_n(iterable, n=None):
+            self.i = 0
+            for _ in iterable:
+                self.i += 1
+                if ((n is not None) and (self.i > n)):
+                    break
 
     def time_timeseries_iter_periodindex(self):
         iter_n(self.idx2)
 
 
 class timeseries_iter_periodindex_preexit(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -947,23 +798,27 @@ class timeseries_iter_periodindex_preexit(object):
         self.idx1 = date_range(start='20140101', freq='T', periods=self.N)
         self.idx2 = period_range(start='20140101', freq='T', periods=self.N)
 
+        def iter_n(iterable, n=None):
+            self.i = 0
+            for _ in iterable:
+                self.i += 1
+                if ((n is not None) and (self.i > n)):
+                    break
+
     def time_timeseries_iter_periodindex_preexit(self):
         iter_n(self.idx2, self.M)
 
 
 class timeseries_large_lookup_value(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
-        self.rng = date_range(start='1/1/2000', periods=1500000, freq='s')
+        self.rng = date_range(start='1/1/2000', periods=1500000, freq='S')
         self.ts = Series(1, index=self.rng)
 
     def time_timeseries_large_lookup_value(self):
@@ -972,14 +827,11 @@ class timeseries_large_lookup_value(object):
 
 
 class timeseries_period_downsample_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -991,14 +843,11 @@ class timeseries_period_downsample_mean(object):
 
 
 class timeseries_resample_datetime64(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1011,14 +860,11 @@ class timeseries_resample_datetime64(object):
 
 
 class timeseries_slice_minutely(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1028,14 +874,11 @@ class timeseries_slice_minutely(object):
 
 
 class timeseries_sort_index(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1049,14 +892,11 @@ class timeseries_sort_index(object):
 
 
 class timeseries_timestamp_downsample_mean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1068,14 +908,11 @@ class timeseries_timestamp_downsample_mean(object):
 
 
 class timeseries_timestamp_tzinfo_cons(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1086,14 +923,11 @@ class timeseries_timestamp_tzinfo_cons(object):
 
 
 class timeseries_to_datetime_YYYYMMDD(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1105,33 +939,43 @@ class timeseries_to_datetime_YYYYMMDD(object):
 
 
 class timeseries_to_datetime_iso8601(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
-        self.rng = date_range(start='1/1/2000', periods=20000, freq='h')
+        self.rng = date_range(start='1/1/2000', periods=20000, freq='H')
         self.strings = [x.strftime('%Y-%m-%d %H:%M:%S') for x in self.rng]
 
     def time_timeseries_to_datetime_iso8601(self):
         to_datetime(self.strings)
 
 
-class timeseries_with_format_no_exact(object):
+class timeseries_to_datetime_iso8601_format(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
+        if hasattr(Series, 'convert'):
+            Series.resample = Series.convert
+        self.ts = Series(np.random.randn(self.N), index=self.rng)
+        self.rng = date_range(start='1/1/2000', periods=20000, freq='H')
+        self.strings = [x.strftime('%Y-%m-%d %H:%M:%S') for x in self.rng]
 
+    def time_timeseries_to_datetime_iso8601_format(self):
+        to_datetime(self.strings, format='%Y-%m-%d %H:%M:%S')
+
+
+class timeseries_with_format_no_exact(object):
+    goal_time = 0.2
+
+    def setup(self):
+        self.N = 100000
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1142,14 +986,11 @@ class timeseries_with_format_no_exact(object):
 
 
 class timeseries_with_format_replace(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1160,14 +1001,11 @@ class timeseries_with_format_replace(object):
 
 
 class timeseries_year_apply(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)
@@ -1186,14 +1024,11 @@ class timeseries_year_apply(object):
 
 
 class timeseries_year_incr(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 100000
-        try:
-            self.rng = date_range(start='1/1/2000', periods=self.N, freq='min')
-        except NameError:
-            self.rng = DatetimeIndex(start='1/1/2000', periods=self.N, freq='T')
-
+        self.rng = date_range(start='1/1/2000', periods=self.N, freq='T')
         if hasattr(Series, 'convert'):
             Series.resample = Series.convert
         self.ts = Series(np.random.randn(self.N), index=self.rng)

@@ -1,16 +1,9 @@
-import pandas as pd
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
 import pandas.computation.expressions as expr
-from itertools import product
-from string import ascii_letters, digits
 
 
 class dataframe_getitem_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000)
@@ -24,6 +17,7 @@ class dataframe_getitem_scalar(object):
 
 
 class datamatrix_getitem_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         try:
@@ -41,6 +35,7 @@ class datamatrix_getitem_scalar(object):
 
 
 class series_get_value(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000)
@@ -52,6 +47,7 @@ class series_get_value(object):
 
 
 class time_series_getitem_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         tm.N = 1000
@@ -63,6 +59,7 @@ class time_series_getitem_scalar(object):
 
 
 class frame_iloc_big(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(dict(A=(['foo'] * 1000000)))
@@ -72,6 +69,7 @@ class frame_iloc_big(object):
 
 
 class frame_iloc_dups(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'A': ([0.1] * 3000), 'B': ([1] * 3000), })
@@ -84,6 +82,7 @@ class frame_iloc_dups(object):
 
 
 class frame_loc_dups(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame({'A': ([0.1] * 3000), 'B': ([1] * 3000), })
@@ -96,6 +95,7 @@ class frame_loc_dups(object):
 
 
 class frame_xs_mi_ix(object):
+    goal_time = 0.2
 
     def setup(self):
         self.mi = MultiIndex.from_tuples([(x, y) for x in range(1000) for y in range(1000)])
@@ -107,6 +107,7 @@ class frame_xs_mi_ix(object):
 
 
 class indexing_dataframe_boolean(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(50000, 100))
@@ -117,6 +118,7 @@ class indexing_dataframe_boolean(object):
 
 
 class indexing_dataframe_boolean_no_ne(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(50000, 100))
@@ -131,6 +133,7 @@ class indexing_dataframe_boolean_no_ne(object):
 
 
 class indexing_dataframe_boolean_rows(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10000, 4), columns=['A', 'B', 'C', 'D'])
@@ -142,6 +145,7 @@ class indexing_dataframe_boolean_rows(object):
 
 
 class indexing_dataframe_boolean_rows_object(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(10000, 4), columns=['A', 'B', 'C', 'D'])
@@ -153,6 +157,7 @@ class indexing_dataframe_boolean_rows_object(object):
 
 
 class indexing_dataframe_boolean_st(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(np.random.randn(50000, 100))
@@ -167,6 +172,7 @@ class indexing_dataframe_boolean_st(object):
 
 
 class indexing_frame_get_value(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000)
@@ -180,6 +186,7 @@ class indexing_frame_get_value(object):
 
 
 class indexing_frame_get_value_ix(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000)
@@ -193,6 +200,7 @@ class indexing_frame_get_value_ix(object):
 
 
 class indexing_panel_subset(object):
+    goal_time = 0.2
 
     def setup(self):
         self.p = Panel(np.random.randn(100, 100, 100))
@@ -202,7 +210,36 @@ class indexing_panel_subset(object):
         self.p.ix[(self.inds, self.inds, self.inds)]
 
 
+class multiindex_slicers(object):
+    goal_time = 0.2
+
+    def setup(self):
+        np.random.seed(1234)
+        self.idx = pd.IndexSlice
+        self.n = 100000
+        self.mdt = pandas.DataFrame()
+        self.mdt['A'] = np.random.choice(range(10000, 45000, 1000), self.n)
+        self.mdt['B'] = np.random.choice(range(10, 400), self.n)
+        self.mdt['C'] = np.random.choice(range(1, 150), self.n)
+        self.mdt['D'] = np.random.choice(range(10000, 45000), self.n)
+        self.mdt['x'] = np.random.choice(range(400), self.n)
+        self.mdt['y'] = np.random.choice(range(25), self.n)
+        self.test_A = 25000
+        self.test_B = 25
+        self.test_C = 40
+        self.test_D = 35000
+        self.eps_A = 5000
+        self.eps_B = 5
+        self.eps_C = 5
+        self.eps_D = 5000
+        self.mdt2 = self.mdt.set_index(['A', 'B', 'C', 'D']).sortlevel()
+
+    def time_multiindex_slicers(self):
+        self.mdt2.loc[self.idx[(self.test_A - self.eps_A):(self.test_A + self.eps_A), (self.test_B - self.eps_B):(self.test_B + self.eps_B), (self.test_C - self.eps_C):(self.test_C + self.eps_C), (self.test_D - self.eps_D):(self.test_D + self.eps_D)], :]
+
+
 class series_getitem_array(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -212,6 +249,7 @@ class series_getitem_array(object):
 
 
 class series_getitem_label_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000000)
@@ -223,6 +261,7 @@ class series_getitem_label_slice(object):
 
 
 class series_getitem_list_like(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -232,6 +271,7 @@ class series_getitem_list_like(object):
 
 
 class series_getitem_pos_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = tm.makeStringIndex(1000000)
@@ -242,6 +282,7 @@ class series_getitem_pos_slice(object):
 
 
 class series_getitem_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -251,6 +292,7 @@ class series_getitem_scalar(object):
 
 
 class series_getitem_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -260,6 +302,7 @@ class series_getitem_slice(object):
 
 
 class series_iloc_array(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -269,6 +312,7 @@ class series_iloc_array(object):
 
 
 class series_iloc_list_like(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -278,6 +322,7 @@ class series_iloc_list_like(object):
 
 
 class series_iloc_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -287,6 +332,7 @@ class series_iloc_scalar(object):
 
 
 class series_iloc_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -296,6 +342,7 @@ class series_iloc_slice(object):
 
 
 class series_ix_array(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -305,6 +352,7 @@ class series_ix_array(object):
 
 
 class series_ix_list_like(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -314,6 +362,7 @@ class series_ix_list_like(object):
 
 
 class series_ix_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -323,6 +372,7 @@ class series_ix_scalar(object):
 
 
 class series_ix_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -332,6 +382,7 @@ class series_ix_slice(object):
 
 
 class series_loc_array(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -341,6 +392,7 @@ class series_loc_array(object):
 
 
 class series_loc_list_like(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -350,6 +402,7 @@ class series_loc_list_like(object):
 
 
 class series_loc_scalar(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -359,6 +412,7 @@ class series_loc_scalar(object):
 
 
 class series_loc_slice(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.rand(1000000))
@@ -368,6 +422,7 @@ class series_loc_slice(object):
 
 
 class series_xs_mi_ix(object):
+    goal_time = 0.2
 
     def setup(self):
         self.mi = MultiIndex.from_tuples([(x, y) for x in range(1000) for y in range(1000)])
@@ -378,6 +433,7 @@ class series_xs_mi_ix(object):
 
 
 class sort_level_one(object):
+    goal_time = 0.2
 
     def setup(self):
         self.a = np.repeat(np.arange(100), 1000)
@@ -390,6 +446,7 @@ class sort_level_one(object):
 
 
 class sort_level_zero(object):
+    goal_time = 0.2
 
     def setup(self):
         self.a = np.repeat(np.arange(100), 1000)

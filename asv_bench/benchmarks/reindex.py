@@ -1,35 +1,9 @@
-from numpy.random import randint
-import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
-from collections import OrderedDict
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from pandas import read_csv, read_table
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
 from random import shuffle
-from pandas import concat, Timestamp
-import sqlite3
-try:
-    from pandas import date_range
-except ImportError:
-
-    def date_range(start=None, end=None, periods=None, freq=None):
-        return DatetimeIndex(start, end, periods=periods, offset=freq)
-from cStringIO import StringIO
-from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
-from random import randrange
-import numpy as np
-from pandas.core import common as com
 
 
 class dataframe_reindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = DatetimeIndex(start='1/1/1970', periods=10000, freq=datetools.Minute())
@@ -42,6 +16,7 @@ class dataframe_reindex(object):
 
 
 class frame_drop_dup_inplace(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -56,6 +31,7 @@ class frame_drop_dup_inplace(object):
 
 
 class frame_drop_dup_na_inplace(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -71,6 +47,7 @@ class frame_drop_dup_na_inplace(object):
 
 
 class frame_drop_duplicates(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -85,6 +62,7 @@ class frame_drop_duplicates(object):
 
 
 class frame_drop_duplicates_na(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -100,6 +78,7 @@ class frame_drop_duplicates_na(object):
 
 
 class frame_fillna_many_columns_pad(object):
+    goal_time = 0.2
 
     def setup(self):
         self.values = np.random.randn(1000, 1000)
@@ -111,6 +90,7 @@ class frame_fillna_many_columns_pad(object):
 
 
 class frame_reindex_columns(object):
+    goal_time = 0.2
 
     def setup(self):
         self.df = DataFrame(index=range(10000), data=np.random.rand(10000, 30), columns=range(30))
@@ -120,6 +100,7 @@ class frame_reindex_columns(object):
 
 
 class frame_sort_index_by_columns(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -134,6 +115,7 @@ class frame_sort_index_by_columns(object):
 
 
 class lib_fast_zip(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -148,6 +130,7 @@ class lib_fast_zip(object):
 
 
 class lib_fast_zip_fillna(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -163,6 +146,7 @@ class lib_fast_zip_fillna(object):
 
 
 class reindex_daterange_backfill(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -171,23 +155,24 @@ class reindex_daterange_backfill(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_daterange_backfill(self):
-        backfill()
+        backfill(self.ts2, self.ts.index)
 
 
 class reindex_daterange_pad(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -196,23 +181,24 @@ class reindex_daterange_pad(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_daterange_pad(self):
-        pad()
+        pad(self.ts2, self.ts.index)
 
 
 class reindex_fillna_backfill(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -221,23 +207,24 @@ class reindex_fillna_backfill(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_fillna_backfill(self):
         self.ts3.fillna(method='backfill')
 
 
 class reindex_fillna_backfill_float32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -246,23 +233,24 @@ class reindex_fillna_backfill_float32(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_fillna_backfill_float32(self):
         self.ts4.fillna(method='backfill')
 
 
 class reindex_fillna_pad(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -271,23 +259,24 @@ class reindex_fillna_pad(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_fillna_pad(self):
         self.ts3.fillna(method='pad')
 
 
 class reindex_fillna_pad_float32(object):
+    goal_time = 0.2
 
     def setup(self):
         self.rng = date_range('1/1/2000', periods=100000, freq=datetools.Minute())
@@ -296,23 +285,24 @@ class reindex_fillna_pad_float32(object):
         self.ts3 = self.ts2.reindex(self.ts.index)
         self.ts4 = self.ts3.astype('float32')
 
-        def pad():
+        def pad(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='pad')
+                source_series.reindex(target_index, method='pad')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='pad')
+                source_series.reindex(target_index, fillMethod='pad')
 
-        def backfill():
+        def backfill(source_series, target_index):
             try:
-                self.ts2.reindex(self.ts.index, method='backfill')
+                source_series.reindex(target_index, method='backfill')
             except:
-                self.ts2.reindex(self.ts.index, fillMethod='backfill')
+                source_series.reindex(target_index, fillMethod='backfill')
 
     def time_reindex_fillna_pad_float32(self):
         self.ts4.fillna(method='pad')
 
 
 class reindex_frame_level_align(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -325,6 +315,7 @@ class reindex_frame_level_align(object):
 
 
 class reindex_frame_level_reindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.index = MultiIndex(levels=[np.arange(10), np.arange(100), np.arange(100)], labels=[np.arange(10).repeat(10000), np.tile(np.arange(100).repeat(100), 10), np.tile(np.tile(np.arange(100), 100), 10)])
@@ -337,6 +328,7 @@ class reindex_frame_level_reindex(object):
 
 
 class reindex_multiindex(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 1000
@@ -352,6 +344,7 @@ class reindex_multiindex(object):
 
 
 class series_align_irregular_string(object):
+    goal_time = 0.2
 
     def setup(self):
         self.n = 50000
@@ -370,6 +363,7 @@ class series_align_irregular_string(object):
 
 
 class series_drop_duplicates_int(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.randint(0, 1000, size=10000))
@@ -380,6 +374,7 @@ class series_drop_duplicates_int(object):
 
 
 class series_drop_duplicates_string(object):
+    goal_time = 0.2
 
     def setup(self):
         self.s = Series(np.random.randint(0, 1000, size=10000))

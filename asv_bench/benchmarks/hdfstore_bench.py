@@ -1,16 +1,9 @@
-import pandas as pd
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from itertools import product
-from string import ascii_letters, digits
+import os
 
 
 class query_store_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -34,6 +27,7 @@ class query_store_table(object):
 
 
 class query_store_table_wide(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -57,6 +51,7 @@ class query_store_table_wide(object):
 
 
 class read_store(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -80,6 +75,7 @@ class read_store(object):
 
 
 class read_store_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -103,6 +99,7 @@ class read_store_mixed(object):
 
 
 class read_store_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -126,6 +123,7 @@ class read_store_table(object):
 
 
 class read_store_table_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -150,6 +148,7 @@ class read_store_table_mixed(object):
 
 
 class read_store_table_panel(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -172,6 +171,7 @@ class read_store_table_panel(object):
 
 
 class read_store_table_wide(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -194,6 +194,7 @@ class read_store_table_wide(object):
 
 
 class write_store(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -216,6 +217,7 @@ class write_store(object):
 
 
 class write_store_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -238,6 +240,7 @@ class write_store_mixed(object):
 
 
 class write_store_table(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -260,6 +263,7 @@ class write_store_table(object):
 
 
 class write_store_table_dc(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -281,6 +285,7 @@ class write_store_table_dc(object):
 
 
 class write_store_table_mixed(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -303,6 +308,7 @@ class write_store_table_mixed(object):
 
 
 class write_store_table_panel(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'
@@ -324,6 +330,7 @@ class write_store_table_panel(object):
 
 
 class write_store_table_wide(object):
+    goal_time = 0.2
 
     def setup(self):
         self.f = '__test__.h5'

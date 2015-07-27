@@ -1,21 +1,9 @@
-import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
-import sqlite3
-from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
+from pandas.util.decorators import cache_readonly
 
 
 class match_strings(object):
+    goal_time = 0.2
 
     def setup(self):
         self.uniques = tm.makeStringIndex(1000).values
@@ -26,6 +14,7 @@ class match_strings(object):
 
 
 class misc_cache_readonly(object):
+    goal_time = 0.2
 
     def setup(self):
 

@@ -1,28 +1,11 @@
-from numpy.random import randint
-import pandas as pd
-from pandas.util.decorators import cache_readonly
-import sqlalchemy
-from collections import OrderedDict
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
-from pandas import read_csv, read_table
-from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
-import sqlite3
 from cStringIO import StringIO
-from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
-from random import randrange
-import numpy as np
-from pandas.core import common as com
+from pandas_vb_common import *
+import os
+from pandas import read_csv, read_table
 
 
 class read_csv_comment2(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = ['A,B,C']
@@ -34,6 +17,7 @@ class read_csv_comment2(object):
 
 
 class read_csv_default_converter(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = '0.1213700904466425978256438611,0.0525708283766902484401839501,0.4174092731488769913994474336\n        0.4096341697147408700274695547,0.1587830198973579909349496119,0.1292545832485494372576795285\n        0.8323255650024565799327547210,0.9694902427379478160318626578,0.6295047811546814475747169126\n        0.4679375305798131323697930383,0.2963942381834381301075609371,0.5268936082160610157032465394\n        0.6685382761849776311890991564,0.6721207066140679753374342908,0.6519975277021627935170045020\n        '
@@ -44,6 +28,7 @@ class read_csv_default_converter(object):
 
 
 class read_csv_precise_converter(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = '0.1213700904466425978256438611,0.0525708283766902484401839501,0.4174092731488769913994474336\n        0.4096341697147408700274695547,0.1587830198973579909349496119,0.1292545832485494372576795285\n        0.8323255650024565799327547210,0.9694902427379478160318626578,0.6295047811546814475747169126\n        0.4679375305798131323697930383,0.2963942381834381301075609371,0.5268936082160610157032465394\n        0.6685382761849776311890991564,0.6721207066140679753374342908,0.6519975277021627935170045020\n        '
@@ -54,6 +39,7 @@ class read_csv_precise_converter(object):
 
 
 class read_csv_roundtrip_converter(object):
+    goal_time = 0.2
 
     def setup(self):
         self.data = '0.1213700904466425978256438611,0.0525708283766902484401839501,0.4174092731488769913994474336\n        0.4096341697147408700274695547,0.1587830198973579909349496119,0.1292545832485494372576795285\n        0.8323255650024565799327547210,0.9694902427379478160318626578,0.6295047811546814475747169126\n        0.4679375305798131323697930383,0.2963942381834381301075609371,0.5268936082160610157032465394\n        0.6685382761849776311890991564,0.6721207066140679753374342908,0.6519975277021627935170045020\n        '
@@ -64,6 +50,7 @@ class read_csv_roundtrip_converter(object):
 
 
 class read_csv_thou_vb(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -81,6 +68,7 @@ class read_csv_thou_vb(object):
 
 
 class read_csv_vb(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -96,6 +84,7 @@ class read_csv_vb(object):
 
 
 class read_table_multiple_date(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000
@@ -108,6 +97,7 @@ class read_table_multiple_date(object):
 
 
 class read_table_multiple_date_baseline(object):
+    goal_time = 0.2
 
     def setup(self):
         self.N = 10000

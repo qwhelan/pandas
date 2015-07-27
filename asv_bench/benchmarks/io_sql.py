@@ -1,20 +1,11 @@
-import pandas as pd
-import sqlalchemy
-import os
-try:
-    from pandas.tseries.offsets import *
-except:
-    from pandas.core.datetools import *
 from pandas_vb_common import *
-import pandas.computation.expressions as expr
-from pandas import concat, Timestamp
-import sqlite3
 from sqlalchemy import create_engine
-from itertools import product
-from string import ascii_letters, digits
+import sqlite3
+import sqlalchemy
 
 
 class sql_datetime_read_and_parse_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -29,6 +20,7 @@ class sql_datetime_read_and_parse_sqlalchemy(object):
 
 
 class sql_datetime_read_as_native_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -43,6 +35,7 @@ class sql_datetime_read_as_native_sqlalchemy(object):
 
 
 class sql_datetime_write_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -55,6 +48,7 @@ class sql_datetime_write_sqlalchemy(object):
 
 
 class sql_float_read_query_fallback(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -69,6 +63,7 @@ class sql_float_read_query_fallback(object):
 
 
 class sql_float_read_query_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -83,6 +78,7 @@ class sql_float_read_query_sqlalchemy(object):
 
 
 class sql_float_read_table_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -97,6 +93,7 @@ class sql_float_read_table_sqlalchemy(object):
 
 
 class sql_float_write_fallback(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -109,6 +106,7 @@ class sql_float_write_fallback(object):
 
 
 class sql_float_write_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -121,6 +119,7 @@ class sql_float_write_sqlalchemy(object):
 
 
 class sql_read_query_fallback(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -135,6 +134,7 @@ class sql_read_query_fallback(object):
 
 
 class sql_read_query_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -149,6 +149,7 @@ class sql_read_query_sqlalchemy(object):
 
 
 class sql_read_table_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -163,6 +164,7 @@ class sql_read_table_sqlalchemy(object):
 
 
 class sql_string_write_fallback(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -175,6 +177,7 @@ class sql_string_write_fallback(object):
 
 
 class sql_string_write_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -187,6 +190,7 @@ class sql_string_write_sqlalchemy(object):
 
 
 class sql_write_fallback(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
@@ -199,6 +203,7 @@ class sql_write_fallback(object):
 
 
 class sql_write_sqlalchemy(object):
+    goal_time = 0.2
 
     def setup(self):
         self.engine = create_engine('sqlite:///:memory:')
