@@ -12,12 +12,17 @@ def vbench_to_asv_source(bench, kinds=None):
         kinds = ['time']
 
     output = 'class {}(object):\n'.format(bench.name)
+    output += tab + 'goal_time = 0.2\n\n'
+
     if bench.setup:
         indented_setup = [tab * 2 + '{}\n'.format(x) for x in bench.setup.splitlines()]
         output += tab + 'def setup(self):\n' + ''.join(indented_setup) + '\n'
 
     for kind in kinds:
-        output += tab + 'def {}_{}(self):\n'.format(kind, bench.name) + tab * 2 + bench.code + '\n\n'
+        output += tab + 'def {}_{}(self):\n'.format(kind, bench.name)
+        for line in bench.code.splitlines():
+            output += tab * 2 + line + '\n'
+        output += '\n\n'
 
     if bench.cleanup:
         output += tab + 'def teardown(self):\n' + tab * 2 + bench.cleanup
@@ -27,13 +32,17 @@ def vbench_to_asv_source(bench, kinds=None):
 
 
 class AssignToSelf(ast.NodeTransformer):
-    transforms = {}
-    imports = []
+    def __init__(self):
+        super(AssignToSelf, self).__init__()
+        self.transforms = {}
+        self.imports = []
 
-    in_setup = False
+        self.in_class_define = False
+        self.in_setup = False
 
     def visit_ClassDef(self, node):
         self.transforms = {}
+        self.in_class_define = True
         self.generic_visit(node)
         return node
 
@@ -46,7 +55,7 @@ class AssignToSelf(ast.NodeTransformer):
 
     def visit_Assign(self, node):
         for target in node.targets:
-            if isinstance(target, ast.Name) and not isinstance(target.ctx, ast.Param):
+            if isinstance(target, ast.Name) and not isinstance(target.ctx, ast.Param) and not self.in_class_define:
                 self.transforms[target.id] = 'self.' + target.id
         self.generic_visit(node)
 
@@ -70,6 +79,8 @@ class AssignToSelf(ast.NodeTransformer):
 
     def visit_FunctionDef(self, node):
         """Delete functions that are empty due to imports being moved"""
+        self.in_class_define = False
+
         if self.in_setup:
             node.col_offset -= 4
             ast.increment_lineno(node, -1)
@@ -132,7 +143,7 @@ if __name__ == '__main__':
 
     for module in glob.glob(os.path.join(new_dir, '*.py')):
         mod = os.path.basename(module)
-        if mod in ['make.py', 'measure_memory_consumption.py', 'perf_HEAD.py', 'run_suite.py', 'test_perf.py', 'generate_rst_files.py', 'test.py']:
+        if mod in ['make.py', 'measure_memory_consumption.py', 'perf_HEAD.py', 'run_suite.py', 'test_perf.py', 'generate_rst_files.py', 'test.py', 'suite.py']:
             continue
         print
         print mod
