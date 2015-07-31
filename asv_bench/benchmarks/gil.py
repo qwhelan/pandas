@@ -1,6 +1,14 @@
 from pandas_vb_common import *
 from pandas.core import common as com
-from pandas.util.testing import test_parallel
+try:
+    from pandas.util.testing import test_parallel
+except:
+    def test_parallel(func):
+        def pass_func(g):
+            return g
+
+        return pass_func
+
 
 
 class nogil_groupby_count_2(object):
