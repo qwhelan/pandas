@@ -320,7 +320,10 @@ class _Concatenator(object):
 
         # Standardize axis parameter to int
         if isinstance(sample, Series):
-            axis = DataFrame()._get_axis_number(axis)
+            if compat.PY2:
+                axis = DataFrame()._get_axis_number(axis)
+            else:
+                axis = DataFrame._get_axis_number(DataFrame, axis)
         else:
             axis = sample._get_axis_number(axis)
 
