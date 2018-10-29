@@ -137,9 +137,8 @@ cdef class IndexEngine:
 
         if self.is_monotonic_increasing:
             values = self._get_index_values()
-            typed_val = np.array(val, dtype=values.dtype)
-            left = values.searchsorted(typed_val, side='left')
-            right = values.searchsorted(typed_val, side='right')
+            left = values.searchsorted(val, side='left')
+            right = values.searchsorted(val, side='right')
 
             diff = right - left
             if diff == 0:

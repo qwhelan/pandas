@@ -987,14 +987,14 @@ class DatetimeIndex(DatetimeArrayMixin, DatelikeOps, TimelikeOps,
                                           'when key is a time object')
             return self.indexer_at_time(key)
 
-        try:
-            return Index.get_loc(self, key, method, tolerance)
-        except (KeyError, ValueError, TypeError):
+        if isinstance(key, str):
             try:
                 return self._get_string_slice(key)
             except (TypeError, KeyError, ValueError):
                 pass
-
+        try:
+            return Index.get_loc(self, key, method, tolerance)
+        except (KeyError, ValueError, TypeError):
             try:
                 stamp = Timestamp(key, tz=self.tz)
                 return Index.get_loc(self, stamp, method, tolerance)
