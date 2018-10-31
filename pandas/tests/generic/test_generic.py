@@ -1020,6 +1020,7 @@ class TestNDFrame(object):
             with pytest.raises(ValueError):
                 result = wp.pipe((f, 'y'), x=1, y=1)
 
+    @pytest.mark.filterwarnings("ignore:\\nPanel:FutureWarning")
     def test_axis_classmethods(self):
         types = [pd.Series, pd.DataFrame, pd.Panel]
         for typ in types:
