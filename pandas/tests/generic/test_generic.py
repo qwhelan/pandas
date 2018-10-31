@@ -1019,3 +1019,13 @@ class TestNDFrame(object):
 
             with pytest.raises(ValueError):
                 result = wp.pipe((f, 'y'), x=1, y=1)
+
+    def test_axis_classmethods(self):
+        types = [pd.Series, pd.DataFrame, pd.Panel]
+        for typ in types:
+            obj = typ()
+            values = list(typ._AXIS_NAMES.keys()) + list(typ._AXIS_NUMBERS.keys()) + list(typ._AXIS_ALIASES.keys())
+            for v in values:
+                assert obj._get_axis_number(v) == typ._get_axis_number(v)
+                assert obj._get_axis_name(v) == typ._get_axis_name(v)
+                assert obj._get_block_manager_axis(v) == typ._get_block_manager_axis(v)
