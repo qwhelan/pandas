@@ -81,6 +81,20 @@ class FromRecords(object):
         self.df = DataFrame.from_records(self.gen, nrows=nrows)
 
 
+class ToRecords(object):
+
+    params = [1000, 100000]
+    param_names = ['nrows']
+
+    def setup(self, nrows):
+        N = nrows
+        self.gen = ((x, (x * 20), (x * 100)) for x in range(N))
+        self.df = DataFrame.from_records(self.gen, nrows=nrows)
+
+    def time_frame_to_records(self, nrows):
+        self.df.to_records()
+
+
 class FromNDArray(object):
 
     def setup(self):
