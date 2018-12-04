@@ -1445,6 +1445,10 @@ def extract_ordinals(object[:] values, freq):
 
     freqstr = Period._maybe_convert_freq(freq).freqstr
 
+    from pandas.core.config import get_option
+    dayfirst = get_option('display.date_dayfirst')
+    yearfirst = get_option('display.date_yearfirst')
+
     for i in range(n):
         p = values[i]
 
@@ -1461,7 +1465,8 @@ def extract_ordinals(object[:] values, freq):
                     raise IncompatibleFrequency(msg)
 
             except AttributeError:
-                p = Period(p, freq=freq)
+                p = Period(p, freq=freq, dayfirst=dayfirst,
+                           yearfirst=yearfirst)
                 if p is NaT:
                     # input may contain NaT-like string
                     ordinals[i] = NPY_NAT
@@ -2401,11 +2406,14 @@ class Period(_Period):
     hour : int, default 0
     minute : int, default 0
     second : int, default 0
+    dayfirst : bool, default None
+    yearfirst : bool, default None
     """
 
     def __new__(cls, value=None, freq=None, ordinal=None,
                 year=None, month=None, quarter=None, day=None,
-                hour=None, minute=None, second=None):
+                hour=None, minute=None, second=None, dayfirst=None,
+                yearfirst=None):
         # freq points to a tuple (base, mult);  base is one of the defined
         # periods such as A, Q, etc. Every five minutes would be, e.g.,
         # ('T', 5) but may be passed in as a string like '5T'
@@ -2461,7 +2469,8 @@ class Period(_Period):
             if util.is_integer_object(value):
                 value = str(value)
             value = value.upper()
-            dt, _, reso = parse_time_string(value, freq)
+            dt, _, reso = parse_time_string(value, freq, dayfirst=dayfirst,
+                                            yearfirst=yearfirst)
             if dt is NaT:
                 ordinal = NPY_NAT
 
