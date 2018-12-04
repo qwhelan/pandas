@@ -34,6 +34,19 @@ class PeriodUnaryMethods(object):
     def time_asfreq(self, freq):
         self.per.asfreq('A')
 
+class PeriodConstructor(object):
+    params = [['D'], [True, False]]
+    param_names = ['freq', 'is_offset']
+
+    def setup(self, freq, is_offset):
+        if is_offset:
+            self.freq = to_offset(freq)
+        else:
+            self.freq = freq
+
+    def time_period_constructor(self, freq, is_offset):
+        Period('2012-06-01', freq=freq)
+        
 
 class PeriodIndexConstructor(object):
 
