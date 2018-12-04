@@ -165,13 +165,16 @@ def to_offset(freq):
                     stride_sign = -1 if stride.startswith('-') else 1
                 if not stride:
                     stride = 1
-                if prefix in Resolution._reso_str_bump_map.keys():
+                if prefix in Resolution._reso_str_bump_map.keys() and stride != 1:
                     stride, name = Resolution.get_stride_from_decimal(
                         float(stride), prefix
                     )
                 stride = int(stride)
                 offset = get_offset(name)
-                offset = offset * int(np.fabs(stride) * stride_sign)
+                multiplier = int(np.fabs(stride) * stride_sign)
+                if multiplier != 1:
+                    offset = offset * multiplier
+
                 if delta is None:
                     delta = offset
                 else:
