@@ -1,5 +1,6 @@
 from pandas import (DataFrame, Series, Period, PeriodIndex, date_range,
                     period_range)
+from pandas.tseries.frequencies import to_offset
 
 
 class PeriodProperties(object):
@@ -34,24 +35,41 @@ class PeriodUnaryMethods(object):
     def time_asfreq(self, freq):
         self.per.asfreq('A')
 
+class PeriodConstructor(object):
+    params = [['D'], [True, False]]
+    param_names = ['freq', 'is_offset']
+
+    def setup(self, freq, is_offset):
+        if is_offset:
+            self.freq = to_offset(freq)
+        else:
+            self.freq = freq
+
+    def time_period_constructor(self, freq, is_offset):
+        Period('2012-06-01', freq=freq)
+
 
 class PeriodIndexConstructor(object):
 
-    params = ['D']
-    param_names = ['freq']
+    params = [['D'], [True, False]]
+    param_names = ['freq', 'is_offset']
 
-    def setup(self, freq):
+    def setup(self, freq, is_offset):
         self.rng = date_range('1985', periods=1000)
         self.rng2 = date_range('1985', periods=1000).to_pydatetime()
         self.ints = list(range(2000, 3000))
+        if is_offset:
+            self.freq = to_offset(freq)
+        else:
+            self.freq = freq
 
-    def time_from_date_range(self, freq):
+    def time_from_date_range(self, freq, is_offset):
         PeriodIndex(self.rng, freq=freq)
 
-    def time_from_pydatetime(self, freq):
+    def time_from_pydatetime(self, freq, is_offset):
         PeriodIndex(self.rng2, freq=freq)
 
-    def time_from_ints(self, freq):
+    def time_from_ints(self, freq, is_offset):
         PeriodIndex(self.ints, freq=freq)
 
 
