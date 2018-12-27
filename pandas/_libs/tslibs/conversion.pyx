@@ -33,7 +33,6 @@ from pandas._libs.tslibs.timezones cimport (
     is_utc, is_tzlocal, is_fixed_offset, get_utcoffset, get_dst_info,
     get_timezone, maybe_get_tz, tz_compare)
 from pandas._libs.tslibs.timezones import UTC
-from pandas._libs.tslibs.parsing import parse_datetime_string
 
 from pandas._libs.tslibs.nattype import nat_strings
 from pandas._libs.tslibs.nattype cimport (
@@ -474,6 +473,7 @@ cdef _TSObject convert_str_to_tsobject(object ts, object tz, object unit,
 
         except ValueError:
             try:
+                from pandas._libs.tslibs.parsing import parse_datetime_string
                 ts = parse_datetime_string(ts, dayfirst=dayfirst,
                                            yearfirst=yearfirst)
             except Exception:

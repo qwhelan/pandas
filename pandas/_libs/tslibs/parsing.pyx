@@ -29,6 +29,8 @@ from dateutil.parser import parse as du_parse
 
 from pandas._libs.tslibs.ccalendar import MONTH_NUMBERS
 from pandas._libs.tslibs.nattype import nat_strings, NaT
+from pandas.core.config import get_option
+
 
 # ----------------------------------------------------------------------
 # Constants
@@ -117,7 +119,6 @@ def parse_time_string(arg, freq=None, dayfirst=None, yearfirst=None):
         freq = freq.rule_code
 
     if dayfirst is None or yearfirst is None:
-        from pandas.core.config import get_option
         if dayfirst is None:
             dayfirst = get_option("display.date_dayfirst")
         if yearfirst is None:
