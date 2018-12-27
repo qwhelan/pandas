@@ -5,7 +5,7 @@ import re
 
 import numpy as np
 
-from pandas._libs.lib import is_bool, is_integer, is_float, is_complex, is_scalar, is_decimal, is_interval
+from pandas._libs.inference import is_bool, is_integer, is_float, is_complex, is_scalar, is_decimal, is_interval
 from pandas.compat import (
     PY2, Set, re_type, string_and_binary_types, string_types, text_type)
 

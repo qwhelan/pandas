@@ -41,6 +41,8 @@ from pandas._libs.tslibs.offsets cimport to_offset
 
 from pandas._libs.tslibs.timestamps cimport create_timestamp_from_ts
 from pandas._libs.tslibs.timestamps import Timestamp
+from pandas._libs.tslibs.parsing import parse_datetime_string
+
 
 
 cdef bint PY2 = str == bytes
@@ -511,8 +513,6 @@ cpdef array_to_datetime(ndarray[object] values, str errors='raise',
         float offset_seconds, tz_offset
         set out_tzoffset_vals = set()
 
-    from pandas._libs.tslibs.parsing import parse_datetime_string
-
     # specify error conditions
     assert is_raise or is_ignore or is_coerce
 
@@ -787,8 +787,6 @@ cdef array_to_datetime_object(ndarray[object] values, bint is_raise,
         object val,
         ndarray[object] oresult
         npy_datetimestruct dts
-
-    from pandas._libs.tslibs.parsing import parse_datetime_string
 
     oresult = np.empty(n, dtype=object)
 

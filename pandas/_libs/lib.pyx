@@ -51,8 +51,8 @@ cdef extern from "src/parse_helper.h":
 
 cimport pandas._libs.util as util
 from pandas._libs.util cimport is_nan, UINT64_MAX, INT64_MAX, INT64_MIN
-
-
+from pandas._libs.inference import is_scalar
+from pandas._libs.tslib import array_to_datetime
 from pandas._libs.tslibs.nattype cimport NPY_NAT
 from pandas._libs.tslibs.nattype import NaT
 from pandas._libs.tslibs.conversion cimport convert_to_tsobject
@@ -103,69 +103,6 @@ def memory_usage_of_objects(arr: object[:]) -> int64_t:
 
 # ----------------------------------------------------------------------
 
-
-def is_scalar(val: object) -> bool:
-    """
-    Return True if given value is scalar.
-
-    Parameters
-    ----------
-    val : object
-        This includes:
-
-        - numpy array scalar (e.g. np.int64)
-        - Python builtin numerics
-        - Python builtin byte arrays and strings
-        - None
-        - datetime.datetime
-        - datetime.timedelta
-        - Period
-        - decimal.Decimal
-        - Interval
-        - DateOffset
-        - Fraction
-        - Number
-
-    Returns
-    -------
-    bool
-        Return True if given object is scalar, False otherwise
-
-    Examples
-    --------
-    >>> dt = pd.datetime.datetime(2018, 10, 3)
-    >>> pd.is_scalar(dt)
-    True
-
-    >>> pd.api.types.is_scalar([2, 3])
-    False
-
-    >>> pd.api.types.is_scalar({0: 1, 2: 3})
-    False
-
-    >>> pd.api.types.is_scalar((0, 2))
-    False
-
-    pandas supports PEP 3141 numbers:
-
-    >>> from fractions import Fraction
-    >>> pd.api.types.is_scalar(Fraction(3, 5))
-    True
-    """
-
-    return (cnp.PyArray_IsAnyScalar(val)
-            # PyArray_IsAnyScalar is always False for bytearrays on Py3
-            or isinstance(val, (Fraction, Number))
-            # We differ from numpy, which claims that None is not scalar;
-            # see np.isscalar
-            or val is None
-            or PyDate_Check(val)
-            or PyDelta_Check(val)
-            or PyTime_Check(val)
-            or util.is_period_object(val)
-            or is_decimal(val)
-            or is_interval(val)
-            or util.is_offset_object(val))
 
 
 def item_from_zerodim(val: object) -> object:
@@ -1398,7 +1335,6 @@ def infer_datetimelike_array(arr: object) -> object:
     # convert *every* string array
     if len(objs):
         try:
-            from pandas._libs.tslib import array_to_datetime
             array_to_datetime(objs, errors='raise')
             return 'datetime'
         except:

@@ -290,6 +290,7 @@ class CheckSDist(sdist_class):
     """Custom sdist that ensures Cython has compiled all pyx files to c."""
 
     _pyxfiles = ['pandas/_libs/lib.pyx',
+                 'pandas/_libs/inference.pyx',
                  'pandas/_libs/hashtable.pyx',
                  'pandas/_libs/tslib.pyx',
                  'pandas/_libs/index.pyx',
@@ -531,10 +532,14 @@ ext_data = {
         'depends': _pxi_dep['interval']},
     '_libs.join': {
         'pyxfile': '_libs/join'},
+    '_libs.inference': {
+        'pyxfile': '_libs/inference',
+        'include': common_include + ts_include,
+        'depends': lib_depends + tseries_depends},
     '_libs.lib': {
         'pyxfile': '_libs/lib',
         'include': common_include + ts_include,
-        'depends': lib_depends + tseries_depends},
+        'depends': lib_depends + tseries_depends + ['_libs/inference.h']},
     '_libs.missing': {
         'pyxfile': '_libs/missing',
         'include': common_include + ts_include,
