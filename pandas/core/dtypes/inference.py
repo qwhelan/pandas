@@ -5,26 +5,11 @@ import re
 
 import numpy as np
 
-from pandas._libs import lib
+from pandas._libs.lib import is_bool, is_integer, is_float, is_complex, is_scalar, is_decimal, is_interval
 from pandas.compat import (
     PY2, Set, re_type, string_and_binary_types, string_types, text_type)
 
 from pandas import compat
-
-is_bool = lib.is_bool
-
-is_integer = lib.is_integer
-
-is_float = lib.is_float
-
-is_complex = lib.is_complex
-
-is_scalar = lib.is_scalar
-
-is_decimal = lib.is_decimal
-
-is_interval = lib.is_interval
-
 
 def is_number(obj):
     """

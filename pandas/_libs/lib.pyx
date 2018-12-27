@@ -52,7 +52,7 @@ cdef extern from "src/parse_helper.h":
 cimport pandas._libs.util as util
 from pandas._libs.util cimport is_nan, UINT64_MAX, INT64_MAX, INT64_MIN
 
-from pandas._libs.tslib import array_to_datetime
+
 from pandas._libs.tslibs.nattype cimport NPY_NAT
 from pandas._libs.tslibs.nattype import NaT
 from pandas._libs.tslibs.conversion cimport convert_to_tsobject
@@ -1398,6 +1398,7 @@ def infer_datetimelike_array(arr: object) -> object:
     # convert *every* string array
     if len(objs):
         try:
+            from pandas._libs.tslib import array_to_datetime
             array_to_datetime(objs, errors='raise')
             return 'datetime'
         except:
