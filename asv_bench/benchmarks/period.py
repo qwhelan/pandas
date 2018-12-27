@@ -58,6 +58,7 @@ class PeriodIndexConstructor(object):
         self.rng = date_range('1985', periods=1000)
         self.rng2 = date_range('1985', periods=1000).to_pydatetime()
         self.ints = list(range(2000, 3000))
+        self.daily_ints = date_range('1/1/2000', periods=1000, freq=freq).strftime('%Y%m%d').map(int)
         if is_offset:
             self.freq = to_offset(freq)
         else:
@@ -71,6 +72,9 @@ class PeriodIndexConstructor(object):
 
     def time_from_ints(self, freq, is_offset):
         PeriodIndex(self.ints, freq=freq)
+
+    def time_from_ints_daily(self, freq, is_offset):
+        PeriodIndex(self.daily_ints, freq=freq)
 
 
 class DataFramePeriodColumn(object):
