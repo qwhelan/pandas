@@ -1949,7 +1949,7 @@ def maybe_convert_objects(ndarray[object] objects, bint try_float=0,
         ndarray[int64_t] idatetimes
         ndarray[int64_t] itimedeltas
         Seen seen = Seen()
-        object val
+        object val, ival
         float64_t fval, fnan
 
     n = len(objects)
@@ -2011,10 +2011,11 @@ def maybe_convert_objects(ndarray[object] objects, bint try_float=0,
             floats[i] = <float64_t>val
             complexes[i] = <double complex>val
             if not seen.null_:
-                seen.saw_int(int(val))
+                ival = int(val)
+                seen.saw_int(ival)
 
                 if ((seen.uint_ and seen.sint_) or
-                        val > oUINT64_MAX or val < oINT64_MIN):
+                        ival > UINT64_MAX or ival < INT64_MIN):
                     seen.object_ = 1
                     break
 
