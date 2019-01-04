@@ -109,4 +109,18 @@ class MaybeConvertNumeric(object):
         lib.maybe_convert_numeric(data, set(), coerce_numeric=False)
 
 
+class MaybeConvertObject(object):
+
+    def setup_cache(self):
+        N = 10**6
+        arr = np.repeat([2**63], N) + np.arange(N).astype('uint64')
+        data = arr.astype(object)
+        data[1::2] = arr[1::2].astype(str)
+        data[-1] = -1
+        return data
+
+    def time_convert(self, data):
+        lib.maybe_convert_objects(data)
+
+
 from .pandas_vb_common import setup  # noqa: F401
