@@ -536,6 +536,9 @@ class TestSeriesDatetimeValues():
         expected = Series([time(23, 56, tzinfo=tz), time(21, 24, tzinfo=tz),
                            time(22, 14, tzinfo=tz)])
         result = s.dt.timetz
+
+        assert result.tz == tz
+
         tm.assert_series_equal(result, expected)
 
     def test_setitem_with_string_index(self):
