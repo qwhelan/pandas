@@ -317,6 +317,29 @@ class Dropna(object):
         self.df_mixed.dropna(how=how, axis=axis)
 
 
+class CombineFirst(object):
+
+    def setup(self):
+        self.df = DataFrame(np.random.randn(10000, 1000))
+        self.df2 = self.df.copy()
+        self.df_mixed = self.df.copy()
+        self.df_mixed['foo'] = 'bar'
+        self.df_mixed2 = self.df_mixed.copy()
+
+        self.df.ix[50:1000, 20:50] = np.nan
+        self.df_mixed.ix[50:1000, 20:50] = np.nan
+        self.df.ix[2000:3000] = np.nan
+        self.df_mixed.ix[2000:3000] = np.nan
+        self.df.ix[:, 60:70] = np.nan
+        self.df_mixed.ix[:, 60:70] = np.nan
+
+    def time_combine_first(self):
+        self.df.combine_first(self.df2)
+
+    def time_combine_first_mixed(self):
+        self.df_mixed.combine_first(self.df_mixed2)
+
+
 class Count(object):
 
     params = [0, 1]
