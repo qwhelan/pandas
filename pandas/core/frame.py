@@ -5266,20 +5266,22 @@ class DataFrame(NDFrame):
             this_dtype = series.dtype
             other_dtype = otherSeries.dtype
 
-            this_mask = isna(series)
-            other_mask = isna(otherSeries)
+            if do_fill or not overwrite:
+                other_mask = isna(otherSeries)
+                if do_fill:
+                    this_mask = isna(series)
 
-            # don't overwrite columns unecessarily
-            # DO propagate if this column is not in the intersection
-            if not overwrite and other_mask.all():
-                result[col] = this[col].copy()
-                continue
+                # don't overwrite columns unecessarily
+                # DO propagate if this column is not in the intersection
+                if other_mask.all():
+                    result[col] = this[col].copy()
+                    continue
 
-            if do_fill:
-                series = series.copy()
-                otherSeries = otherSeries.copy()
-                series[this_mask] = fill_value
-                otherSeries[other_mask] = fill_value
+                if do_fill:
+                    series = series.copy()
+                    otherSeries = otherSeries.copy()
+                    series[this_mask] = fill_value
+                    otherSeries[other_mask] = fill_value
 
             if col not in self.columns:
                 # If self DataFrame does not have col in other DataFrame,
