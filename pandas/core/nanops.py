@@ -201,11 +201,13 @@ def _get_fill_value(dtype, fill_value=None, fill_value_typ=None):
 
 
 def _get_values(values, skipna, fill_value=None, fill_value_typ=None,
-                isfinite=False, copy=True, mask=None):
+                isfinite=False, copy=True, mask=None, compute_mask=True):
     """ utility to get the values view, mask, dtype
     if necessary copy and mask using the specified fill_value
     copy = True will force the copy
     """
+    if skipna:
+        compute_mask = True
 
     if is_datetime64tz_dtype(values):
         # com.values_from_object returns M8[ns] dtype instead of tz-aware,
@@ -216,7 +218,7 @@ def _get_values(values, skipna, fill_value=None, fill_value_typ=None,
         values = com.values_from_object(values)
         dtype = values.dtype
 
-    if mask is None:
+    if mask is None and compute_mask:
         if isfinite:
             mask = _isfinite(values)
         else:
@@ -362,8 +364,12 @@ def nanany(values, axis=None, skipna=True, mask=None):
     >>> nanops.nanany(s)
     False
     """
-    values, mask, dtype, _, _ = _get_values(values, skipna, False, copy=skipna,
-                                            mask=mask)
+    if (hasattr(values, 'dtype') and is_bool_dtype(values.dtype) and
+            mask is None):
+        # Assume np.bool cannot store NaNs
+        skipna = False
+    values, _, _, _, _ = _get_values(values, skipna, False, copy=skipna,
+                                     mask=mask, compute_mask=False)
     return values.any(axis)
 
 
@@ -395,8 +401,12 @@ def nanall(values, axis=None, skipna=True, mask=None):
     >>> nanops.nanall(s)
     False
     """
-    values, mask, dtype, _, _ = _get_values(values, skipna, True, copy=skipna,
-                                            mask=mask)
+    if (hasattr(values, 'dtype') and is_bool_dtype(values.dtype) and
+            mask is None):
+        # Assume np.bool cannot store NaNs
+        skipna = False
+    values, _, _, _, _ = _get_values(values, skipna, True, copy=skipna,
+                                     mask=mask, compute_mask=False)
     return values.all(axis)
 
 
