@@ -5274,7 +5274,7 @@ class DataFrame(NDFrame):
 
                 # don't overwrite columns unecessarily
                 # DO propagate if this column is not in the intersection
-                if other_mask.all():
+                if not overwrite and other_mask.all():
                     result[col] = this[col].copy()
                     continue
 
