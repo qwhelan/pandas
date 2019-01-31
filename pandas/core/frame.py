@@ -5139,7 +5139,8 @@ class DataFrame(NDFrame):
         assert lib.is_scalar(other) or np.ndim(other) == 0
         return ops.dispatch_to_series(self, other, func)
 
-    def combine(self, other, func, fill_value=None, overwrite=True):
+    def combine(self, other, func, fill_value=None, overwrite=True,
+                skip_if_full=False):
         """
         Perform column-wise combine with another DataFrame based on a
         passed function.
@@ -5266,9 +5267,9 @@ class DataFrame(NDFrame):
             this_dtype = series.dtype
             other_dtype = otherSeries.dtype
 
-            if do_fill or not overwrite:
+            if do_fill or not overwrite or skip_if_full:
                 other_mask = isna(otherSeries)
-                if do_fill:
+                if do_fill or skip_if_full:
                     this_mask = isna(series)
 
                 # don't overwrite columns unecessarily
@@ -5276,6 +5277,11 @@ class DataFrame(NDFrame):
                 if other_mask.all():
                     result[col] = this[col].copy()
                     continue
+
+                if skip_if_full and series.index.equals(otherSeries.index):
+                    if not this_mask.any():
+                        result[col] = this[col].copy()
+                        continue
 
                 if do_fill:
                     series = series.copy()
