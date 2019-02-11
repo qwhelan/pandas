@@ -19,7 +19,10 @@ cimport numpy as cnp
 from numpy cimport int64_t
 cnp.import_array()
 
-import pandas._libs.src.tzlocal as tzlocal_package
+try:
+    import tzlocal as tzlocal_package
+except ImportError:
+    import pandas._libs.tslibs.tzlocal as tzlocal_package
 
 # ----------------------------------------------------------------------
 from pandas._libs.tslibs.util cimport (
