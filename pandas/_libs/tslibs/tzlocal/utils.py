@@ -12,6 +12,8 @@ def get_system_offset():
     To keep compatibility with Windows, we're always importing time module here.
     """
     import time
+    import os
+    print('TZ=', os.environ.get('TZ', None))
     if time.daylight and time.localtime().tm_isdst > 0:
         return -time.altzone
     else:
@@ -20,6 +22,7 @@ def get_system_offset():
 
 def get_tz_offset(tz):
     """Get timezone's offset using built-in function datetime.utcoffset()."""
+    print(tz, datetime.datetime.now(tz), datetime.datetime.now(tz).utcoffset())
     return int(datetime.datetime.now(tz).utcoffset().total_seconds())
 
 
@@ -32,7 +35,7 @@ def assert_tz_offset(tz):
     system_offset = get_system_offset()
     if tz_offset != system_offset:
         msg = ('Timezone offset does not match system offset: {0} != {1}. '
-               'Please, check your config files.').format(
-                   tz_offset, system_offset
+               'Please, check your config files. {2}').format(
+                   tz_offset, system_offset, str(tz)
                )
         raise ValueError(msg)

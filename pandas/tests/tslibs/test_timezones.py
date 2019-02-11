@@ -6,6 +6,7 @@ import pytest
 import pytz
 
 from pandas._libs.tslibs import conversion, timezones
+import pandas.util.testing as tm
 
 from pandas import Timestamp
 
@@ -50,24 +51,21 @@ def test_tzlocal_offset():
 
 
 def test_tzlocal_package():
-    orig_tzlocal_tz = timezones.get_tzlocal_tz(None)
     # Check that we fall back to non-tzlocal code path if user has an invalid
     # system tz set
-    timezones._set_tzlocal_tz('foo/bar')
-    ts = Timestamp("2011-01-01", tz=dateutil.tz.tzlocal())
-    assert ts.tz == dateutil.tz.tzlocal()
+    with tm.set_timezone('foo/bar'):
+        ts = Timestamp("2011-01-01", tz=dateutil.tz.tzlocal())
+        assert ts.tz == dateutil.tz.tzlocal()
 
     utc = pytz.utc
     for tz in pytz.all_timezones:
         # Check that all pytz timezones work
-        ts_tz = Timestamp("2011-01-01", tz=tz)
-        timezones._set_tzlocal_tz(tz)
-        ts_local = Timestamp("2011-01-01", tz=dateutil.tz.tzlocal())
+        with tm.set_timezone(tz):
+            ts_tz = Timestamp("2011-01-01", tz=tz)
+            ts_local = Timestamp("2011-01-01", tz=dateutil.tz.tzlocal())
 
-        assert ts_tz.astimezone(utc) == ts_local.astimezone(utc)
-        assert ts_local.tz == dateutil.tz.tzlocal()
-
-    timezones._set_tzlocal_tz(orig_tzlocal_tz.zone)
+            assert ts_tz.astimezone(utc) == ts_local.astimezone(utc)
+            assert ts_local.tz == dateutil.tz.tzlocal()
 
 
 @pytest.fixture(params=[

@@ -19,10 +19,11 @@ cimport numpy as cnp
 from numpy cimport int64_t
 cnp.import_array()
 
-try:
-    import tzlocal as tzlocal_package
-except ImportError:
-    import pandas._libs.tslibs.tzlocal as tzlocal_package
+#try:
+#    import tzlocal as tzlocal_package
+#except ImportError:
+import pandas._libs.tslibs.tzlocal as tzlocal_package
+import os
 
 # ----------------------------------------------------------------------
 from pandas._libs.tslibs.util cimport (
@@ -43,20 +44,26 @@ cdef inline bint is_tzlocal(object tz):
 cpdef object get_tzlocal_tz(object tz):
     global tzlocal_tz
     if tzlocal_tz is None:
+        print('querying', tz, tzlocal_tz, tzlocal_package.unix._cache_tz, os.environ.get('TZ', None))
         local_tz = tzlocal_package.get_localzone()
         tzlocal_tz = local_tz.zone
 
-    try:
-        return pytz.timezone(tzlocal_tz)
-    except pytz.exceptions.UnknownTimeZoneError:
-        tzlocal_tz = None
-
+    if tzlocal_tz:
+        try:
+            print(tz, tzlocal_tz, tzlocal_package.unix._cache_tz)
+            return pytz.timezone(tzlocal_tz)
+        except pytz.exceptions.UnknownTimeZoneError:
+            tzlocal_tz = None
+    print(tz, tzlocal_tz, tzlocal_package.unix._cache_tz)
     return tz
 
 
 cpdef _set_tzlocal_tz(object tz_str):
     global tzlocal_tz
-    tzlocal_tz = str(tz_str)
+    if tz_str is None:
+        tzlocal_tz = None
+    else:
+        tzlocal_tz = str(tz_str)
 
 
 cdef inline bint treat_tz_as_pytz(object tz):

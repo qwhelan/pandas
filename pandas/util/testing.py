@@ -2975,18 +2975,23 @@ def set_timezone(tz):
 
     import os
     import time
+    from pandas._libs.tslibs.timezones import _set_tzlocal_tz
+    from pandas._libs.tslibs.tzlocal import reload_localzone
 
     def setTZ(tz):
         if tz is None:
             try:
                 del os.environ['TZ']
+                _set_tzlocal_tz(tz)
             except KeyError:
                 pass
         else:
             os.environ['TZ'] = tz
             time.tzset()
+            _set_tzlocal_tz(tz)
 
     orig_tz = os.environ.get('TZ')
+    print('settz', orig_tz, tz)
     setTZ(tz)
     try:
         yield

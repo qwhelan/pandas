@@ -2,7 +2,7 @@ import os
 import pytz
 import re
 
-from pandas._libs.src.tzlocal import utils
+from pandas._libs.tslibs.tzlocal import utils
 
 _cache_tz = None
 
