@@ -227,4 +227,49 @@ class Any(object):
         self.s.any()
 
 
+class NanOps(object):
+
+    params = [[10**3, 10**6], ['int64', 'float64']]
+    param_names = ['N', 'dtype']
+
+    def setup(self, N, dtype):
+        self.s = Series([1] * N, dtype=dtype)
+
+    def time_var(self, N, dtype):
+        self.s.var()
+
+    def time_mean(self, N, dtype):
+        self.s.mean()
+
+    def time_median(self, N, dtype):
+        self.s.median()
+
+    def time_max(self, N, dtype):
+        self.s.max()
+
+    def time_min(self, N, dtype):
+        self.s.min()
+
+    def time_sum(self, N, dtype):
+        self.s.sum()
+
+    def time_std(self, N, dtype):
+        self.s.std()
+
+    def time_sem(self, N, dtype):
+        self.s.sem()
+
+    def time_argmax(self, N, dtype):
+        self.s.argmax()
+
+    def time_skew(self, N, dtype):
+        self.s.skew()
+
+    def time_kurt(self, N, dtype):
+        self.s.kurt()
+
+    def time_prod(self, N, dtype):
+        self.s.prod()
+
+
 from .pandas_vb_common import setup  # noqa: F401
