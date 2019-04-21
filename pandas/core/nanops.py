@@ -1,8 +1,10 @@
 from distutils.version import LooseVersion
 import functools
 import itertools
+from typing import Any, Tuple, Optional
 import operator
 import warnings
+
 
 import numpy as np
 
@@ -200,7 +202,8 @@ def _get_fill_value(dtype, fill_value=None, fill_value_typ=None):
                 return tslibs.iNaT
 
 
-def _maybe_get_mask(values, skipna, mask, invert=False):
+def _maybe_get_mask(values: np.ndarray, skipna: bool,
+                    mask: Optional[np.ndarray]) -> Optional[np.ndarray]:
     """ This function will compute a mask iff it is necessary. Otherwise,
     return the provided mask (potentially None) when a mask does not need to be
     computed.
@@ -217,16 +220,14 @@ def _maybe_get_mask(values, skipna, mask, invert=False):
 
     Parameters
     ----------
-    values : ndarray
+    values : np.ndarray
     skipna : bool
-    mask : Optional[ndarray[bool]]
+    mask : Optional[np.ndarray]
         nan-mask if known
-    invert : bool, optional
-        return notna() instead of isna()
 
     Returns
     -------
-    result : Optional[ndarray[bool]]
+    result : Optional[np.ndarray]
 
     """
 
@@ -236,16 +237,14 @@ def _maybe_get_mask(values, skipna, mask, invert=False):
             return None
 
         if skipna:
-            if not invert:
-                mask = isna(values)
-            else:
-                mask = notna(values)
+            mask = isna(values)
 
     return mask
 
 
-def _get_values(values, skipna, fill_value=None, fill_value_typ=None,
-                mask=None):
+def _get_values(values: np.ndarray, skipna: bool, fill_value: Any=None,
+                fill_value_typ: str = None,
+                mask: Optional[np.ndarray] = None) -> Tuple[np.ndarray, Optional[np.ndarray], type, type]:
     """ Utility to get the values view, mask, dtype, dtype_max, and fill_value.
 
     If both mask and fill_value/fill_value_typ are not None and skipna is True,
@@ -582,7 +581,7 @@ def nanmedian(values, axis=None, skipna=True, mask=None):
     2.0
     """
     def get_median(x):
-        mask = _maybe_get_mask(x, skipna, None, invert=True)
+        mask = notna(x)
         if mask is not None:
             if not skipna and not mask.all():
                 return np.nan
