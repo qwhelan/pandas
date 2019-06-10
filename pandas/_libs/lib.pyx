@@ -16,6 +16,7 @@ from cpython.datetime cimport (PyDateTime_Check, PyDate_Check,
                                PyTime_Check, PyDelta_Check,
                                PyDateTime_IMPORT)
 PyDateTime_IMPORT
+from collections import OrderedDict, defaultdict
 
 import numpy as np
 cimport numpy as cnp
@@ -2311,3 +2312,17 @@ def fast_multiget(dict mapping, ndarray keys, default=np.nan):
             output[i] = default
 
     return maybe_convert_objects(output)
+
+
+def _from_nested_dict(dict data):
+    cdef:
+        dict new_data = {}
+
+    for index, s in data.items():
+        for col, v in s.items():
+            new_data[col] = {}
+
+    for index, s in data.items():
+        for col, v in s.items():
+            new_data[col][index] = v
+    return new_data

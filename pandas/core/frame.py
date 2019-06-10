@@ -1111,7 +1111,10 @@ class DataFrame(NDFrame):
             if len(data) > 0:
                 # TODO speed up Series case
                 if isinstance(list(data.values())[0], (Series, dict)):
-                    data = _from_nested_dict(data)
+                    try:
+                        data = lib._from_nested_dict(data)
+                    except TypeError:
+                        data = _from_nested_dict(data)
                 else:
                     data, index = list(data.values()), list(data.keys())
         elif orient == 'columns':
@@ -8064,8 +8067,12 @@ def _from_nested_dict(data):
     new_data = OrderedDict()
     for index, s in data.items():
         for col, v in s.items():
-            new_data[col] = new_data.get(col, OrderedDict())
+            new_data[col] = OrderedDict()
+
+    for index, s in data.items():
+        for col, v in s.items():
             new_data[col][index] = v
+
     return new_data
 
 
