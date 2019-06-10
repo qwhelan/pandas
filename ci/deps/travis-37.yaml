@@ -10,7 +10,7 @@ dependencies:
   - numpy
   - python-dateutil
   - nomkl
-  - pyarrow
+  - pyarrow>=0.12
   - pytz
   # universal
   - pytest>=4.0.2
