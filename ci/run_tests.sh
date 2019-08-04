@@ -35,7 +35,7 @@ for TYPE in single multiple
 do
     if [ "$COVERAGE" ]; then
         COVERAGE_FNAME="/tmp/coc-$TYPE.xml"
-        COVERAGE="-s --cov=pandas --cov-report=xml:$COVERAGE_FNAME"
+        COVERAGE="-s --cov --cov-report=xml:$COVERAGE_FNAME"
     fi
 
     TYPE_PATTERN=$TYPE
