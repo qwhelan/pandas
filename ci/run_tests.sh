@@ -31,6 +31,7 @@ if [ -n "$PATTERN" ]; then
     PATTERN=" and $PATTERN"
 fi
 
+ALL_PYTEST_SUCCESS=1
 for TYPE in single multiple
 do
     if [ "$COVERAGE" ]; then
@@ -50,9 +51,21 @@ do
     # if no tests are found (the case of "single and slow"), pytest exits with code 5, and would make the script fail, if not for the below code
     sh -c "$PYTEST_CMD; ret=\$?; [ \$ret = 5 ] && exit 0 || exit \$ret"
 
-    if [[ "$COVERAGE" && $? == 0 ]]; then
+    if [ $? != 0 ]; then
+	ALL_PYTEST_SUCCESS=0
+        if [[ "$COVERAGE" ]]; then
+	    rm -f "$COVERAGE_FNAME"
+	fi
+    fi
+done
+
+if [[ "$COVERAGE" && "$ALL_PYTEST_SUCCESS" ]]; then
+    for TYPE in single multiple
+    do
+	COVERAGE_FNAME="/tmp/coc-$TYPE.xml"
         echo "uploading coverage for $TYPE tests"
         echo "bash <(curl -s https://codecov.io/bash) -Z -c -F $TYPE -f $COVERAGE_FNAME"
               bash <(curl -s https://codecov.io/bash) -Z -c -F $TYPE -f $COVERAGE_FNAME
-    fi
-done
+    done
+fi
+
