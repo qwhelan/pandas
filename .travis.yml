@@ -76,6 +76,7 @@ install:
   - ci/prep_cython_cache.sh
   - ci/setup_env.sh
   - ci/submit_cython_cache.sh
+  - python -c "import pandas; print(pandas.__version__)"
   - echo "install done"
 
 before_script:
