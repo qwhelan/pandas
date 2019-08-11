@@ -6,9 +6,9 @@ from pandas import to_datetime, date_range, Series, DataFrame, period_range
 from pandas.tseries.frequencies import infer_freq
 
 try:
-    from pandas.plotting._matplotlib.converter import DatetimeConverter
+    from pandas.plotting._matplotlib.converter import DatetimeConverter, PeriodConverter
 except ImportError:
-    from pandas.tseries.converter import DatetimeConverter
+    from pandas.tseries.converter import DatetimeConverter, PeriodConverter
 
 
 class DatetimeIndex:
@@ -119,13 +119,29 @@ class InferFreq:
         infer_freq(self.idx)
 
 
-class TimeDatetimeConverter:
-    def setup(self):
-        N = 100000
-        self.rng = date_range(start="1/1/2000", periods=N, freq="T")
+class TimeConverter:
+    params = [["datetime", "period"]]
+    param_names = ["index"]
 
-    def time_convert(self):
-        DatetimeConverter.convert(self.rng, None, None)
+    def setup(self, index):
+        N = 100000
+        if index == "datetime":
+            func = date_range
+            self.converter = DatetimeConverter
+        else:
+            func = period_range
+            self.converter = PeriodConverter
+
+        class Axis:
+            pass
+
+        self.axis = Axis()
+        self.axis.freq = "T"
+
+        self.rng = func(start="1/1/2000", periods=N, freq="T")
+
+    def time_convert(self, index):
+        self.converter.convert(self.rng, None, self.axis)
 
 
 class Iteration:

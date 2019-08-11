@@ -25,7 +25,7 @@ from pandas.core.dtypes.generic import ABCSeries
 
 import pandas.core.common as com
 from pandas.core.index import Index
-from pandas.core.indexes.datetimes import date_range
+from pandas.core.indexes.datetimes import date_range, DatetimeIndex
 from pandas.core.indexes.period import Period, PeriodIndex, period_range
 import pandas.core.tools.datetimes as tools
 
@@ -192,7 +192,7 @@ class TimeFormatter(Formatter):
 class PeriodConverter(dates.DateConverter):
     @staticmethod
     def convert(values, units, axis):
-        if is_nested_list_like(values):
+        if not isinstance(values, PeriodIndex) and is_nested_list_like(values):
             values = [PeriodConverter._convert_1d(v, units, axis) for v in values]
         else:
             values = PeriodConverter._convert_1d(values, units, axis)
@@ -253,7 +253,7 @@ class DatetimeConverter(dates.DateConverter):
     def convert(values, unit, axis):
         # values might be a 1-d array, or a list-like of arrays.
         _check_implicitly_registered()
-        if is_nested_list_like(values):
+        if not isinstance(values, DatetimeIndex) and is_nested_list_like(values):
             values = [DatetimeConverter._convert_1d(v, unit, axis) for v in values]
         else:
             values = DatetimeConverter._convert_1d(values, unit, axis)
